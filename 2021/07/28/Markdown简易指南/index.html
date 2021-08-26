@@ -1,0 +1,753 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jasonyang.github.io/img/panda.png">
+  <link rel="icon" href="/jasonyang.github.io/img/panda.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="jasonyang">
+  <meta name="keywords" content="">
+  
+  <title>Markdown简易指南 - jasonyang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/jasonyang.github.io/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/jasonyang.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/jasonyang.github.io/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","app_key":"wlepdaYUatxn4WD8tudl2BdX","server_url":"https://uqjw3jet.lc-cn-n1-shared.com"}},"search_path":"//jayheyang.github.io/jasonyang.github.io/search.xml"};
+  </script>
+  <script  src="/jasonyang.github.io/js/utils.js" ></script>
+  <script  src="/jasonyang.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/jasonyang.github.io/">&nbsp;<strong>Morvan</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/jasonyang.github.io/img/zelda2.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Markdown简易指南">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-07-28 00:21" pubdate>
+        2021年7月28日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      14
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Markdown简易指南</h1>
+            
+            <div class="markdown-body">
+              <h1>Markdown简易指南</h1>
+<h2 id="文档标题">文档标题</h2>
+<p>文档的标题级别通过<code>#</code>数量的多少来衡量，<code>#</code>号数量越多则级别越大，但字号越小。最后一个<code>#</code>号和标题文字之间有一个空格，且文档最多支持六级标题，具体示例如下：</p>
+<h3 id="三级标题">三级标题</h3>
+<h4 id="四级标题">四级标题</h4>
+<h5 id="五级标题">五级标题</h5>
+<p><img src="1.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="创建列表">创建列表</h2>
+<h3 id="创建无序列表">创建无序列表</h3>
+<p>在英文输入法下，通过输入<code>- </code>符号创建无序列表。</p>
+<ul>
+<li>无序列表1</li>
+<li>无序列表2</li>
+</ul>
+<h3 id="创建有序列表">创建有序列表</h3>
+<p>在英文输入法下，通过输入<code>1. </code>数字标记创建有序列表</p>
+<ol>
+<li>有序列表1</li>
+<li>有序列表2</li>
+</ol>
+<p><img src="2.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="列表嵌套">列表嵌套</h3>
+<p>再完成一种列表的创建之后回车下一行（可能需要删除掉下一行自动添加的同级列表标记），键入<code>Tap</code>创建嵌套列表，嵌套列表的类型由<code>Tap</code>后输入的<code>- </code>或者<code>1. </code>符号决定。</p>
+<ol>
+<li>有序列表1
+<ul>
+<li>无序列表1.1</li>
+<li>无序列表1.2</li>
+</ul>
+</li>
+<li>有序列表2
+<ol>
+<li>有序列表2.1</li>
+<li>有序列表2.2</li>
+</ol>
+</li>
+</ol>
+<p><img src="3.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="创建任务清单列表">创建任务清单列表</h3>
+<p>在英文输入法下通过键入<code>- [ ] </code>创建未完成的任务清单；通过键入<code>- [x] </code>创建已完成的任务清单。任务清单同样可以嵌套，方法同样是利用<code>Tap</code>缩进决定嵌套级别，然后通过规定符号标记确定嵌套列表的类型。</p>
+<ul>
+<li>[ ] 这是一个未完成的任务：锻炼
+<ol>
+<li>手臂肌肉锻炼</li>
+<li>篮球技巧联系</li>
+</ol>
+</li>
+</ul>
+<div>
+            <input type="checkbox" disabled="" checked="checked">这是一个已完成的任务：刷B站
+          </div>
+<div>
+            <input type="checkbox" disabled="" checked="checked">木鱼水心的视频
+          </div>
+<div>
+            <input type="checkbox" disabled="" checked="checked">何同学的视频
+          </div>
+<p><img src="4.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="创建分割线">创建分割线</h2>
+<p>可以发现在创建文档标题时，一二级标题下面会自动存在分割线，而其他的标题下面没有分割线，而通过三个以上的<code>*</code>或者<code>-</code>符号可以手动创建分割线。</p>
+<hr>
+<hr>
+<p><img src="5.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="创建表格">创建表格</h2>
+<p>在英文输入法下，通过<code>|</code>和<code>-</code>的组合可以创建表格。</p>
+<table>
+<thead>
+<tr>
+<th>表头1</th>
+<th>表头2</th>
+<th>表头3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内容1</td>
+<td>内容2</td>
+<td>内容3</td>
+</tr>
+<tr>
+<td>内容1</td>
+<td>内容2</td>
+<td>内容3</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>标题</th>
+<th>网址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>百度</td>
+<td><a target="_blank" rel="noopener" href="https://www.baidu.com">https://www.baidu.com</a></td>
+</tr>
+<tr>
+<td>02</td>
+<td>谷歌</td>
+<td><a target="_blank" rel="noopener" href="https://www.google.com">https://www.google.com</a></td>
+</tr>
+</tbody>
+</table>
+<p><img src="6.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="表格的对齐格式">表格的对齐格式</h3>
+<p>通过在<code>----</code>两天添加英文冒号可以指定表格每列的对齐方式，<code>:----</code>、<code>:----:</code>和<code>----:</code>分别表示左对齐、居中对齐和右对齐。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">序号（左对齐）</th>
+<th style="text-align:center">标题（居中对齐）</th>
+<th style="text-align:right">网址（右对齐）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">01</td>
+<td style="text-align:center">百度</td>
+<td style="text-align:right"><a target="_blank" rel="noopener" href="https://www.baidu.com">https://www.baidu.com</a></td>
+</tr>
+<tr>
+<td style="text-align:left">02</td>
+<td style="text-align:center">谷歌</td>
+<td style="text-align:right"><a target="_blank" rel="noopener" href="https://www.google.com">https://www.google.com</a></td>
+</tr>
+</tbody>
+</table>
+<p><img src="7.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="插入图片">插入图片</h2>
+<p>通过<code>![图片描述](图片网址)</code>在文档中插入图片，图片网址可以是本地地址也可以是网络图片地址，图片描述可以省略。</p>
+<p><img src="markdown_logo.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="Markdown Logo"></p>
+<p><img src="8.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="插入链接">插入链接</h2>
+<p>通过<code>[链接说明](网址链接)</code>在文档中插入网址连接，一般来说链接说明不能省略。</p>
+<p><a target="_blank" rel="noopener" href="https://www.baidu.com/">百度</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.google.com/">谷歌</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.github.com/">GitHub</a></p>
+<p><img src="9.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="多次引用同一个网址，可以为网址指定索引标签">多次引用同一个网址，可以为网址指定索引标签</h3>
+<p>通过<code>[索引标签]:网址连接</code>创建网址的索引标签，然后在使用<code>[链接说明][索引标签]</code>索引网址。</p>
+<p>这里是我们常用的几个网址连接： <a target="_blank" rel="noopener" href="https://www.google.com/">谷歌</a> 、<a target="_blank" rel="noopener" href="https://www.baidu.com/">百度</a>和 <a target="_blank" rel="noopener" href="https://www.github.com/">GitHub</a></p>
+<p><img src="10.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="插入目录锚点（实现文章内部点击跳转）">插入目录锚点（实现文章内部点击跳转）</h3>
+<p>通过<code>[目录名称](#索引标签)</code>生成目录锚点，索引标签必须和要跳转的标题章节名称对应（注：该方法只能跳转到文档标题开头处，正文不能跳转）。如果图方便生成文档目录的话可以直接采用<code>[TOC]</code>命令生成当前文档的目录。</p>
+<p>目标检测入门算法：</p>
+<ul>
+<li><a href="#YOLO%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B">YOLO</a></li>
+<li>[Faster R-CNN](#Faster R-CNN算法简介)</li>
+<li><a href="#SSD%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B">SSD</a></li>
+</ul>
+<h4 id="YOLO算法简介">YOLO算法简介</h4>
+<h4 id="Faster-R-CNN算法简介">Faster R-CNN算法简介</h4>
+<h4 id="SSD算法简介">SSD算法简介</h4>
+<p><img src="11.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h4 id="快捷生成目录">快捷生成目录</h4>
+<p>[TOC]</p>
+<h2 id="插入代码块">插入代码块</h2>
+<h3 id="插入行内代码">插入行内代码</h3>
+<p>通过使用成对的左上撇号（`）插入行内代码。</p>
+<p>就如<code>train_func</code>所示，巴拉巴拉…</p>
+<h3 id="插入整段代码块">插入整段代码块</h3>
+<p>通过使用成对的三个左上撇号（`）在文档中插入代码块，同时在第一组左上撇号的后面输入代码块使用的脚本语言例如python。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">print_func</span>()</span><br><span class="hljs-function">	<span class="hljs-title">print</span>(<span class="hljs-params"><span class="hljs-string">'hello, world!'</span></span>)</span><br></code></pre></td></tr></tbody></table></figure>
+<p><img src="12.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="插入公式">插入公式</h2>
+<p>分数：$$ f(x,y) = \frac{x^2}{y^3} $$</p>
+<p>省略号：$$ f(x_1, x_2, \ldots, x_n) = x_1 + x_2 + \cdots + x_n $$</p>
+<p><img src="13.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="标记引用段落">标记引用段落</h2>
+<p>某几句话或者一句话需要特别标注是可以采用“引用”样式，使用方法是在需要引用的文字前面添加<code>&gt; </code>符号。</p>
+<blockquote>
+<p>这句话很重要，引用起来。</p>
+</blockquote>
+<h3 id="可以嵌套引用">可以嵌套引用</h3>
+<blockquote>
+<p>这是第一级引用、</p>
+<blockquote>
+<p>这是第二级引用</p>
+<blockquote>
+<p>这是第三级引用</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p><img src="14.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="常用标记">常用标记</h2>
+<p>下面介绍正文的一些处理样式包括粗体、斜体、删除线、文本高亮、下划线、上下标等等。</p>
+<p><strong>粗体</strong>、<em>斜体</em>、==高亮==、<s>删除线</s>、<u>下划线</u>、我是^上标^、我是~下标~</p>
+<p><img src="15.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="转义符号">转义符号</h3>
+<p>因为在Markdown中星号、加减号、括号等都有相应的指示作用，因此如果需要展示使用这些符号本身是需要用到转义字符<code>\</code>。</p>
+<p>\<br>
+’<br>
+*<br>
+_<br>
+{}<br>
+[]<br>
+()<br>
++<br>
+.<br>
+!</p>
+<p><img src="16.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h3 id="插入emoji表情">插入emoji表情</h3>
+<p>插入emoji表情的方法如下，即在成对的<code>:</code>中间填入表情对应的英文名称即可。</p>
+<p><span class="github-emoji"><span>🥶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f976.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><br>
+<span class="github-emoji"><span>🥵</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f975.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><br>
+<span class="github-emoji"><span>😄</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><br>
+<span class="github-emoji"><span>😆</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><br>
+<span class="github-emoji"><span>👏</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f44f.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<p>更多表情符号请参考这个<a target="_blank" rel="noopener" href="https://www.einsition.com/tools/emojicheatsheet">链接</a></p>
+<p><img src="17.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<h2 id="注意事项">注意事项</h2>
+<p>通常在正文与列表项、表格项、文档标题之间都需要留有空行。</p>
+<div class="note note-success">
+            <p>文字 或者 <code>markdown</code> 均可</p>
+          </div>
+<hr>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/Markdown/">Markdown</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2021/07/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+                        <span class="hidden-mobile">机器学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","appKey":"wlepdaYUatxn4WD8tudl2BdX","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://uqjw3jet.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/jasonyang.github.io/js/events.js" ></script>
+<script  src="/jasonyang.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/jasonyang.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/jasonyang.github.io/js/local-search.js" ></script>
+
+
+
+
+  <script defer src="/jasonyang.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/jasonyang.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>
