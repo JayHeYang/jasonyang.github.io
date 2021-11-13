@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      840 字
+      844 字
     </span>
   
 
@@ -230,24 +230,32 @@
             <h1 style="display: none">解决Hexo框架下Fluid主题自带搜索框一直loading的问题</h1>
             
             <div class="markdown-body">
-              <h1 id="解决Hexo框架下Fluid主题自带搜索框一直loading的问题"><a href="#解决Hexo框架下Fluid主题自带搜索框一直loading的问题" class="headerlink" title="解决Hexo框架下Fluid主题自带搜索框一直loading的问题"></a>解决Hexo框架下Fluid主题自带搜索框一直loading的问题</h1><p>最开始根据Fluid主题创建个人博客时发现搜索框一直显示loading，不能进行本地搜索。最开始尝试百度和Google解答无果，便搁置了下去。最近有了时间便开始尝试解决，最终使用了一种可行的方案达到了本地搜索效果。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>fluid主题无法搜索的问题如下：当点击博客页面的<strong>搜索</strong>按钮时，搜索页面会一直显示<strong>Loading</strong>，如下图所示：</p>
+              <h1>解决Hexo框架下Fluid主题自带搜索框一直loading的问题</h1>
+<p>最开始根据Fluid主题创建个人博客时发现搜索框一直显示loading，不能进行本地搜索。最开始尝试百度和Google解答无果，便搁置了下去。最近有了时间便开始尝试解决，最终使用了一种可行的方案达到了本地搜索效果。</p>
+<h2 id="问题描述">问题描述</h2>
+<p>fluid主题无法搜索的问题如下：当点击博客页面的<strong>搜索</strong>按钮时，搜索页面会一直显示<strong>Loading</strong>，如下图所示：</p>
 <p><img src="1.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
-<h2 id="寻找原因"><a href="#寻找原因" class="headerlink" title="寻找原因"></a>寻找原因</h2><p>打开自己的博客根文件夹，如我的就是<code>blog</code>，然后打开<code>themes\fluid\_config.yml</code>，找到<code>search</code>模块，如下所示：</p>
+<h2 id="寻找原因">寻找原因</h2>
+<p>打开自己的博客根文件夹，如我的就是<code>blog</code>，然后打开<code>themes\fluid\_config.yml</code>，找到<code>search</code>模块，如下所示：</p>
 <p><img src="2.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
-<p>从图中可以看到我们搜索索引的文件是<code>local-search.xml</code>，然命令行切换到<code>blog</code>目录启动hexo三连发。<br></p><figure class="highlight sas"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sas">cd blog<br>hexo clean <span class="hljs-variable">&amp;&amp;</span> hexo g <span class="hljs-variable">&amp;&amp;</span> hexo s<br></code></pre></td></tr></tbody></table></figure><br>打开Chrome浏览器，通过localhost链接打开博客主页，然后点击搜索按钮，使用F12查看报错信息，可以看到如下报错。<p></p>
+<p>从图中可以看到我们搜索索引的文件是<code>local-search.xml</code>，然命令行切换到<code>blog</code>目录启动hexo三连发。</p>
+<figure class="highlight sas"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sas">cd blog<br>hexo clean <span class="hljs-variable">&amp;&amp;</span> hexo g <span class="hljs-variable">&amp;&amp;</span> hexo s<br></code></pre></td></tr></tbody></table></figure>
+<p>打开Chrome浏览器，通过localhost链接打开博客主页，然后点击搜索按钮，使用F12查看报错信息，可以看到如下报错。</p>
 <p><img src="3.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
 <p>可以发现是因为找不到这个搜索文件引发的报错，因此就有了解决方案version1。</p>
-<h2 id="解决方案version1"><a href="#解决方案version1" class="headerlink" title="解决方案version1"></a>解决方案version1</h2><p>因为搜索框一直loading的原因是找不到生成的<code>.xml</code>文件，然后尝试在自己的<code>blog</code>文件夹中查找<code>local-search.xml</code>文件，发现确实有随着<code>hexo g</code>命令一起生成的<code>local-search.xml</code>文件，但是文件内部并没有博客的内容，因此即使更换为该文件同样无法起到搜索作用（这个本地搜索功能本质上就是检索<code>.xml</code>文件内部的内容，因此没有博客内容的<code>.xml</code>文件起不到任何检索作用）。</p>
+<h2 id="解决方案version1">解决方案version1</h2>
+<p>因为搜索框一直loading的原因是找不到生成的<code>.xml</code>文件，然后尝试在自己的<code>blog</code>文件夹中查找<code>local-search.xml</code>文件，发现确实有随着<code>hexo g</code>命令一起生成的<code>local-search.xml</code>文件，但是文件内部并没有博客的内容，因此即使更换为该文件同样无法起到搜索作用（这个本地搜索功能本质上就是检索<code>.xml</code>文件内部的内容，因此没有博客内容的<code>.xml</code>文件起不到任何检索作用）。</p>
 <p>接下来仔细查看<code>blog</code>文件夹，发现在<code>blog\public\</code>文件夹内生成了一个<code>search.xml</code>文件，该文件包含了博客内部的内容应该能起到检索作用。那么，开始修改！同样，打开<code>blog\themes\fluid\_config.yml</code>，找到<code>search</code>模块，更改path如下所示：</p>
 <p><img src="4.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
 <p>再次启动hexo三连大法，然后可以看到<code>主页</code>的搜索已经可以正常检索了，然而当点击到<code>分类</code>d等其他页面时，再点击搜索，同样还是Loading。</p>
-<p><img src="5.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""><br><img src="1.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
+<p><img src="5.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""><br>
+<img src="1.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
 <p>再次使用F12查看问题</p>
 <p><img src="6.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
 <p>发现全使用<code>search.xml</code>之后在跳转其他页面时Fluid会自动在地址上加入页面标签，比如分类页面就加上了<code>categories</code>(主页时是<code>http://localhost:4000/jasonyang.github.io/search.xml</code>，而分类页变为了<code>http://localhost:4000/jasonyang.github.io/categories/search.xml</code>)</p>
 <p>然后就想到了使用绝对的文件索引地址，由此再每次切换页面时检索文件的地址就不会发生变化。</p>
-<h2 id="解决方案version2"><a href="#解决方案version2" class="headerlink" title="解决方案version2"></a>解决方案version2</h2><p>因为这个博客是为了部署到GitHub上面，因此这里将<code>blog\themes\fluid\_config.yml</code>，文件<code>search</code>版块的path更改为<code>博客项目的地址</code>+<code>search.xml</code>。例如：</p>
+<h2 id="解决方案version2">解决方案version2</h2>
+<p>因为这个博客是为了部署到GitHub上面，因此这里将<code>blog\themes\fluid\_config.yml</code>，文件<code>search</code>版块的path更改为<code>博客项目的地址</code>+<code>search.xml</code>。例如：</p>
 <figure class="highlight awk"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">path: <span class="hljs-regexp">//</span>jayheyang.github.io<span class="hljs-regexp">/jasonyang.github.io/</span>search.xml<br></code></pre></td></tr></tbody></table></figure>
 <p>最后<code>hexo d</code>部署到GitHub Pages，测试结果如下：</p>
 <p><img src="7.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
