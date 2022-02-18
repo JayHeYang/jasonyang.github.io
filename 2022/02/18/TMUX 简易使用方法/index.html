@@ -1,0 +1,668 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jasonyang.github.io/img/panda.png">
+  <link rel="icon" href="/jasonyang.github.io/img/panda.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="jasonyang">
+  <meta name="keywords" content="">
+  
+  <title>TMUX 简易使用方法 - jasonyang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/jasonyang.github.io/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/jasonyang.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/jasonyang.github.io/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","app_key":"wlepdaYUatxn4WD8tudl2BdX","server_url":"https://uqjw3jet.lc-cn-n1-shared.com"}},"search_path":"//jayheyang.github.io/jasonyang.github.io/search.xml"};
+  </script>
+  <script  src="/jasonyang.github.io/js/utils.js" ></script>
+  <script  src="/jasonyang.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/jasonyang.github.io/">&nbsp;<strong>Morvan</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/jasonyang.github.io/img/zelda2.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="TMUX 简易使用方法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-18 14:43" pubdate>
+        2022年2月18日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      15
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">TMUX 简易使用方法</h1>
+            
+            <div class="markdown-body">
+              <h2 id="TMUX-简易使用方法">TMUX 简易使用方法</h2>
+<blockquote>
+<p><strong>主要参考：</strong></p>
+<p>阮一峰 Tmux 使用教程：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/10/tmux.html">https://www.ruanyifeng.com/blog/2019/10/tmux.html</a></p>
+<p>Tmux使用手册：<a target="_blank" rel="noopener" href="http://louiszhai.github.io/2017/09/30/tmux/#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E7%9A%84%E4%BC%9A%E8%AF%9D">http://louiszhai.github.io/2017/09/30/tmux/#查看所有的会话</a></p>
+</blockquote>
+<p>**基本概念：**输入tmux命令就相当于开启了一个服务器，此时默认将新建一个会话，然后会话中默认新建一个窗口，窗口中默认新建一个面板。tmux会话、窗口、面板之间的联系如下：</p>
+<ul>
+<li>
+<p>一个tmux <code>session</code>（会话）可以包含多个<code>window</code>（窗口），窗口默认充满会话界面，因此这些窗口中可以运行相关性不大的任务。</p>
+</li>
+<li>
+<p>一个<code>window</code>又可以包含多个<code>pane</code>（面板），窗口下的面板，都处于同一界面下，这些面板适合运行相关性高的任务，以便同时观察到它们的运行情况。</p>
+</li>
+</ul>
+<h3 id="0-tmux-安装">0. tmux 安装</h3>
+<hr>
+<h4 id="ROOT-用户安装：">ROOT 用户安装：</h4>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Ubuntu 或 Debian</span><br>$ sudo apt-get install tmux<br><br><span class="hljs-comment"># CentOS 或 Fedora</span><br>$ sudo yum install tmux<br><br><span class="hljs-comment"># Mac</span><br>$ brew install tmux<br></code></pre></td></tr></tbody></table></figure>
+<h4 id="非ROOT-用户安装：">非ROOT 用户安装：</h4>
+<p>非root用户安装tmux参考以下链接：</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/155662601">知乎：非root用户安装tmux</a></p>
+<blockquote>
+<p>如果使用<code>wget</code>产生类似<code>无法解析github.com</code>的错误信息可以利用链接进入GitHub仓库下载后传入安装位置。</p>
+</blockquote>
+<h3 id="1-基本用法">1. 基本用法</h3>
+<hr>
+<p>最简单也是最常用的tmux使用流程是：新建会话、在新建的会话中运行程序、分离会话、下次使用接入会话</p>
+<h4 id="创建会话">创建会话</h4>
+<ol>
+<li>使用tmux快速创建会话</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux<br></code></pre></td></tr></tbody></table></figure>
+<ol start="2">
+<li>指定创建会话的名称</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux new -s test-1<br></code></pre></td></tr></tbody></table></figure>
+<p>上面表示创建一个名为<code>test</code>的会话。会话创建完后会在当前窗口的下方出现一个小绿条，类似这种：</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220218101122309.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220218101122309"></p>
+<p>小绿条左边显示会话名称<code>test-1</code>、窗格(pane)序号<code>0</code>以及窗口名称<code>bash</code>（窗格和窗口的简单操作后面会提到）。小绿条右边则显示会话的创建时间及其他一些信息。</p>
+<h4 id="运行程序">运行程序</h4>
+<p>在刚才创建好的会话中键入自己想运行的程序指令，然后该指令便会一直在后台运行并不会随着SSH连接的断开而停止运行。例如在刚才的会话中运行<code>train.py</code>。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ python train.py<br></code></pre></td></tr></tbody></table></figure>
+<p>就像正常的SSH连接一样程序开始运行。</p>
+<h4 id="会话分离">会话分离</h4>
+<p>经过上面的操作程序已经正常运行起来了，接下来我们可以用<code>detach</code>将这个会话与SSH窗口分离开，让它自己在后台运行。</p>
+<p>具体操作如下：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux detach<br></code></pre></td></tr></tbody></table></figure>
+<p>然后小绿条消失，会话窗口恢复到SSH连接窗口。</p>
+<blockquote>
+<p>可能在运行程序之后，你的程序会一直打印输出导致你无法输入上述指令这时可以利用先按一次<code>Ctrl+b</code>松开后再按<code>d</code>快捷键分离会话。</p>
+</blockquote>
+<h4 id="会话接入">会话接入</h4>
+<p>一个小时之后我们想看看自己的程序跑得怎么样了，这时使用<code>attach</code>便能接入会话查看训练过程。具体指令如下：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 接入之前 test 会话</span><br>$ tmux attach -t <span class="hljs-built_in">test</span><br></code></pre></td></tr></tbody></table></figure>
+<h4 id="退出会话">退出会话</h4>
+<p>会话分离操作只是将任务放置后台托管并没有断开连接，如果想在程序运行完之后断开连接退出会话则需要使用快捷键<code>Ctrl+d</code>或者键入<code>exit</code>。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">exit</span><br></code></pre></td></tr></tbody></table></figure>
+<h3 id="2-其他操作">2. 其他操作</h3>
+<h4 id="会话操作">会话操作</h4>
+<ul>
+<li>创建会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux new -s &lt;session-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>查看会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ctrl+b + s 分开按</span><br><span class="hljs-comment"># or</span><br>$ tmux ls<br><span class="hljs-comment"># or</span><br>$ tmux list-session<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>分离会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ctrl+b + d 分开按</span><br><span class="hljs-comment"># or</span><br>$ tmux detach<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>接入会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux attach -t &lt;session-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>杀死（退出）会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Ctrl+d</span><br><span class="hljs-comment"># or</span><br>$ tmux kill-session -t &lt;session-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>切换会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux switch -t &lt;session-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>重命名会话</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux rename-session -t &lt;old-name&gt; &lt;new-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<h4 id="窗格操作">窗格操作</h4>
+<ul>
+<li>划分窗格</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 划分为上下两个窗格</span><br><span class="hljs-comment"># ctrl+b + " 分开按</span><br><span class="hljs-comment"># or</span><br>$ tmux split-window<br><br><br><span class="hljs-comment"># 划分为左右两个窗格</span><br><span class="hljs-comment"># ctrl+b + % 分开按</span><br><span class="hljs-comment"># or</span><br>$ tmux split-window -h<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>移动光标</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 光标切换到上方窗格</span><br>$ tmux select-pane -U<br><br><span class="hljs-comment"># 光标切换到下方窗格</span><br>$ tmux select-pane -D<br><br><span class="hljs-comment"># 光标切换到左边窗格</span><br>$ tmux select-pane -L<br><br><span class="hljs-comment"># 光标切换到右边窗格</span><br>$ tmux select-pane -R<br></code></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>除了使用上面的显示指令外也可以通过<code>ctrl+b</code>和<code>键盘上下左右方向键来移动光标</code>。</p>
+</blockquote>
+<ul>
+<li>交换窗格位置</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 当前窗格上移</span><br>$ tmux swap-pane -U<br><br><span class="hljs-comment"># 当前窗格下移</span><br>$ tmux swap-pane -D<br></code></pre></td></tr></tbody></table></figure>
+<p>貌似无法支持窗格左右移动？</p>
+<ul>
+<li>查看窗格</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux list-pane<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>移除窗格</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 移除当前光标所在窗格</span><br><span class="hljs-comment"># ctrl+b + x 分开按</span><br><br><span class="hljs-comment"># 移除指定序号0的窗格</span><br>$ tmux kill-pane -t 0<br></code></pre></td></tr></tbody></table></figure>
+<h4 id="窗口操作">窗口操作</h4>
+<ul>
+<li>创建窗口</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux new-window<br><br><span class="hljs-comment"># 新建一个指定名称的窗口</span><br>$ tmux new-window -n &lt;window-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>重命名窗口</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 给当前窗口重名命</span><br>$ tmux rename-window &lt;new-name&gt;<br><br>$ tmux rename-window -t  &lt;old-name&gt; &lt;new-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>查看窗口</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux list-window<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>切换窗口</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 切换到指定编号的窗口</span><br>$ tmux select-window -t &lt;window-number&gt;<br><br><span class="hljs-comment"># 切换到指定名称的窗口</span><br>$ tmux select-window -t &lt;window-name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<ul>
+<li>关闭窗口</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 移除指定的窗口</span><br>$ tmux kill-window -t &lt;name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<p>END</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/tmux-linux/">tmux linux</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2021/11/30/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/">
+                        <span class="hidden-mobile">风格迁移</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","appKey":"wlepdaYUatxn4WD8tudl2BdX","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://uqjw3jet.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/jasonyang.github.io/js/events.js" ></script>
+<script  src="/jasonyang.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/jasonyang.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/jasonyang.github.io/js/local-search.js" ></script>
+
+
+
+
+  <script defer src="/jasonyang.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/jasonyang.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>
