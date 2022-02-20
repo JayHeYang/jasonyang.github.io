@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Windows更改默认Python版本</title>
+    <link href="/jasonyang.github.io/2022/02/20/windows%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4Python%E7%89%88%E6%9C%AC/"/>
+    <url>/jasonyang.github.io/2022/02/20/windows%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4Python%E7%89%88%E6%9C%AC/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Windows更改默认Python版本">Windows更改默认Python版本</h2><p>之前想为特定版本的Python安装依赖包时遇到无法切换Python默认版本的问题，于是记录一下解决过程。</p><blockquote><p>适用于windows 直接安装的python版本之间切换或者直接安装的python版本与anaconda中 base环境 python版本的切换。如果直接在anaconda中切换版本直接使用<code>source activate &lt;env name&gt; </code>或者<code>conda activate &lt;env name&gt;</code>。</p></blockquote><h4 id="1-查看当前默认Python版本">1.查看当前默认Python版本</h4><p>在windows命令行窗口输入<code>python -V</code>查看当前Python版本。</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220144944093.png" alt="image-20220220144944093"></p><h4 id="2-打开环境变量编辑界面">2.打开环境变量编辑界面</h4><p>windows中指令的调用顺序或者优先级是按照环境变量排列的先后顺序确定的，因此要改变默认python版本只需要调整<code>python.exe</code>路径在环境变量中的先后。依次点击<code>开始菜单&gt;设置&gt;系统&gt;关于&gt;高级系统设置&gt;环境变量</code>，打开后可以看到以下页面。</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220150355935.png" alt="image-20220220150355935"></p><p>有两组变量<code>用户变量</code>和<code>系统变量</code>，<code>系统变量</code>的优先级比用户变量优先级更高，因此即使你是<code>用户变量path</code>中的第一个也比<code>系统变量path</code>中的最后一个优先级低。</p><h4 id="3-确定python各版本路径">3.确定python各版本路径</h4><p>先确定切换的python版本的路径，在命令行窗口输入<code>where python</code>查看已安装的python的路径。</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220151037991.png" alt="image-20220220151037991"></p><p>主要就两个：一个在C盘，一个在G盘（C盘的是3.7, G盘的是python3.9）。</p><h4 id="4-更改环境变量顺序">4.更改环境变量顺序</h4><p>然后分别点击<code>用户变量</code>和<code>系统变量</code>中的<code>Path</code>组，然后点击<code>编辑</code>，查看对应python的顺序，确保想设置为默认python版本的路径在前面，我这里python3.7在anaconda python3.9上面所以默认是python 3.7。</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220152025184.png" alt="image-20220220152025184"></p><p>如果我更改环境变量顺序为下图所示：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220152226491.png" alt="image-20220220152226491"></p><p>此时重新打开命令行窗口，并输入<code>python -V</code>则会返回python 3.9</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220152410083.png" alt="image-20220220152410083"></p><p>至此python默认版本更改完毕。</p><blockquote><p>注意：有些时候你的不同版本python变量路径分别在<code>用户变量</code>和<code>系统变量</code>的path中，这时可以把其中一个路径删除，在同一个组（<code>用户变量</code>组或<code>系统变量</code>组）内添加，并确定优先顺序。</p></blockquote><div class="note note-success">            <p><strong>Post Author:</strong> jasonyang</p>          </div>]]></content>
+    
+    
+    <categories>
+      
+      <category>杂记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>python</tag>
+      
+      <tag>windows</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>TMUX 简易使用方法</title>
     <link href="/jasonyang.github.io/2022/02/18/TMUX%20%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"/>
     <url>/jasonyang.github.io/2022/02/18/TMUX%20%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
