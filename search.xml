@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>01. Pytorch 筛选部分网络层权重参数加载</title>
+    <link href="/jasonyang.github.io/2022/02/20/Pytorch%20%E7%AD%9B%E9%80%89%E9%83%A8%E5%88%86%E7%BD%91%E7%BB%9C%E5%B1%82%E6%9D%83%E9%87%8D%E5%8F%82%E6%95%B0%E5%8A%A0%E8%BD%BD/"/>
+    <url>/jasonyang.github.io/2022/02/20/Pytorch%20%E7%AD%9B%E9%80%89%E9%83%A8%E5%88%86%E7%BD%91%E7%BB%9C%E5%B1%82%E6%9D%83%E9%87%8D%E5%8F%82%E6%95%B0%E5%8A%A0%E8%BD%BD/</url>
+    
+    <content type="html"><![CDATA[<h2 id="01-Pytorch-筛选部分网络层权重参数加载">01. Pytorch 筛选部分网络层权重参数加载</h2><h3 id="1-从权重文件中筛选并加载">1. 从权重文件中筛选并加载</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">pretrained_weight = torch.load(<span class="hljs-string">'weight.pth'</span>) <span class="hljs-comment"># 加载预训练的全部权重参数</span><br>new_net = My_Net() <span class="hljs-comment"># 定义自己的部分网络</span><br>new_net_dict = new_net.state_dict() <span class="hljs-comment"># 获取自己网络的权重参数</span><br>pretrained_dict = {k: v <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> pretrained_weight.items() <span class="hljs-keyword">if</span> k <span class="hljs-keyword">in</span> net_dict} <span class="hljs-comment"># 筛选</span><br>new_net_dict.update(pretrained_dict) <span class="hljs-comment"># 更新自己网络的权重参数</span><br>new_net.load_state_dict(new_net_dict) <span class="hljs-comment"># 重新加载进自己的网络中</span><br></code></pre></td></tr></tbody></table></figure><blockquote><p>上面代码<code>筛选</code>步骤需要两个网络的网络层命名一样才能筛选成功，如果不一样参考下面网络层名映射的方法。</p></blockquote><h3 id="2-从Pytorch官方模型中筛选部分层并加载">2. 从Pytorch官方模型中筛选部分层并加载</h3><h4 id="1-加载预训练模型">1. 加载预训练模型</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torchvision <span class="hljs-keyword">as</span> tv<br><br>pretrained_net = tv.models.alexnet(pretrained=<span class="hljs-literal">True</span>)<br>pretrained_weight = pretrained_net.state_dict()<br><br><span class="hljs-built_in">print</span>(pretrained_net)<br><span class="hljs-built_in">print</span>(pretrained_weight.keys())<br><br></code></pre></td></tr></tbody></table></figure><p>部分输出截取如下：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220220163646781.png" alt="image-20220220163646781"></p><p>选取红框部分的网络参数加载</p><h4 id="2-自定义网络">2. 自定义网络</h4><p>根据已有模型的输入输出设计网络</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">My_net</span>(<span class="hljs-params">torch.nn.Module</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-built_in">super</span>(My_net, self).__init__()<br>        self.layer = torch.nn.Sequential(<br>            torch.nn.Linear(in_features=<span class="hljs-number">4096</span>, out_features=<span class="hljs-number">4096</span>, bias=<span class="hljs-literal">True</span>),<br>            torch.nn.ReLU(inplace=<span class="hljs-literal">True</span>),<br>            torch.nn.Linear(in_features=<span class="hljs-number">4096</span>, out_features=<span class="hljs-number">1000</span>, bias=<span class="hljs-literal">True</span>)   <br>        )<br>     <br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">forward</span>(<span class="hljs-params">self, x</span>):</span><br>        <span class="hljs-keyword">return</span> self.layer(x)<br></code></pre></td></tr></tbody></table></figure><h4 id="3-实例化网络并确定映射关系">3. 实例化网络并确定映射关系</h4><p>因为权重参数是通过字典存储的，当你重新定义一样的网络（即时输入输出相同）但是每层的名称会不一样。导致无法加载。</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">net = My_net()<br>net_dict = net.state_dict()<br>net_dict.keys()<br>need_weights = [<span class="hljs-string">'classifier.4.weight'</span>, <span class="hljs-string">'classifier.4.bias'</span>, <span class="hljs-string">'classifier.6.weight'</span>, <span class="hljs-string">'classifier.6.bias'</span>]<br>layer_name_map = { a: b <span class="hljs-keyword">for</span> a,b <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(need_weights, net_dict.keys())} <span class="hljs-comment"># 网络层名称映射</span><br><span class="hljs-built_in">print</span>(layer_name_map)<br><span class="hljs-string">"""</span><br><span class="hljs-string">outs:</span><br><span class="hljs-string">{'classifier.4.weight': 'layer.0.weight',</span><br><span class="hljs-string"> 'classifier.4.bias': 'layer.0.bias',</span><br><span class="hljs-string"> 'classifier.6.weight': 'layer.2.weight',</span><br><span class="hljs-string"> 'classifier.6.bias': 'layer.2.bias'}</span><br><span class="hljs-string">"""</span><br></code></pre></td></tr></tbody></table></figure><h4 id="4-筛选并加载参数">4. 筛选并加载参数</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">pretrained_dict = {}<br><span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> pretrained_weight.items():<br>    <span class="hljs-keyword">if</span> k <span class="hljs-keyword">in</span> need_weights:<br>        <span class="hljs-comment"># 通过映射获取自己网络的网络名</span><br>        pretrained_dict[layer_name_map[k]] = v<br><br>net.load_state_dict(pretrained_dict)<br></code></pre></td></tr></tbody></table></figure><p>END</p><div class="note note-success">            <p><strong>Post Author:</strong> jasonyang</p>          </div>]]></content>
+    
+    
+    <categories>
+      
+      <category>机器学习</category>
+      
+      <category>Pytorch 使用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>python</tag>
+      
+      <tag>pytorch</tag>
+      
+      <tag>权重加载</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Windows更改默认Python版本</title>
     <link href="/jasonyang.github.io/2022/02/20/windows%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4Python%E7%89%88%E6%9C%AC/"/>
     <url>/jasonyang.github.io/2022/02/20/windows%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4Python%E7%89%88%E6%9C%AC/</url>
@@ -233,81 +264,6 @@
     <tags>
       
       <tag>Markdown</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>机器学习</title>
-    <link href="/jasonyang.github.io/2021/07/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    <url>/jasonyang.github.io/2021/07/22/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    <categories>
-      
-      <category>机器学习</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>机器学习</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>图像分割</title>
-    <link href="/jasonyang.github.io/2021/07/22/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/"/>
-    <url>/jasonyang.github.io/2021/07/22/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    <categories>
-      
-      <category>图像分割</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>图像分割</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>目标检测</title>
-    <link href="/jasonyang.github.io/2021/07/22/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"/>
-    <url>/jasonyang.github.io/2021/07/22/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    <categories>
-      
-      <category>目标检测</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>目标检测</tag>
       
     </tags>
     
