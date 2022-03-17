@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>03. pytorch中model eval和torch no grad()的区别</title>
+    <link href="/jasonyang.github.io/2022/03/17/03.%20pytorch%E4%B8%ADmodel%20eval%E5%92%8Ctorch%20no%20grad()%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <url>/jasonyang.github.io/2022/03/17/03.%20pytorch%E4%B8%ADmodel%20eval%E5%92%8Ctorch%20no%20grad()%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    
+    <content type="html"><![CDATA[<h2 id="03-pytorch中model-eval和torch-no-grad-的区别">03. pytorch中model eval和torch no grad()的区别</h2><p>原博文连接如下：<a href="https://blog.csdn.net/songyu0120/article/details/103884586?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164748615916780269889584%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164748615916780269889584&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-1-103884586.142%5Ev2%5Epc_search_result_cache,143%5Ev4%5Econtrol&amp;utm_term=model.eval%28%29%E5%92%8Ctorch.no_grad%28%29&amp;spm=1018.2226.3001.4187">CSDN: pytorch中model eval和torch no grad()的区别</a></p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220317110919631.png" alt="image-20220317110919631"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Pytorch 使用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Pytorch</tag>
+      
+      <tag>train and test model</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>阿里云+frp实现内网穿透</title>
     <link href="/jasonyang.github.io/2022/03/10/%E9%98%BF%E9%87%8C%E4%BA%91+frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/"/>
     <url>/jasonyang.github.io/2022/03/10/%E9%98%BF%E9%87%8C%E4%BA%91+frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</url>
