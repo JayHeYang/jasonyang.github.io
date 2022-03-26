@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>LeetCode日积月累：01.二分查找</title>
+    <link href="/jasonyang.github.io/2022/03/26/LeetCode%E6%97%A5%E7%A7%AF%E6%9C%88%E7%B4%AF%EF%BC%9A01.%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"/>
+    <url>/jasonyang.github.io/2022/03/26/LeetCode%E6%97%A5%E7%A7%AF%E6%9C%88%E7%B4%AF%EF%BC%9A01.%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    
+    <content type="html"><![CDATA[<h3 id="LeetCode日积月累：01-二分查找">LeetCode日积月累：01.二分查找</h3><p>根据<strong>代码随想录</strong>的讲解顺序开始打卡学习，闲时更新。</p><blockquote><p>代码随想录：<a href="https://www.programmercarl.com/0704.%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE.html#_704-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">https://www.programmercarl.com/0704.二分查找.html#_704-二分查找</a></p><p>LeetCode练习题目：<a href="https://leetcode-cn.com/problems/binary-search/">https://leetcode-cn.com/problems/binary-search/</a></p></blockquote><h4 id="题目描述">题目描述</h4><p>给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。</p><p><strong>示例</strong></p><figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: nums = [-1,0,3,5,9,12], target = 9</span><br><span class="hljs-section">输出: 4</span><br><span class="hljs-section">解释: 9 出现在 nums 中并且下标为 4</span><br></code></pre></td></tr></tbody></table></figure><figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: nums = [-1,0,3,5,9,12], target = 2</span><br><span class="hljs-section">输出: -1</span><br><span class="hljs-section">解释: 2 不存在 nums 中因此返回 -1</span><br></code></pre></td></tr></tbody></table></figure><h4 id="解决方案">解决方案</h4><p>注意选取的指针列表是左闭右开区间（<code>[left, right)</code>）还是闭区间（<code>[left, right]</code>）。</p><ul><li><code>[left, right)</code>：则当<code>nums[middle] &gt; target</code>时，<code>right = middle</code>因为右端是开，middle是取不到的刚好也是开.</li><li><code>[left, right]</code>：则当<code>nums[middle] &gt; target</code>时，<code>right = middle - 1 </code>因为右端是闭区间，而<code>nums[middle]</code>已经大于<code>target</code>, <code>middle-1</code>才是可以取到.</li></ul><ol><li>[left, right]版本</li></ol><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span>:</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">search</span>(<span class="hljs-params">self, nums: <span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>], target: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:</span><br>        left, right = <span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(nums)-<span class="hljs-number">1</span><br><br>        <span class="hljs-keyword">while</span> left &lt;= right:<br>            middle = (left + right) // <span class="hljs-number">2</span><br>            <span class="hljs-keyword">if</span> nums[middle] &gt; target:<br>                right = middle - <span class="hljs-number">1</span><br>            <span class="hljs-keyword">elif</span> nums[middle] &lt; target:<br>                left = middle + <span class="hljs-number">1</span><br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-keyword">return</span> middle<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span><br></code></pre></td></tr></tbody></table></figure><ol start="2"><li>[left, right)版本</li></ol><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span>(<span class="hljs-params"><span class="hljs-built_in">object</span></span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">search</span>(<span class="hljs-params">self, nums, target</span>):</span><br>        left, right = <span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(nums) <span class="hljs-comment"># 半开区间</span><br><br>        <span class="hljs-keyword">while</span> left &lt; right: <span class="hljs-comment"># left不能取到right</span><br>            middle = (left + right) // <span class="hljs-number">2</span><br>            <span class="hljs-keyword">if</span> nums[middle] &gt; target:<br>                right = middle<br>            <span class="hljs-keyword">elif</span> nums[middle] &lt; target:<br>                left = middle + <span class="hljs-number">1</span><br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-keyword">return</span> middle<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span><br></code></pre></td></tr></tbody></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>LeetCode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>LeetCode</tag>
+      
+      <tag>Python 算法</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>03. pytorch中model eval和torch no grad()的区别</title>
     <link href="/jasonyang.github.io/2022/03/17/03.%20pytorch%E4%B8%ADmodel%20eval%E5%92%8Ctorch%20no%20grad()%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
     <url>/jasonyang.github.io/2022/03/17/03.%20pytorch%E4%B8%ADmodel%20eval%E5%92%8Ctorch%20no%20grad()%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
@@ -372,31 +399,6 @@
     <tags>
       
       <tag>Markdown</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>LeetCode题目积累</title>
-    <link href="/jasonyang.github.io/2021/07/22/LeetCode%E9%A2%98%E7%9B%AE%E7%A7%AF%E7%B4%AF/"/>
-    <url>/jasonyang.github.io/2021/07/22/LeetCode%E9%A2%98%E7%9B%AE%E7%A7%AF%E7%B4%AF/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    <categories>
-      
-      <category>LeetCode</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>LeetCode</tag>
       
     </tags>
     
