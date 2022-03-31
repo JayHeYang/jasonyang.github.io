@@ -18,7 +18,7 @@
   <meta name="author" content="jasonyang">
   <meta name="keywords" content="">
   
-  <title>如何查找会议论文开会地和出版地 - jasonyang</title>
+  <title>04. Pytorch中WeightedRandomSampler()的使用 - jasonyang</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -165,7 +165,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="如何查找会议论文开会地和出版地">
+            <span class="h2" id="subtitle" title="04. Pytorch中WeightedRandomSampler()的使用">
               
             </span>
 
@@ -175,8 +175,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-13 14:38" pubdate>
-        2022年3月13日 下午
+      <time datetime="2022-03-31 20:32" pubdate>
+        2022年3月31日 晚上
       </time>
     </span>
   
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      915 字
+      673 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      11
+      9
        分钟
     </span>
   
@@ -227,101 +227,33 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">如何查找会议论文开会地和出版地</h1>
+            <h1 style="display: none">04. Pytorch中WeightedRandomSampler()的使用</h1>
             
             <div class="markdown-body">
-              <h2 id="如何查找会议论文开会地和出版地">如何查找会议论文开会地和出版地</h2>
+              <h2 id="04-Pytorch中WeightedRandomSampler-的使用">04. Pytorch中WeightedRandomSampler()的使用</h2>
 <hr>
-<p>国内一些期刊要求会议论文的参考文献必须得明确论文的出版地（or开会地）和出版商，而直接用google scholar 搜索论文得到的引用格式由通常没有出版地信息，上网搜索了一波，整理了一下其他博主的方案归纳如下。</p>
-<p>会议论文的一般引用格式：</p>
-<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs prolog">［序号］作者．题名[<span class="hljs-symbol">A</span>]．论文集名[<span class="hljs-symbol">C</span>]．出版地：出版社,出版年：起-止页码.<br></code></pre></td></tr></tbody></table></figure>
-<p>示例：</p>
-<figure class="highlight stylus"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-attr">[19]</span> WANG Zhong-dao, ZHENG Liang, LIU Yi-xuan, et al. Towards real-<span class="hljs-selector-tag">time</span> multi-<span class="hljs-selector-tag">object</span> tracking<span class="hljs-selector-attr">[C]</span><span class="hljs-comment">// European Conference on Computer Vision. Cham: Springer, 2020: 107-122.</span><br></code></pre></td></tr></tbody></table></figure>
+<p>针对一些样本类别不均衡数据集，可使用加权的随机采样器平衡各类样本被采样（抽取）训练的概率，缓和偏向预测。</p>
+<h3 id="1-加权随机采样器简介">1. 加权随机采样器简介</h3>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220329232206466.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220329232206466"></p>
+<p>参数介绍：</p>
+<ul>
+<li><code>weights:</code>每个样本的采样权重（注意是每个样本），是一个长度为<code>N</code>的<code>list</code>，<code>N</code>为数据集中的样本总个数。</li>
+<li><code>num_samples:</code>需要采样的样本个数。</li>
+<li><code>replacement:</code>是否可以重采样，如果可以重采样则<code>num_samples</code>可以大于<code>N</code>；否则<code>num_samples &lt;= N</code>，且当<code>num_samples=N</code>时采样权重失效。</li>
+<li><code>generator:</code>用于生成采样器的生成器，一般不指定。</li>
+</ul>
+<h3 id="2-使用示例">2. 使用示例</h3>
+<p>为了阐述<code>WeightedRandomSampler()</code>的工作原理，首先简单创建一个<code>dataset</code>。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">'''</span><br><span class="hljs-string">创建简易数据集</span><br><span class="hljs-string">'''</span><br><span class="hljs-keyword">from</span> torch.utils <span class="hljs-keyword">import</span> data<br><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">My_dataset</span>(<span class="hljs-params">data.Dataset</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self</span>):</span><br>        self.data = torch.randn(<span class="hljs-number">10</span>, <span class="hljs-number">3</span>, <span class="hljs-number">256</span>, <span class="hljs-number">256</span>) <span class="hljs-comment"># 生成虚拟图像数据</span><br>        self.labels = torch.randint(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, [<span class="hljs-number">10</span>]) <span class="hljs-comment"># 生层虚拟数据的label</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__getitem__</span>(<span class="hljs-params">self, idx</span>):</span><br>        <span class="hljs-keyword">return</span> self.data[idx], self.labels[idx], idx<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__len__</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> self.data.size(<span class="hljs-number">0</span>)<br>  <br></code></pre></td></tr></tbody></table></figure>
+<p>上面创建了一个简易的数据集，里面只有10个（虚假）的图像数据，接下来将结合这个数据集类展示<code>WeightedRandomSampler()</code>来的用法。</p>
+<h4 id="2-1-生成采样索引">2.1 生成采样索引</h4>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.utils <span class="hljs-keyword">import</span> data<br><span class="hljs-keyword">import</span> torch<br><br>weights = [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>] <span class="hljs-comment"># 10个样本各自的采样权重</span><br>sampler = data.WeightedRandomSampler(weights, num_samples=<span class="hljs-number">20</span>, replacement=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(sampler))<br><span class="hljs-comment">### out</span><br><span class="hljs-comment"># 因为最后一个样本的采样权重比较大，所以采样得到样本索引大多数都是最后一个样本</span><br><span class="hljs-comment"># [9, 9, 1, 9, 9, 9, 4, 9, 4, 3, 4, 9, 0, 9, 2, 9, 9, 9, 7, 9] </span><br><br>weights = [<span class="hljs-number">9</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] <span class="hljs-comment"># 10个样本各自的采样权重</span><br>sampler = data.WeightedRandomSampler(weights, num_samples=<span class="hljs-number">20</span>, replacement=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(sampler))<br><span class="hljs-comment">### out</span><br><span class="hljs-comment"># 同理，因为第一个样本的采样权重比较大，所以采样得到样本索引大多数都是第一个样本</span><br><span class="hljs-comment"># [0, 0, 4, 7, 4, 0, 1, 0, 0, 4, 0, 0, 3, 6, 3, 0, 0, 8, 0, 0]</span><br><br></code></pre></td></tr></tbody></table></figure>
 <blockquote>
-<p>无论英文还是中文作者姓名一律<code>姓前名后</code>，有些期刊可能会要求完整的姓名拼音（如示例），根据具体期刊要求修改即可。</p>
+<p>当<code>replacement=False</code>时，各个样本的索引只能被采样一次，且当<code>num_samples=N</code>时，输出的采样样本就是原始数据集。</p>
 </blockquote>
-<h3 id="1-首先使用中文Google-Scholar镜像站搜索对应论文，得到一个基本的国标引用格式。">1. 首先使用中文Google Scholar镜像站搜索对应论文，得到一个基本的国标引用格式。</h3>
-<hr>
-<blockquote>
-<p>注：如果直接用Google scholar 搜索的话，在导出文献引用时会没有<code>GB/T 7714</code>格式。</p>
-</blockquote>
-<p><strong>Google Scholar镜像站:</strong> <a target="_blank" rel="noopener" href="http://scholar.scqylaw.com/">http://scholar.scqylaw.com/</a><br>
-进入后随便点击一个访问链接，并搜索需要引用的论文，这里以<code>YOLO:You only look once</code>为例。复制<code>GB/T 7714</code>的引用文本。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326112911647.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326112911647"></p>
-<p>这里得到引文通常是没有出版地和出版商的，需要进入我们的主线任务：<strong>如何查看会议论文的出版地和出版商。</strong></p>
-<h3 id="2-查看会议论文的出版地和出版商">2. 查看会议论文的出版地和出版商</h3>
-<hr>
-<blockquote>
-<p>常用的几个出版商和出版地：</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>出版商</th>
-<th>出版地</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>IEEE</td>
-<td>Piscataway, NJ</td>
-</tr>
-<tr>
-<td>IEEE Computer Society</td>
-<td>Los Alamitos, CA</td>
-</tr>
-<tr>
-<td>IEEE Communications Society</td>
-<td>New York, NY</td>
-</tr>
-<tr>
-<td>AAAI Press</td>
-<td>Palo Alto, CA</td>
-</tr>
-<tr>
-<td>Springer</td>
-<td>Berlin, German</td>
-</tr>
-</tbody>
-</table>
-<p>查询的网址主要有两个：</p>
-<p><strong>Web of science 检索:</strong> <a target="_blank" rel="noopener" href="https://www.webofscience.com/wos/woscc/basic-search">https://www.webofscience.com/wos/woscc/basic-search</a></p>
-<p>**EI检索：**<a target="_blank" rel="noopener" href="https://www.engineeringvillage.com/search/quick.url">https://www.engineeringvillage.com/search/quick.url</a></p>
-<blockquote>
-<p>记得一定断掉代理，否则网站无法通过ip地址识别你是校园机构用户。</p>
-</blockquote>
-<h4 id="2-1-Web-of-science-检索">2.1 Web of science 检索</h4>
-<blockquote>
-<p><strong>Web of science 检索:</strong> <a target="_blank" rel="noopener" href="https://www.webofscience.com/wos/woscc/basic-search">https://www.webofscience.com/wos/woscc/basic-search</a></p>
-</blockquote>
-<p>还是同样的以<code>YOLO:You only look once</code>为例，输入文章名点击检索，找到对应文章并点击进入（红框）。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326140131358.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326140131358"></p>
-<p>然后就可以看到以下信息：</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326140643347.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326140643347"></p>
-<p>继续往下翻阅可以看到出版商和出版地：</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326140820268.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326140820268"></p>
-<p>最后综合Google Scholar镜像中导出的<code>GB\T</code>引文和<code>web of science</code>查到的出版地，<code>YOLO</code>会议论文的参考文献格式如下：</p>
-<figure class="highlight pgsql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">Redmon J, Divvala S, Girshick R, et al. You <span class="hljs-keyword">only</span> look once: Unified, <span class="hljs-type">real</span>-<span class="hljs-type">time</span> <span class="hljs-keyword">object</span> detection[C]//Proceedings <span class="hljs-keyword">of</span> the IEEE conference <span class="hljs-keyword">on</span> computer vision <span class="hljs-keyword">and</span> pattern recognition. <span class="hljs-built_in">New</span> York:IEEE,<span class="hljs-number">2016</span>: <span class="hljs-number">779</span><span class="hljs-number">-788.</span><br></code></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>不确定最后的归属州<code>NY</code>需不需要添加，按理说只需要填写到具体城市就可以了，酌情参考。</p>
-</blockquote>
-<h4 id="2-2-EI检索">2.2 EI检索</h4>
-<blockquote>
-<p>**EI检索：**<a target="_blank" rel="noopener" href="https://www.engineeringvillage.com/search/quick.url">https://www.engineeringvillage.com/search/quick.url</a></p>
-</blockquote>
-<p>用在检索页面的最上方输入文章名，找到对应文章，进入后点击<code>Detailed</code>。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326141705520.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326141705520"></p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326141846669.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326141846669"></p>
-<p>进入后就可以到该会议论文的<code>出版时间，论文集，出版商，出版地，页码</code>等详细信息。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220326142338284.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220326142338284"></p>
-<blockquote>
-<p>一般EI检索和Web of  science检索出来的出版商会不一样，感觉EI检索的更规范一些，建议先用EI检索查找出版商，如果没找到对应论文再用web of science。</p>
-</blockquote>
-<p>最后综合之前的引文得到最终<code>YOLO</code>参考文献的格式为：</p>
-<figure class="highlight pgsql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">Redmon J, Divvala S, Girshick R, et al. You <span class="hljs-keyword">only</span> look once: Unified, <span class="hljs-type">real</span>-<span class="hljs-type">time</span> <span class="hljs-keyword">object</span> detection[C]//Proceedings <span class="hljs-keyword">of</span> the IEEE conference <span class="hljs-keyword">on</span> computer vision <span class="hljs-keyword">and</span> pattern recognition. Los Alamitos:IEEE Computer Society, <span class="hljs-number">2016</span>: <span class="hljs-number">779</span><span class="hljs-number">-788.</span><br></code></pre></td></tr></tbody></table></figure>
-<h3 id="主要参考：">主要参考：</h3>
-<p>【知乎】：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/96910701">《参考文献 [出版地: 出版社] 检索方法》</a></p>
-<p>【CSDN】：<a target="_blank" rel="noopener" href="https://blog.csdn.net/JaysonRen/article/details/121794249">《深度学习顶会：CVPR、ICCV、ECCV 历年举办地点[2015~2021]》</a></p>
+<h4 id="2-2-结合dataset演示">2.2 结合<code>dataset</code>演示</h4>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.utils <span class="hljs-keyword">import</span> data<br><span class="hljs-keyword">import</span> torch<br><br>weights = [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>] <span class="hljs-comment"># 10个样本各自的采样权重</span><br>sampler = data.WeightedRandomSampler(weights, num_samples=<span class="hljs-number">20</span>, replacement=<span class="hljs-literal">True</span>)<br>my_dataset = My_dataset()<br>my_dataloader = data.DataLoader(my_dataset, batch_size=<span class="hljs-number">10</span>, sampler=sampler)<br><span class="hljs-keyword">for</span> (data, label, index) <span class="hljs-keyword">in</span> my_dataloader:<br>    <span class="hljs-built_in">print</span>(index)<br><br><span class="hljs-comment">### out</span><br><span class="hljs-comment"># tensor([1, 9, 8, 8, 9, 3, 1, 9, 4, 9])</span><br><span class="hljs-comment"># tensor([9, 9, 0, 3, 9, 9, 5, 9, 7, 9])</span><br></code></pre></td></tr></tbody></table></figure>
+<p>加入<code>sampler</code>之后，<code>dataloader</code>在每次加载的数据样本就会依据采样的样本索引去获取对应索引样本的数据，以达到平衡不同类别的样本数量。</p>
 
             </div>
             <hr>
@@ -331,7 +263,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/Pytorch-%E4%BD%BF%E7%94%A8/">Pytorch 使用</a>
                     
                   </div>
                 
@@ -339,7 +271,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/">参考文献</a>
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/Pytorch/">Pytorch</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/dataset/">dataset</a>
                     
                   </div>
                 
@@ -350,18 +284,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/jasonyang.github.io/2022/03/17/03.%20pytorch%E4%B8%ADmodel%20eval%E5%92%8Ctorch%20no%20grad()%E7%9A%84%E5%8C%BA%E5%88%AB/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">03. Pytorch中model eval和torch no grad()的区别</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/jasonyang.github.io/2022/03/10/%E9%98%BF%E9%87%8C%E4%BA%91+frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">
-                        <span class="hidden-mobile">阿里云+frp实现内网穿透</span>
+                      <a href="/jasonyang.github.io/2022/03/30/%E5%88%AB%E4%BA%BA%E6%89%80%E7%90%86%E8%A7%A3%E7%9A%84%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/">
+                        <span class="hidden-mobile">别人所理解的卡尔曼滤波</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
