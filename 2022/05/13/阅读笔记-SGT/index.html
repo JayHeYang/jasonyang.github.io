@@ -18,7 +18,7 @@
   <meta name="author" content="jasonyang">
   <meta name="keywords" content="">
   
-  <title>LeetCode日积月累：02.移除元素 - jasonyang</title>
+  <title>阅读笔记-Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker（SGT） - jasonyang</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -165,7 +165,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="LeetCode日积月累：02.移除元素">
+            <span class="h2" id="subtitle" title="阅读笔记-Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker（SGT）">
               
             </span>
 
@@ -175,8 +175,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-04-07 22:24" pubdate>
-        2022年4月7日 晚上
+      <time datetime="2022-05-13 12:43" pubdate>
+        2022年5月13日 下午
       </time>
     </span>
   
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      834 字
+      1.9k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      23
        分钟
     </span>
   
@@ -227,36 +227,148 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">LeetCode日积月累：02.移除元素</h1>
+            <h1 style="display: none">阅读笔记-Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker（SGT）</h1>
             
             <div class="markdown-body">
-              <h2 id="LeetCode日积月累：02-移除元素">LeetCode日积月累：02.移除元素</h2>
-<p>根据<strong>代码随想录</strong>的讲解顺序开始打卡学习，闲时更新。</p>
+              <h1>Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker</h1>
+<hr>
+<p>论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2205.00968v1.pdf">https://arxiv.org/pdf/2205.00968v1.pdf</a></p>
+<h2 id="总体结构">总体结构</h2>
+<h3 id="网络总体流程图">网络总体流程图</h3>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220511100109328.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220511100109328"></p>
+<h3 id="推理流程">推理流程</h3>
+<ol>
+<li>
+<p>连续两帧的图片输入到检测网络，提取得到$bboxs^{t1}, embeddings^{t1}$以及$bboxs^{t2}, embeddings^{t2}$；</p>
+</li>
+<li>
+<p>根据检测框的前景置信度分数排序，从$t1,t2$帧中各选取$K$个候选框（in MOT17，$K=100$, in MOT 20 , $K=300$）;</p>
+</li>
+<li>
+<p>添加之前missed tracklets的轨迹信息到$t1$帧，总共的节点数为：$2K + N_{missed}$，然后结合节点所处的帧阶段，对这些节点进行连接初始化，具体规则如下：</p>
+<ol>
+<li>前后帧节点（检测到的候选目标）中心点距离较近——两节点连接</li>
+<li>前后帧节点的外观特征余弦距离较小——连接</li>
+<li>前后帧节点的边框IoU较高——连接</li>
+</ol>
+<p>至此得到一个带链接关系的二向图。</p>
+</li>
+<li>
+<p>初始化节点（node）特征、边（edge）特征。其中节点特征可选用外观特征代替，边特征有两个，分别是$t1 \rightarrow t2$的边特征和$t2 \rightarrow t1$的边特征，它们的定义如下:<br>
+$$<br>
+e_{i, j}^{0}=f_{e n c}\left(\left[x_{i}-x_{j}, y_{i}-y_{j}, \log \left(\frac{w_{i}}{w_{j}}\right), \log \left(\frac{h_{i}}{h_{j}}\right), \operatorname{IoU}<em>{i, j}, \operatorname{Sim}</em>{i, j}\right]\right)<br>
+$$</p>
 <blockquote>
-<p>代码随想录：<a target="_blank" rel="noopener" href="https://www.programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#_27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0">https://www.programmercarl.com/0027.移除元素.html#_27-移除元素</a></p>
-<p>LeetCode练习题目：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-element/">https://leetcode-cn.com/problems/remove-element/</a></p>
+<p>其中$f_{enc}$表示两层FC block， $Sim_{i,j}$表示两个节点的外观相似度。因为$x_i - x_j$不等于$x_j - x_i$所以即使两条边使用相同的（共享权重的）$f_{enc}$，但是$e_{i,j}^0$和$e_{j,i}^0$也不相同。</p>
 </blockquote>
-<h3 id="题目描述">题目描述</h3>
-<p>给你一个数组 <code>nums</code> 和一个值 <code>val</code>，你需要 原地 移除所有数值等于 <code>val</code> 的元素，并返回移除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并 <strong>原地修改输入数组</strong>。</p>
-<p>元素的<strong>顺序可以改变</strong>。你不需要考虑数组中超出新长度后面的元素。</p>
-<p><strong>示例</strong></p>
-<figure class="highlight nix"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">nums</span> = [<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>], <span class="hljs-attr">val</span> = <span class="hljs-number">3</span><br>输出：<span class="hljs-number">2</span>, <span class="hljs-attr">nums</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>]<br>解释：函数应该返回新的长度 <span class="hljs-number">2</span>, 并且 nums 中的前两个元素均为 <span class="hljs-number">2</span>。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 <span class="hljs-number">2</span> ，而 <span class="hljs-attr">nums</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>] 或 <span class="hljs-attr">nums</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]，也会被视作正确答案。<br></code></pre></td></tr></tbody></table></figure>
-<figure class="highlight dns"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">0,1,2,2</span>,<span class="hljs-number">3,0,4,2</span>], val = <span class="hljs-number">2</span><br>输出：<span class="hljs-number">5</span>, nums = [<span class="hljs-number">0,1,4,0</span>,<span class="hljs-number">3</span>]<br>解释：函数应该返回新的长度 <span class="hljs-number">5</span>, 并且 nums 中的前五个元素为 <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>。注意这五个元素可为任意顺序。你不需要考虑数组中超出新长度后面的元素。<br><br></code></pre></td></tr></tbody></table></figure>
-<h3 id="解决方案（own）">解决方案（own）</h3>
-<p>借本想法是建立前、后两个指针，前指针从前往后判断元素是否是移除，在发现需要移除的值后，后指针从后往前遍历寻找不等于val的元素，然后交换这两个指针对应的元素值。整个程序在前指针大于后指针时停止。算法总共只需遍历一次数组元素，时间复杂度为O(n)。</p>
+</li>
+<li>
+<p>节点和边特征更新，更新共有3次即$N_{iter}=3$，每次更新的公式如下：</p>
+<ol>
+<li>
+<p>边更新<br>
+$$<br>
+e_{i, j}^{l}=f_{e}\left(\left[v_{i}^{l-1}, v_{j}^{l-1}, e_{i, j}^{0}, e_{i, j}^{l-1}\right]\right)<br>
+$$<br>
+为防止过拟合，每次边更新都有最初的边特征$e_{i,j}^0$加入；$f_e$同样表示两层FC block.</p>
+</li>
+<li>
+<p>节点更新<br>
+$$<br>
+v_{j}^{l}=f_{v_{\text {out }}}\left(\frac{1}{\left|E_{:, j}^{l}\right|} \sum_{i} f_{v_{e n c}}\left(\left[v_{i}^{l-1}, e_{i, j}^{l}\right]\right)\right)<br>
+$$<br>
+$|E_{:, j}^{l}|$表示与节点$j$所连接的另一帧的节点数量。（帧内节点不连接，帧间节点通过第3点中的3个条件来连接）</p>
+</li>
+</ol>
+</li>
+<li>
+<p>轨迹链接预测和目标可见性预测</p>
+<ol>
+<li>
+<p>轨迹链接预测</p>
+<p>通过融合两个更新后的边特征（$e_{i,j}^3$和$e_{j,i}^3$），文章中说是取平均，然后特征通过一个分类器，得到节点$i,j$之间的连接度$SE$，然后依据连接度分数利用匈牙利算法对二分图的连接关系进行指定，保证$t1$帧的每个节点至多只有一条传播到$t2$帧的边，然后对于高于阈值$\mathcal{T}_E$的边，则认为前后帧$i,j$节点（目标）具有同一ID，以此完成轨迹的向前传播。</p>
+</li>
+<li>
+<p>目标可见性预测</p>
+<p>针对$t2$帧的节点（目标），利用节点特征通过一个分类器，得到节点的可恢复度$SN$,当可恢复度低于阈值$\mathcal{T}_N$时，认为该目标不可恢复，如果该节点已被$t1$帧的节点连接，则此时将他们的连接删除，该节点对应的目标在$t2$帧也不会出现。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>旧轨迹终止和新轨迹初始化</p>
+<ol>
+<li>
+<p>旧轨迹终止</p>
+<p>当一个轨迹(这个轨迹在之前至少被连续跟踪了$min_{age}=10$帧)暂时未通过连接预测进行帧间传播时，轨迹被加入$\mathcal{T}<em>{missed}$,并持续跟踪$max</em>{age}=30$帧，以保证长时期long-term的数据关联。但如果超过30帧轨迹仍未能从每次的$t2$帧中找到匹配的检测框，则将这段轨迹移出轨迹暂存池$\mathcal{T}<em>{pool} = \mathcal{T}</em>{active} + \mathcal{T}_{missed}$</p>
+</li>
+<li>
+<p>新轨迹初始化</p>
+<p>对于第一帧和第二帧的前向传播情况，如果前后两帧有节点保持了连接则为他们分配唯一的ID，然后对于第二帧和第三帧的前向传播，因为第二帧的一些节点已经分配了ID，若这些节点能够与第三帧的节点相连接，则与其连接的第三帧的节点共享其ID，如果第二帧中未分配ID的节点与第三帧的节点相连接，则重新为它们分配一个额外的唯一的ID。</p>
 <blockquote>
-<p>每次前后指针找到待移除元素时，数组总长度-1；该方法会改变删除后输出数组元素的相对位置。</p>
+<p>注：具体是不是两帧连接就初始化轨迹，文章里面貌似也没说，上面的流程只代表一种可行的新轨迹初始化方案。</p>
 </blockquote>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span>(<span class="hljs-params"><span class="hljs-built_in">object</span></span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">removeElement</span>(<span class="hljs-params">self, nums, val</span>):</span><br>        <span class="hljs-string">"""</span><br><span class="hljs-string">        :type nums: List[int]</span><br><span class="hljs-string">        :type val: int</span><br><span class="hljs-string">        :rtype: int</span><br><span class="hljs-string">        """</span><br><br>        <span class="hljs-comment">## own solution</span><br>        l = <span class="hljs-built_in">len</span>(nums)<br>        left_idx, right_idx = <span class="hljs-number">0</span>, l-<span class="hljs-number">1</span><br>        temp = <span class="hljs-literal">None</span><br>        <span class="hljs-keyword">while</span> left_idx &lt;= right_idx:<br>            <span class="hljs-keyword">if</span> nums[left_idx] == val:<br>                l -= <span class="hljs-number">1</span><br>                <span class="hljs-keyword">while</span> nums[right_idx] == val <span class="hljs-keyword">and</span> left_idx &lt; right_idx :<br>                    right_idx -= <span class="hljs-number">1</span><br>                    l -= <span class="hljs-number">1</span><br>                temp = nums[left_idx]<br>                nums[left_idx] = nums[right_idx]<br>                nums[right_idx] = temp<br>                right_idx -= <span class="hljs-number">1</span><br>            left_idx += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">return</span> l<br></code></pre></td></tr></tbody></table></figure>
-<h3 id="解决方案（others）">解决方案（others）</h3>
-<p>双指针法（快慢指针法）： <strong>通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。</strong></p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/008eGmZEly1gntrds6r59g30du09mnpd.gif" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="27.移除元素-双指针法"></p>
-<p>快慢指针均从前往后遍历， 当快指针遇到待删除元素时，慢指针暂停移动，快指针继续遍历，直到遇到非删除元素，然后将快指针对应的值赋值到慢指针所在位置，赋值后慢指针和快指针继续移动，最终到快指针遍历结束，此时慢指针的位置则为移除val后的数组长度。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>（轨迹外观模型更新的小trick）</p>
+<p>文章中使用轨迹当前的检测置信度分数对轨迹的外观特征进行自适应加权更新，更新公式如下：<br>
+$$<br>
+e m b_{t 2}^{t r k}=e m b_{t 1}^{t r k} \times \frac{S_{t 1}}{S_{t 1}+S_{t 2}}+e m b_{t 2}^{d e t} \times \frac{S_{t 2}}{S_{t 1}+S_{t 2}}<br>
+$$</p>
 <blockquote>
-<p>因为是顺序遍历，最后输出的数组元素之间的相对位置与删除前一致。</p>
+<p>上述公式表明，对于已分配ID的轨迹的节点特征，是融合了上一次前后两帧关联后$t2$帧对应节点的外观特征的结果。</p>
 </blockquote>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span>:</span><br>    <span class="hljs-string">"""双指针法</span><br><span class="hljs-string">    时间复杂度：O(n)</span><br><span class="hljs-string">    空间复杂度：O(1)</span><br><span class="hljs-string">    """</span><br><br><span class="hljs-meta">    @classmethod</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">removeElement</span>(<span class="hljs-params">cls, nums: <span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>], val: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:</span><br>        fast = slow = <span class="hljs-number">0</span><br><br>        <span class="hljs-keyword">while</span> fast &lt; <span class="hljs-built_in">len</span>(nums):<br><br>            <span class="hljs-keyword">if</span> nums[fast] != val:<br>                nums[slow] = nums[fast]<br>                slow += <span class="hljs-number">1</span><br><br>            <span class="hljs-comment"># 当 fast 指针遇到要删除的元素时停止赋值</span><br>            <span class="hljs-comment"># slow 指针停止移动, fast 指针继续前进</span><br>            fast += <span class="hljs-number">1</span><br><br>        <span class="hljs-keyword">return</span> slow<br></code></pre></td></tr></tbody></table></figure>
+</li>
+</ol>
+<h3 id="损失设计">损失设计</h3>
+<h4 id="检测损失">检测损失</h4>
+<p>依据CenterNet的损失设计，不过作者将CenterNet中预测$w,h$的回归Head，改为预测从中心点到$left,right,top,bottem$四条边的距离的回归head。</p>
+<h4 id="关联损失">关联损失</h4>
+<p>$$<br>
+\mathcal{L}<em>{A}=w</em>{e d g e} \mathcal{L}<em>{e d g e}+w</em>{n o d e} \mathcal{L}_{n o d e}<br>
+$$</p>
+<ol>
+<li>
+<p>边连接预测损失<br>
+$$<br>
+\mathcal{L}<em>{\text {edge }}=\frac{1}{N</em>{E}+} \sum_{e_{i, j} \in E}\left{\begin{array}{ll}<br>
+\operatorname{FL}\left(E S_{i, j}, e y_{i, j}\right), &amp; \text { if } n y_{i}=1 \text { or } n y_{j}=1 \<br>
+0 &amp; \text { otherwise }<br>
+\end{array}\right.<br>
+$$<br>
+$N_E +$表示GT边的数量，GT边表示至少有一个节点是GT节点的边；$FL(.)$表示Focal Loss; $ny_j=1$表示节点$j$对应的目标是真实目标。</p>
+</li>
+<li>
+<p>节点可恢复度预测损失<br>
+$$<br>
+\mathcal{L}<em>{n o d e}=\frac{1}{N</em>{N_{t 2}^{+}}} \sum_{n_{j} \in N_{t 2}} \operatorname{FL}\left(N S_{j}, n y_{j}\right)<br>
+$$<br>
+$N_{N_{t2}^+}$表示$t2$帧中是真实目标的节点（nodes matching GT in T2 frame ）的数量。</p>
+</li>
+</ol>
+<h4 id="GT框的指定">GT框的指定</h4>
+<p>类似于DETR，利用匈牙利算法基于预测框与GT框的IoU分数来为预测框分配GT。</p>
+<h2 id="总结">总结</h2>
+<p>总的来说这篇文章就是通过前后两帧的检测结果，通过构建一个二向连接图，并衡量前后帧检测结果之间的连接关系来完成轨迹的前后帧传播，好处就是可以将轨迹关联的训练损失可以直接设计为分类预测损失，还有一个点就是使用了前$K$个固定的检测框，以求恢复一些轨迹。之前的算法中恢复轨迹的做法有两种：</p>
+<ol>
+<li>OMC：使用之前轨迹的特征嵌入在当前帧特征embedding上做互相关，得到轨迹响应极点，并结合当前帧目标框检测结果，恢复轨迹；</li>
+<li>ByteTrack：直接对低分检测框和未匹配上的轨迹利用IoU进行二次匹配，恢复轨迹。</li>
+</ol>
+<p>最后，看似整个网络没有使用额外的数据关联或者匹配，实则在每两帧之间生成鲁棒性的节点预测时同样使用了匈牙利算法进行最大化连接度匹配，且最后的效果也没有特别好。</p>
+<p><strong>最后放上Paper with Code上面的MOT17， MOT20的排名：</strong></p>
+<ul>
+<li>
+<p>MOT 17</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220511144541094.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload>
+</li>
+<li>
+<p>MOT 20</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220511144634459.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220511144634459"></p>
+</li>
+</ul>
+<p>​</p>
+<p>​</p>
 
             </div>
             <hr>
@@ -266,7 +378,9 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/LeetCode/">LeetCode</a>
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 
@@ -274,9 +388,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/LeetCode/">LeetCode</a>
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/MOT/">MOT</a>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/Python-%E7%AE%97%E6%B3%95/">Python 算法</a>
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/GNN/">GNN</a>
                     
                   </div>
                 
@@ -287,18 +401,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/jasonyang.github.io/2022/05/13/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-SGT/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">阅读笔记-Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker（SGT）</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/jasonyang.github.io/2022/04/03/Inverted%20residuals%20block%E3%80%81Shufflenet%20block%E7%9A%84Pytorch%E5%AE%9E%E7%8E%B0/">
-                        <span class="hidden-mobile">Inverted residuals block、Shufflenet block的Pytorch实现</span>
+                      <a href="/jasonyang.github.io/2022/04/07/LeetCode%E6%97%A5%E7%A7%AF%E6%9C%88%E7%B4%AF%EF%BC%9A02.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">
+                        <span class="hidden-mobile">LeetCode日积月累：02.移除元素</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

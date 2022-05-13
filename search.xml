@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>阅读笔记-Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker（SGT）</title>
+    <link href="/jasonyang.github.io/2022/05/13/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-SGT/"/>
+    <url>/jasonyang.github.io/2022/05/13/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-SGT/</url>
+    
+    <content type="html"><![CDATA[<h1>Detection Recovery in Online Multi-Object Tracking with Sparse Graph Tracker</h1><hr><p>论文链接：<a href="https://arxiv.org/pdf/2205.00968v1.pdf">https://arxiv.org/pdf/2205.00968v1.pdf</a></p><h2 id="总体结构">总体结构</h2><h3 id="网络总体流程图">网络总体流程图</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220511100109328.png" alt="image-20220511100109328"></p><h3 id="推理流程">推理流程</h3><ol><li><p>连续两帧的图片输入到检测网络，提取得到$bboxs^{t1}, embeddings^{t1}$以及$bboxs^{t2}, embeddings^{t2}$；</p></li><li><p>根据检测框的前景置信度分数排序，从$t1,t2$帧中各选取$K$个候选框（in MOT17，$K=100$, in MOT 20 , $K=300$）;</p></li><li><p>添加之前missed tracklets的轨迹信息到$t1$帧，总共的节点数为：$2K + N_{missed}$，然后结合节点所处的帧阶段，对这些节点进行连接初始化，具体规则如下：</p><ol><li>前后帧节点（检测到的候选目标）中心点距离较近——两节点连接</li><li>前后帧节点的外观特征余弦距离较小——连接</li><li>前后帧节点的边框IoU较高——连接</li></ol><p>至此得到一个带链接关系的二向图。</p></li><li><p>初始化节点（node）特征、边（edge）特征。其中节点特征可选用外观特征代替，边特征有两个，分别是$t1 \rightarrow t2$的边特征和$t2 \rightarrow t1$的边特征，它们的定义如下:<br>$$<br>e_{i, j}^{0}=f_{e n c}\left(\left[x_{i}-x_{j}, y_{i}-y_{j}, \log \left(\frac{w_{i}}{w_{j}}\right), \log \left(\frac{h_{i}}{h_{j}}\right), \operatorname{IoU}<em>{i, j}, \operatorname{Sim}</em>{i, j}\right]\right)<br>$$</p><blockquote><p>其中$f_{enc}$表示两层FC block， $Sim_{i,j}$表示两个节点的外观相似度。因为$x_i - x_j$不等于$x_j - x_i$所以即使两条边使用相同的（共享权重的）$f_{enc}$，但是$e_{i,j}^0$和$e_{j,i}^0$也不相同。</p></blockquote></li><li><p>节点和边特征更新，更新共有3次即$N_{iter}=3$，每次更新的公式如下：</p><ol><li><p>边更新<br>$$<br>e_{i, j}^{l}=f_{e}\left(\left[v_{i}^{l-1}, v_{j}^{l-1}, e_{i, j}^{0}, e_{i, j}^{l-1}\right]\right)<br>$$<br>为防止过拟合，每次边更新都有最初的边特征$e_{i,j}^0$加入；$f_e$同样表示两层FC block.</p></li><li><p>节点更新<br>$$<br>v_{j}^{l}=f_{v_{\text {out }}}\left(\frac{1}{\left|E_{:, j}^{l}\right|} \sum_{i} f_{v_{e n c}}\left(\left[v_{i}^{l-1}, e_{i, j}^{l}\right]\right)\right)<br>$$<br>$|E_{:, j}^{l}|$表示与节点$j$所连接的另一帧的节点数量。（帧内节点不连接，帧间节点通过第3点中的3个条件来连接）</p></li></ol></li><li><p>轨迹链接预测和目标可见性预测</p><ol><li><p>轨迹链接预测</p><p>通过融合两个更新后的边特征（$e_{i,j}^3$和$e_{j,i}^3$），文章中说是取平均，然后特征通过一个分类器，得到节点$i,j$之间的连接度$SE$，然后依据连接度分数利用匈牙利算法对二分图的连接关系进行指定，保证$t1$帧的每个节点至多只有一条传播到$t2$帧的边，然后对于高于阈值$\mathcal{T}_E$的边，则认为前后帧$i,j$节点（目标）具有同一ID，以此完成轨迹的向前传播。</p></li><li><p>目标可见性预测</p><p>针对$t2$帧的节点（目标），利用节点特征通过一个分类器，得到节点的可恢复度$SN$,当可恢复度低于阈值$\mathcal{T}_N$时，认为该目标不可恢复，如果该节点已被$t1$帧的节点连接，则此时将他们的连接删除，该节点对应的目标在$t2$帧也不会出现。</p></li></ol></li><li><p>旧轨迹终止和新轨迹初始化</p><ol><li><p>旧轨迹终止</p><p>当一个轨迹(这个轨迹在之前至少被连续跟踪了$min_{age}=10$帧)暂时未通过连接预测进行帧间传播时，轨迹被加入$\mathcal{T}<em>{missed}$,并持续跟踪$max</em>{age}=30$帧，以保证长时期long-term的数据关联。但如果超过30帧轨迹仍未能从每次的$t2$帧中找到匹配的检测框，则将这段轨迹移出轨迹暂存池$\mathcal{T}<em>{pool} = \mathcal{T}</em>{active} + \mathcal{T}_{missed}$</p></li><li><p>新轨迹初始化</p><p>对于第一帧和第二帧的前向传播情况，如果前后两帧有节点保持了连接则为他们分配唯一的ID，然后对于第二帧和第三帧的前向传播，因为第二帧的一些节点已经分配了ID，若这些节点能够与第三帧的节点相连接，则与其连接的第三帧的节点共享其ID，如果第二帧中未分配ID的节点与第三帧的节点相连接，则重新为它们分配一个额外的唯一的ID。</p><blockquote><p>注：具体是不是两帧连接就初始化轨迹，文章里面貌似也没说，上面的流程只代表一种可行的新轨迹初始化方案。</p></blockquote></li></ol></li><li><p>（轨迹外观模型更新的小trick）</p><p>文章中使用轨迹当前的检测置信度分数对轨迹的外观特征进行自适应加权更新，更新公式如下：<br>$$<br>e m b_{t 2}^{t r k}=e m b_{t 1}^{t r k} \times \frac{S_{t 1}}{S_{t 1}+S_{t 2}}+e m b_{t 2}^{d e t} \times \frac{S_{t 2}}{S_{t 1}+S_{t 2}}<br>$$</p><blockquote><p>上述公式表明，对于已分配ID的轨迹的节点特征，是融合了上一次前后两帧关联后$t2$帧对应节点的外观特征的结果。</p></blockquote></li></ol><h3 id="损失设计">损失设计</h3><h4 id="检测损失">检测损失</h4><p>依据CenterNet的损失设计，不过作者将CenterNet中预测$w,h$的回归Head，改为预测从中心点到$left,right,top,bottem$四条边的距离的回归head。</p><h4 id="关联损失">关联损失</h4><p>$$<br>\mathcal{L}<em>{A}=w</em>{e d g e} \mathcal{L}<em>{e d g e}+w</em>{n o d e} \mathcal{L}_{n o d e}<br>$$</p><ol><li><p>边连接预测损失<br>$$<br>\mathcal{L}<em>{\text {edge }}=\frac{1}{N</em>{E}+} \sum_{e_{i, j} \in E}\left{\begin{array}{ll}<br>\operatorname{FL}\left(E S_{i, j}, e y_{i, j}\right), &amp; \text { if } n y_{i}=1 \text { or } n y_{j}=1 \<br>0 &amp; \text { otherwise }<br>\end{array}\right.<br>$$<br>$N_E +$表示GT边的数量，GT边表示至少有一个节点是GT节点的边；$FL(.)$表示Focal Loss; $ny_j=1$表示节点$j$对应的目标是真实目标。</p></li><li><p>节点可恢复度预测损失<br>$$<br>\mathcal{L}<em>{n o d e}=\frac{1}{N</em>{N_{t 2}^{+}}} \sum_{n_{j} \in N_{t 2}} \operatorname{FL}\left(N S_{j}, n y_{j}\right)<br>$$<br>$N_{N_{t2}^+}$表示$t2$帧中是真实目标的节点（nodes matching GT in T2 frame ）的数量。</p></li></ol><h4 id="GT框的指定">GT框的指定</h4><p>类似于DETR，利用匈牙利算法基于预测框与GT框的IoU分数来为预测框分配GT。</p><h2 id="总结">总结</h2><p>总的来说这篇文章就是通过前后两帧的检测结果，通过构建一个二向连接图，并衡量前后帧检测结果之间的连接关系来完成轨迹的前后帧传播，好处就是可以将轨迹关联的训练损失可以直接设计为分类预测损失，还有一个点就是使用了前$K$个固定的检测框，以求恢复一些轨迹。之前的算法中恢复轨迹的做法有两种：</p><ol><li>OMC：使用之前轨迹的特征嵌入在当前帧特征embedding上做互相关，得到轨迹响应极点，并结合当前帧目标框检测结果，恢复轨迹；</li><li>ByteTrack：直接对低分检测框和未匹配上的轨迹利用IoU进行二次匹配，恢复轨迹。</li></ol><p>最后，看似整个网络没有使用额外的数据关联或者匹配，实则在每两帧之间生成鲁棒性的节点预测时同样使用了匈牙利算法进行最大化连接度匹配，且最后的效果也没有特别好。</p><p><strong>最后放上Paper with Code上面的MOT17， MOT20的排名：</strong></p><ul><li><p>MOT 17</p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220511144541094.png"></li><li><p>MOT 20</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220511144634459.png" alt="image-20220511144634459"></p></li></ul><p>​</p><p>​</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>目标跟踪</category>
+      
+      <category>论文总结</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+      <tag>GNN</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode日积月累：02.移除元素</title>
     <link href="/jasonyang.github.io/2022/04/07/LeetCode%E6%97%A5%E7%A7%AF%E6%9C%88%E7%B4%AF%EF%BC%9A02.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/"/>
     <url>/jasonyang.github.io/2022/04/07/LeetCode%E6%97%A5%E7%A7%AF%E6%9C%88%E7%B4%AF%EF%BC%9A02.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
@@ -465,7 +494,7 @@
     <link href="/jasonyang.github.io/2021/09/23/Simple-Online-and-Realtime-Tracking/"/>
     <url>/jasonyang.github.io/2021/09/23/Simple-Online-and-Realtime-Tracking/</url>
     
-    <content type="html"><![CDATA[<h2 id="Paper-Note-——-Simple-Online-and-Realtime-Tracking">Paper Note —— Simple Online and Realtime Tracking</h2><h3 id="1-文献简介">1.文献简介</h3><hr><ul><li>作者：Alex Bewley、Zongyuan Ge、Lionel Ott</li><li>关键词：Computer Vision, Multiple Object Tracking, Detection, Data Association</li><li>年份&amp;期刊（会议）名：IEEE 2016</li></ul><h3 id="2-结构和内容">2. 结构和内容</h3><hr><ol><li>介绍目标跟踪的任务流程，目前算法存在的问题和本文算法的优势</li><li>阐述研究背景和现状</li><li>介绍方法论<ul><li>检测模型</li><li>运动评估模型</li><li>数据关联</li><li>消失目标与先出现目标的销毁与创建</li></ul></li><li>实验部分</li></ol><h3 id="3-创新点-实验成果汇总">3.创新点/实验成果汇总</h3><hr><ol><li>提出了端到端的跟踪模型，运用了tracking by detection的思想，把主要关注点放在了assignment。</li><li>提出了跟踪领域的baseline。</li><li>运用Kalman filter和Hungarian algorithm进行匀速模型估计和人物关联。（cost matrix 是IOU distance）。</li><li>在score较高的情况下达到了一个高的FPS。</li></ol><h3 id="4-需要改进的地方">4.需要改进的地方</h3><hr><ol><li>仅用IOU的距离度量不能完全表达目标和预测之间的联系度。</li><li>检测的模型不算特别先进（当时还不错，backbone应该是在性能与运算量之间取了平衡）。</li><li>没有整合其他的人体信息，无法处理行人长时被遮挡的情况。</li></ol><h3 id="5-重要内容摘录">5.重要内容摘录</h3><hr><ul><li><p>指标的描述方法值得借鉴<br><img src="sort1.png" alt=""></p></li><li><p>算法速度和性能的二维展示图<br><img src="sort2.png" alt=""></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h2 id="Paper-Note-——-Simple-Online-and-Realtime-Tracking">Paper Note —— Simple Online and Realtime Tracking</h2><h3 id="1-文献简介">1.文献简介</h3><hr><ul><li>作者：Alex Bewley、Zongyuan Ge、Lionel Ott</li><li>关键词：Computer Vision, Multiple Object Tracking, Detection, Data Association</li><li>年份&amp;期刊（会议）名：IEEE 2016</li></ul><h3 id="2-结构和内容">2. 结构和内容</h3><hr><ol><li>介绍目标跟踪的任务流程，目前算法存在的问题和本文算法的优势</li><li>阐述研究背景和现状</li><li>介绍方法论<ul><li>检测模型</li><li>运动评估模型</li><li>数据关联</li><li>消失目标与先出现目标的销毁与创建</li></ul></li><li>实验部分</li></ol><h3 id="3-创新点-实验成果汇总">3.创新点/实验成果汇总</h3><hr><ol><li>提出了端到端的跟踪模型，运用了tracking by detection的思想，把主要关注点放在了assignment。</li><li>提出了跟踪领域的baseline。</li><li>运用Kalman filter和Hungarian algorithm进行匀速模型估计和人物关联。（cost matrix 是IOU distance）。</li><li>在score较高的情况下达到了一个高的FPS。</li></ol><h3 id="4-需要改进的地方">4.需要改进的地方</h3><hr><ol><li>仅用IOU的距离度量不能完全表达目标和预测之间的联系度。</li><li>检测的模型不算特别先进（当时还不错，backbone应该是在性能与运算量之间取了平衡）。</li><li>没有整合其他的人体信息，无法处理行人长时被遮挡的情况。</li></ol><h3 id="5-重要内容摘录">5.重要内容摘录</h3><hr><ul><li><p>指标的描述方法值得借鉴<br><img src="sort1.png" alt=""></p></li><li><p>算法速度和性能的二维展示图<br><img src="sort2.png" alt=""></p></li></ul><p>z</p>]]></content>
     
     
     <categories>
