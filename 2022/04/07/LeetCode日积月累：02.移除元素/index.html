@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      834 字
+      859 字
     </span>
   
 
@@ -230,29 +230,36 @@
             <h1 style="display: none">LeetCode日积月累：02.移除元素</h1>
             
             <div class="markdown-body">
-              <h2 id="LeetCode日积月累：02-移除元素">LeetCode日积月累：02.移除元素</h2>
+              <h2 id="leetcode日积月累02.移除元素">LeetCode日积月累：02.移除元素</h2>
 <p>根据<strong>代码随想录</strong>的讲解顺序开始打卡学习，闲时更新。</p>
 <blockquote>
-<p>代码随想录：<a target="_blank" rel="noopener" href="https://www.programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#_27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0">https://www.programmercarl.com/0027.移除元素.html#_27-移除元素</a></p>
-<p>LeetCode练习题目：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-element/">https://leetcode-cn.com/problems/remove-element/</a></p>
+<p>代码随想录：https://www.programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#_27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0</p>
+<p>LeetCode练习题目：https://leetcode-cn.com/problems/remove-element/</p>
 </blockquote>
 <h3 id="题目描述">题目描述</h3>
-<p>给你一个数组 <code>nums</code> 和一个值 <code>val</code>，你需要 原地 移除所有数值等于 <code>val</code> 的元素，并返回移除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并 <strong>原地修改输入数组</strong>。</p>
+<p>给你一个数组 <code>nums</code> 和一个值 <code>val</code>，你需要 原地
+移除所有数值等于 <code>val</code> 的元素，并返回移除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并
+<strong>原地修改输入数组</strong>。</p>
 <p>元素的<strong>顺序可以改变</strong>。你不需要考虑数组中超出新长度后面的元素。</p>
 <p><strong>示例</strong></p>
 <figure class="highlight nix"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">nums</span> = [<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>], <span class="hljs-attr">val</span> = <span class="hljs-number">3</span><br>输出：<span class="hljs-number">2</span>, <span class="hljs-attr">nums</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>]<br>解释：函数应该返回新的长度 <span class="hljs-number">2</span>, 并且 nums 中的前两个元素均为 <span class="hljs-number">2</span>。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 <span class="hljs-number">2</span> ，而 <span class="hljs-attr">nums</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>] 或 <span class="hljs-attr">nums</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]，也会被视作正确答案。<br></code></pre></td></tr></tbody></table></figure>
 <figure class="highlight dns"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">0,1,2,2</span>,<span class="hljs-number">3,0,4,2</span>], val = <span class="hljs-number">2</span><br>输出：<span class="hljs-number">5</span>, nums = [<span class="hljs-number">0,1,4,0</span>,<span class="hljs-number">3</span>]<br>解释：函数应该返回新的长度 <span class="hljs-number">5</span>, 并且 nums 中的前五个元素为 <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>。注意这五个元素可为任意顺序。你不需要考虑数组中超出新长度后面的元素。<br><br></code></pre></td></tr></tbody></table></figure>
-<h3 id="解决方案（own）">解决方案（own）</h3>
+<h3 id="解决方案own">解决方案（own）</h3>
 <p>借本想法是建立前、后两个指针，前指针从前往后判断元素是否是移除，在发现需要移除的值后，后指针从后往前遍历寻找不等于val的元素，然后交换这两个指针对应的元素值。整个程序在前指针大于后指针时停止。算法总共只需遍历一次数组元素，时间复杂度为O(n)。</p>
 <blockquote>
 <p>每次前后指针找到待移除元素时，数组总长度-1；该方法会改变删除后输出数组元素的相对位置。</p>
 </blockquote>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span>(<span class="hljs-params"><span class="hljs-built_in">object</span></span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">removeElement</span>(<span class="hljs-params">self, nums, val</span>):</span><br>        <span class="hljs-string">"""</span><br><span class="hljs-string">        :type nums: List[int]</span><br><span class="hljs-string">        :type val: int</span><br><span class="hljs-string">        :rtype: int</span><br><span class="hljs-string">        """</span><br><br>        <span class="hljs-comment">## own solution</span><br>        l = <span class="hljs-built_in">len</span>(nums)<br>        left_idx, right_idx = <span class="hljs-number">0</span>, l-<span class="hljs-number">1</span><br>        temp = <span class="hljs-literal">None</span><br>        <span class="hljs-keyword">while</span> left_idx &lt;= right_idx:<br>            <span class="hljs-keyword">if</span> nums[left_idx] == val:<br>                l -= <span class="hljs-number">1</span><br>                <span class="hljs-keyword">while</span> nums[right_idx] == val <span class="hljs-keyword">and</span> left_idx &lt; right_idx :<br>                    right_idx -= <span class="hljs-number">1</span><br>                    l -= <span class="hljs-number">1</span><br>                temp = nums[left_idx]<br>                nums[left_idx] = nums[right_idx]<br>                nums[right_idx] = temp<br>                right_idx -= <span class="hljs-number">1</span><br>            left_idx += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">return</span> l<br></code></pre></td></tr></tbody></table></figure>
-<h3 id="解决方案（others）">解决方案（others）</h3>
-<p>双指针法（快慢指针法）： <strong>通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。</strong></p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/008eGmZEly1gntrds6r59g30du09mnpd.gif" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="27.移除元素-双指针法"></p>
-<p>快慢指针均从前往后遍历， 当快指针遇到待删除元素时，慢指针暂停移动，快指针继续遍历，直到遇到非删除元素，然后将快指针对应的值赋值到慢指针所在位置，赋值后慢指针和快指针继续移动，最终到快指针遍历结束，此时慢指针的位置则为移除val后的数组长度。</p>
+<h3 id="解决方案others">解决方案（others）</h3>
+<p>双指针法（快慢指针法）：
+<strong>通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。</strong></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/008eGmZEly1gntrds6r59g30du09mnpd.gif" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="27.移除元素-双指针法">
+<figcaption aria-hidden="true">27.移除元素-双指针法</figcaption>
+</figure>
+<p>快慢指针均从前往后遍历，
+当快指针遇到待删除元素时，慢指针暂停移动，快指针继续遍历，直到遇到非删除元素，然后将快指针对应的值赋值到慢指针所在位置，赋值后慢指针和快指针继续移动，最终到快指针遍历结束，此时慢指针的位置则为移除val后的数组长度。</p>
 <blockquote>
 <p>因为是顺序遍历，最后输出的数组元素之间的相对位置与删除前一致。</p>
 </blockquote>

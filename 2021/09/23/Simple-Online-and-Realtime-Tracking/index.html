@@ -230,17 +230,19 @@
             <h1 style="display: none">Simple Online and Realtime Tracking</h1>
             
             <div class="markdown-body">
-              <h2 id="Paper-Note-——-Simple-Online-and-Realtime-Tracking">Paper Note —— Simple Online and Realtime Tracking</h2>
-<h3 id="1-文献简介">1.文献简介</h3>
+              <h2 id="paper-note-simple-online-and-realtime-tracking">Paper Note ——
+Simple Online and Realtime Tracking</h2>
+<h3 id="文献简介">1.文献简介</h3>
 <hr>
 <ul>
 <li>作者：Alex Bewley、Zongyuan Ge、Lionel Ott</li>
-<li>关键词：Computer Vision, Multiple Object Tracking, Detection, Data Association</li>
+<li>关键词：Computer Vision, Multiple Object Tracking, Detection, Data
+Association</li>
 <li>年份&amp;期刊（会议）名：IEEE 2016</li>
 </ul>
-<h3 id="2-结构和内容">2. 结构和内容</h3>
+<h3 id="结构和内容">2. 结构和内容</h3>
 <hr>
-<ol>
+<ol type="1">
 <li>介绍目标跟踪的任务流程，目前算法存在的问题和本文算法的优势</li>
 <li>阐述研究背景和现状</li>
 <li>介绍方法论
@@ -249,36 +251,32 @@
 <li>运动评估模型</li>
 <li>数据关联</li>
 <li>消失目标与先出现目标的销毁与创建</li>
-</ul>
-</li>
+</ul></li>
 <li>实验部分</li>
 </ol>
-<h3 id="3-创新点-实验成果汇总">3.创新点/实验成果汇总</h3>
+<h3 id="创新点实验成果汇总">3.创新点/实验成果汇总</h3>
 <hr>
-<ol>
-<li>提出了端到端的跟踪模型，运用了tracking by detection的思想，把主要关注点放在了assignment。</li>
+<ol type="1">
+<li>提出了端到端的跟踪模型，运用了tracking by
+detection的思想，把主要关注点放在了assignment。</li>
 <li>提出了跟踪领域的baseline。</li>
-<li>运用Kalman filter和Hungarian algorithm进行匀速模型估计和人物关联。（cost matrix 是IOU distance）。</li>
+<li>运用Kalman filter和Hungarian
+algorithm进行匀速模型估计和人物关联。（cost matrix 是IOU
+distance）。</li>
 <li>在score较高的情况下达到了一个高的FPS。</li>
 </ol>
-<h3 id="4-需要改进的地方">4.需要改进的地方</h3>
+<h3 id="需要改进的地方">4.需要改进的地方</h3>
 <hr>
-<ol>
+<ol type="1">
 <li>仅用IOU的距离度量不能完全表达目标和预测之间的联系度。</li>
 <li>检测的模型不算特别先进（当时还不错，backbone应该是在性能与运算量之间取了平衡）。</li>
 <li>没有整合其他的人体信息，无法处理行人长时被遮挡的情况。</li>
 </ol>
-<h3 id="5-重要内容摘录">5.重要内容摘录</h3>
+<h3 id="重要内容摘录">5.重要内容摘录</h3>
 <hr>
 <ul>
-<li>
-<p>指标的描述方法值得借鉴<br>
-<img src="sort1.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
-</li>
-<li>
-<p>算法速度和性能的二维展示图<br>
-<img src="sort2.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt=""></p>
-</li>
+<li><p>指标的描述方法值得借鉴 <img src="sort1.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload></p></li>
+<li><p>算法速度和性能的二维展示图 <img src="sort2.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload></p></li>
 </ul>
 <p>z</p>
 

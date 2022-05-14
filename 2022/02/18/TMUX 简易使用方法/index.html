@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      15
+      16
        分钟
     </span>
   
@@ -230,45 +230,46 @@
             <h1 style="display: none">TMUX 简易使用方法</h1>
             
             <div class="markdown-body">
-              <h2 id="TMUX-简易使用方法">TMUX 简易使用方法</h2>
+              <h2 id="tmux-简易使用方法">TMUX 简易使用方法</h2>
 <blockquote>
 <p><strong>主要参考：</strong></p>
-<p>阮一峰 Tmux 使用教程：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/10/tmux.html">https://www.ruanyifeng.com/blog/2019/10/tmux.html</a></p>
-<p>Tmux使用手册：<a target="_blank" rel="noopener" href="http://louiszhai.github.io/2017/09/30/tmux/#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E7%9A%84%E4%BC%9A%E8%AF%9D">http://louiszhai.github.io/2017/09/30/tmux/#查看所有的会话</a></p>
+<p>阮一峰 Tmux
+使用教程：https://www.ruanyifeng.com/blog/2019/10/tmux.html</p>
+<p>Tmux使用手册：http://louiszhai.github.io/2017/09/30/tmux/#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E7%9A%84%E4%BC%9A%E8%AF%9D</p>
 </blockquote>
-<p>**基本概念：**输入tmux命令就相当于开启了一个服务器，此时默认将新建一个会话，然后会话中默认新建一个窗口，窗口中默认新建一个面板。tmux会话、窗口、面板之间的联系如下：</p>
+<p><strong>基本概念：</strong>输入tmux命令就相当于开启了一个服务器，此时默认将新建一个会话，然后会话中默认新建一个窗口，窗口中默认新建一个面板。tmux会话、窗口、面板之间的联系如下：</p>
 <ul>
-<li>
-<p>一个tmux <code>session</code>（会话）可以包含多个<code>window</code>（窗口），窗口默认充满会话界面，因此这些窗口中可以运行相关性不大的任务。</p>
-</li>
-<li>
-<p>一个<code>window</code>又可以包含多个<code>pane</code>（面板），窗口下的面板，都处于同一界面下，这些面板适合运行相关性高的任务，以便同时观察到它们的运行情况。</p>
-</li>
+<li><p>一个tmux
+<code>session</code>（会话）可以包含多个<code>window</code>（窗口），窗口默认充满会话界面，因此这些窗口中可以运行相关性不大的任务。</p></li>
+<li><p>一个<code>window</code>又可以包含多个<code>pane</code>（面板），窗口下的面板，都处于同一界面下，这些面板适合运行相关性高的任务，以便同时观察到它们的运行情况。</p></li>
 </ul>
-<h3 id="0-tmux-安装">0. tmux 安装</h3>
+<h3 id="tmux-安装">0. tmux 安装</h3>
 <hr>
-<h4 id="ROOT-用户安装：">ROOT 用户安装：</h4>
+<h4 id="root-用户安装">ROOT 用户安装：</h4>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Ubuntu 或 Debian</span><br>$ sudo apt-get install tmux<br><br><span class="hljs-comment"># CentOS 或 Fedora</span><br>$ sudo yum install tmux<br><br><span class="hljs-comment"># Mac</span><br>$ brew install tmux<br></code></pre></td></tr></tbody></table></figure>
-<h4 id="非ROOT-用户安装：">非ROOT 用户安装：</h4>
+<h4 id="非root-用户安装">非ROOT 用户安装：</h4>
 <p>非root用户安装tmux参考以下链接：</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/155662601">知乎：非root用户安装tmux</a></p>
 <blockquote>
 <p>如果使用<code>wget</code>产生类似<code>无法解析github.com</code>的错误信息可以利用链接进入GitHub仓库下载后传入安装位置。</p>
 </blockquote>
-<h3 id="1-基本用法">1. 基本用法</h3>
+<h3 id="基本用法">1. 基本用法</h3>
 <hr>
 <p>最简单也是最常用的tmux使用流程是：新建会话、在新建的会话中运行程序、分离会话、下次使用接入会话</p>
 <h4 id="创建会话">创建会话</h4>
-<ol>
+<ol type="1">
 <li>使用tmux快速创建会话</li>
 </ol>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux<br></code></pre></td></tr></tbody></table></figure>
-<ol start="2">
+<ol start="2" type="1">
 <li>指定创建会话的名称</li>
 </ol>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux new -s test-1<br></code></pre></td></tr></tbody></table></figure>
 <p>上面表示创建一个名为<code>test</code>的会话。会话创建完后会在当前窗口的下方出现一个小绿条，类似这种：</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220218101122309.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220218101122309"></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220218101122309.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220218101122309">
+<figcaption aria-hidden="true">image-20220218101122309</figcaption>
+</figure>
 <p>小绿条左边显示会话名称<code>test-1</code>、窗格(pane)序号<code>0</code>以及窗口名称<code>bash</code>（窗格和窗口的简单操作后面会提到）。小绿条右边则显示会话的创建时间及其他一些信息。</p>
 <h4 id="运行程序">运行程序</h4>
 <p>在刚才创建好的会话中键入自己想运行的程序指令，然后该指令便会一直在后台运行并不会随着SSH连接的断开而停止运行。例如在刚才的会话中运行<code>train.py</code>。</p>
@@ -288,7 +289,7 @@
 <h4 id="退出会话">退出会话</h4>
 <p>会话分离操作只是将任务放置后台托管并没有断开连接，如果想在程序运行完之后断开连接退出会话则需要使用快捷键<code>Ctrl+d</code>或者键入<code>exit</code>。</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">exit</span><br></code></pre></td></tr></tbody></table></figure>
-<h3 id="2-其他操作">2. 其他操作</h3>
+<h3 id="其他操作">2. 其他操作</h3>
 <h4 id="会话操作">会话操作</h4>
 <ul>
 <li>创建会话</li>
