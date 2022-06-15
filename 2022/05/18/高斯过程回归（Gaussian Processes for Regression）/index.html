@@ -1,0 +1,648 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jasonyang.github.io/img/panda.png">
+  <link rel="icon" href="/jasonyang.github.io/img/panda.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="jasonyang">
+  <meta name="keywords" content="">
+  
+  <title>Gaussian Processes for Regression - jasonyang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/jasonyang.github.io/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/jasonyang.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/jasonyang.github.io/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","app_key":"wlepdaYUatxn4WD8tudl2BdX","server_url":"https://uqjw3jet.lc-cn-n1-shared.com"}},"search_path":"//jayheyang.github.io/jasonyang.github.io/search.xml"};
+  </script>
+  <script  src="/jasonyang.github.io/js/utils.js" ></script>
+  <script  src="/jasonyang.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/jasonyang.github.io/">&nbsp;<strong>Morvan</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/jasonyang.github.io/img/zelda2.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Gaussian Processes for Regression">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-18 22:23" pubdate>
+        2022年5月18日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      16
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Gaussian Processes for Regression</h1>
+            
+            <div class="markdown-body">
+              <h1 id="高斯过程回归gaussian-processes-for-regression">高斯过程回归（Gaussian
+Processes for Regression）</h1>
+<hr>
+<h2 id="实际问题">实际问题</h2>
+<p>如下图所示，我们已知<span class="math inline">\(x\)</span>在<span class="math inline">\(\left[\begin{array}{llllll} -1.50 &amp; -1.00
+&amp; -0.75 &amp; -0.40 &amp; -0.25 &amp; 0.00
+\end{array}\right]\)</span>处的观测值以及他们在这些点处的观测标准差<span class="math inline">\(\sigma_n=0.3\)</span>，如何根据这些已知信息去求得<span class="math inline">\(x_*=0.2\)</span>时，<span class="math inline">\(y_*=?\)</span>。</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513113623452.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513113623452" style="zoom:35%;"></p>
+<h2 id="问题建模">问题建模</h2>
+<h3 id="确定衡量观测点影响重要程度的协方差函数">确定衡量观测点影响重要程度的协方差函数</h3>
+<p>​ 一般选用径向基函数（RBF）来衡量两个观测点之间的协方差（影响程度）：
+<span class="math display">\[
+k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp
+\left[\frac{-\left(x-x^{\prime}\right)^{2}}{2 l^{2}}\right]
+\]</span></p>
+<blockquote>
+<p><span class="math inline">\(k(x,x')\)</span>表示<span class="math inline">\(x\)</span>与<span class="math inline">\(x'\)</span>之间的协方差，<span class="math inline">\(\sigma_f\)</span>控制影响强度，<span class="math inline">\(l\)</span>控制影响周期。</p>
+</blockquote>
+<h3 id="不同时刻或者位置的观测值">不同时刻或者位置的观测值</h3>
+<p>一个系统或者运动物体在时刻<span class="math inline">\(t\)</span>或者位置<span class="math inline">\(x\)</span>的观测值<span class="math inline">\(y\)</span>有如下计算公式： <span class="math display">\[
+y=f(x)+\mathcal{N}(0, \sigma_{n}^{2})
+\]</span></p>
+<blockquote>
+<p><span class="math inline">\(f(.)\)</span>表示依赖或者映射函数，<span class="math inline">\(\mathcal{N}(0,
+\sigma_{n}^{2})\)</span>表示测量值噪声服从均值为0，方差为<span class="math inline">\(\sigma_{n}^2\)</span>的高斯分布。</p>
+</blockquote>
+<h3 id="融合观测噪声的协方差函数">融合观测噪声的协方差函数</h3>
+<p><span class="math display">\[
+k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp
+\left[\frac{-\left(x-x^{\prime}\right)^{2}}{2
+l^{2}}\right]+\sigma_{n}^{2} \delta\left(x, x^{\prime}\right)
+\]</span></p>
+<blockquote>
+<p><span class="math inline">\(\delta(.)\)</span>表示Kronecker三角函数，当<span class="math inline">\(x=x'\)</span>时，<span class="math inline">\(\delta(x, x')=1\)</span>,其余时候等于0.</p>
+</blockquote>
+<h3 id="根据任意两个观测点计算得到协方差矩阵">根据任意两个观测点计算得到协方差矩阵</h3>
+<p>根据2.3中的协方差函数以及已知观测点的位置<span class="math inline">\(x\)</span>和未知待预测点的位置<span class="math inline">\(x_*\)</span>计算得到以下协方差阵： <span class="math display">\[
+K=\left[\begin{array}{cccc}
+k\left(x_{1}, x_{1}\right) &amp; k\left(x_{1}, x_{2}\right) &amp; \cdots
+&amp; k\left(x_{1}, x_{n}\right) \\
+k\left(x_{2}, x_{1}\right) &amp; k\left(x_{2}, x_{2}\right) &amp; \cdots
+&amp; k\left(x_{2}, x_{n}\right) \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+k\left(x_{n}, x_{1}\right) &amp; k\left(x_{n}, x_{2}\right) &amp; \cdots
+&amp; k\left(x_{n}, x_{n}\right)
+\end{array}\right]
+\]</span></p>
+<p><span class="math display">\[
+K_{*}=\left[\begin{array}{llll}
+k\left(x_{*}, x_{1}\right) &amp; k\left(x_{*}, x_{2}\right) &amp; \cdots
+&amp; k\left(x_{*}, x_{n}\right)
+\end{array}\right] \quad K_{* *}=k\left(x_{*}, x_{*}\right)
+\]</span></p>
+<blockquote>
+<p><span class="math inline">\(x_1, ...,
+x_n\)</span>表示已知观测点，<span class="math inline">\(x_*\)</span>表示待预测的点。可以确定的是依据2.3中的公式，矩阵<span class="math inline">\(K\)</span>的对角线元素为<span class="math inline">\(\sigma_f^2 + \sigma_n^2\)</span>。</p>
+</blockquote>
+<h3 id="基于高斯过程和最大后延概率求解待预测值">基于高斯过程和最大后延概率求解待预测值</h3>
+<p>基于之前的关键假设：观测系统是一个高斯过程。所以目前的观测值和待预测值服从一个多元高斯分布：
+<span class="math display">\[
+\left[\begin{array}{c}
+\mathbf{y} \\
+y_{*}
+\end{array}\right] \sim
+\mathcal{N}\left(\mathbf{0},\left[\begin{array}{ll}
+K &amp; K_{*}^{\mathrm{T}} \\
+K_{*} &amp; K_{* *}
+\end{array}\right]\right)
+\]</span> 现在需要做的是，求得一个待预测的观测值<span class="math inline">\(y_*\)</span>，使得<span class="math inline">\(p(y_*|\mathbf{y})\)</span>的概率最大，换句话说使得<span class="math inline">\(p(y_*|\mathbf{y})\)</span>概率最大的<span class="math inline">\(y_*\)</span>即为所求的最佳高斯过程回归值。</p>
+<p><span class="math inline">\(y_*|\mathbf{y}\)</span>的条件概率服从：
+<span class="math display">\[
+y_{*} \mid \mathbf{y} \sim \mathcal{N}\left(K_{*} K^{-1} \mathbf{y},
+K_{* *}-K_{*} K^{-1} K_{*}^{\mathrm{T}}\right)
+\]</span> 综上，<span class="math inline">\(y_*\)</span>的最佳估计和估计的方差为： <span class="math display">\[
+\bar{y}_{*}=K_{*} K^{-1} \mathbf{y}
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{var}\left(y_{*}\right)=K_{* *}-K_{*} K^{-1}
+K_{*}^{\mathrm{T}}
+\]</span></p>
+<h2 id="例题">例题</h2>
+<p>依据上述第一节的例题，有6个观测点值<span class="math inline">\(x=
+\left[\begin{array}{llllll}-1.50 &amp; -1.00 &amp; -0.75 &amp; -0.40
+&amp; -0.25 &amp; 0.00\end{array}\right]\)</span>，同时可以假定<span class="math inline">\(\sigma_n=0.3\)</span>，设定<span class="math inline">\(\sigma_f=1.27,
+l=1\)</span>，则依据公式（3）（4）（5）得： <span class="math display">\[
+K=\left[\begin{array}{llllll}
+1.70 &amp; 1.42 &amp; 1.21 &amp; 0.87 &amp; 0.72 &amp; 0.51 \\
+1.42 &amp; 1.70 &amp; 1.56 &amp; 1.34 &amp; 1.21 &amp; 0.97 \\
+1.21 &amp; 1.56 &amp; 1.70 &amp; 1.51 &amp; 1.42 &amp; 1.21 \\
+0.87 &amp; 1.34 &amp; 1.51 &amp; 1.70 &amp; 1.59 &amp; 1.48 \\
+0.72 &amp; 1.21 &amp; 1.42 &amp; 1.59 &amp; 1.70 &amp; 1.56 \\
+0.51 &amp; 0.97 &amp; 1.21 &amp; 1.48 &amp; 1.56 &amp; 1.70
+\end{array}\right]
+\\
+K_{*}=\left[\begin{array}{llllll}
+0.38 &amp; 0.79 &amp; 1.03 &amp; 1.35 &amp; 1.46 &amp; 1.58
+\end{array}\right] ,\ \  \    K_{**}=1.70
+\]</span> 之后依据公式（8）（9）得到： <span class="math display">\[
+\bar{y}_{*}=0.95 ，\ \  \operatorname{var}\left(y_{*}\right)=0.21
+\]</span>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513150426202.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513150426202" style="zoom:35%;"></p>
+<blockquote>
+<p>图中黑色实线表示GPR预测值，黑色原点表示实际观测值，蓝色点表示在<span class="math inline">\(x=0.2\)</span>处的观测值，红色区域表示95%的置信度区间（<span class="math inline">\(\bar{y}_{*} \pm 1.96
+\sqrt{\operatorname{var}\left(y_{*}\right)}\)</span>）。</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%BD%A8%E8%BF%B9%E4%BD%8D%E7%BD%AE%E9%A2%84%E6%B5%8B/">轨迹位置预测</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E9%A2%84%E6%B5%8B%E7%AE%97%E6%B3%95/">预测算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/Gaussian-Processes-for-Regression/">Gaussian Processes for Regression</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/%E5%9B%9E%E5%BD%92%E9%A2%84%E6%B5%8B/">回归预测</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2022/05/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-LMP/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">阅读笔记-Multiple People Tracking by Lifted Multicut and Person Re-identiﬁcation</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2022/05/17/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-YOLOPose/">
+                        <span class="hidden-mobile">阅读笔记-YOLO_Pose:Enhancing YOLO for Multi Person Pose Estimation Using Object Keypoint Similarity Loss</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","appKey":"wlepdaYUatxn4WD8tudl2BdX","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://uqjw3jet.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/jasonyang.github.io/js/events.js" ></script>
+<script  src="/jasonyang.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/jasonyang.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/jasonyang.github.io/js/local-search.js" ></script>
+
+
+
+
+  <script defer src="/jasonyang.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/jasonyang.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>

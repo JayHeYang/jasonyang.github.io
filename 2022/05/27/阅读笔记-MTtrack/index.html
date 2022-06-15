@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jasonyang.github.io/img/panda.png">
+  <link rel="icon" href="/jasonyang.github.io/img/panda.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="jasonyang">
+  <meta name="keywords" content="">
+  
+  <title>阅读笔记-Towards Discriminative Representation:Multi-view Trajectory Contrastive Learning for Online Multi-object Tracking (MTtrack) - jasonyang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/jasonyang.github.io/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/jasonyang.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/jasonyang.github.io/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","app_key":"wlepdaYUatxn4WD8tudl2BdX","server_url":"https://uqjw3jet.lc-cn-n1-shared.com"}},"search_path":"//jayheyang.github.io/jasonyang.github.io/search.xml"};
+  </script>
+  <script  src="/jasonyang.github.io/js/utils.js" ></script>
+  <script  src="/jasonyang.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/jasonyang.github.io/">&nbsp;<strong>Morvan</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/jasonyang.github.io/img/zelda2.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="阅读笔记-Towards Discriminative Representation:Multi-view Trajectory Contrastive Learning for Online Multi-object Tracking (MTtrack)">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-27 10:16" pubdate>
+        2022年5月27日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      17
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">阅读笔记-Towards Discriminative Representation:Multi-view Trajectory Contrastive Learning for Online Multi-object Tracking (MTtrack)</h1>
+            
+            <div class="markdown-body">
+              <h1 id="towards-discriminative-representation-multi-view-trajectory-contrastive-learning-for-online-multi-object-tracking">Towards
+Discriminative Representation: Multi-view Trajectory Contrastive
+Learning for Online Multi-object Tracking</h1>
+<p>原文链接：https://arxiv.org/pdf/2203.14208.pdf</p>
+<h2 id="阅读疑惑">阅读疑惑</h2>
+<ol type="1">
+<li>“在推理阶段，开发了一种相似性引导的特征融合策略，以进一步提高轨迹表示的质量。”
+<ol type="1">
+<li>计算当前捕获的特征与之前轨迹buffer中的特征的余弦相似度，然后基于此相似度进行加权特征融合。</li>
+</ol></li>
+<li>在回归采样点坐标的时候，中心点特征的维度是<span class="math inline">\(256\times
+1\)</span>，无论如进行线性变化，最后得到维度都是<span class="math inline">\(N_k \times 1\)</span>，如何确定<span class="math inline">\(x,y\)</span>方向的偏移？
+<ol type="1">
+<li>应该是用中心点特征（256）去变换得到<span class="math inline">\(N_k\)</span>个坐标偏移点坐标，即<span class="math inline">\(1 \times 256-&gt;1 \times (N_k \times
+2)\)</span></li>
+</ol></li>
+</ol>
+<h2 id="行文结构">行文结构</h2>
+<h3 id="提出问题">提出问题</h3>
+<p>最近的工作主要利用单个或相邻帧中的特征来构建度量损失并授权网络来提取目标的表示。尽管这种策略是有效的，但它未能充分利用整个轨迹中包含的信息。许多具有不同身份的对象由于被遮挡或模糊而与相同的轨迹相关联，从而导致学习的表示无法区分。
+因此，需要提取更有意义和有区别的表示来提高关联的准确性。</p>
+<h3 id="介绍">介绍</h3>
+<ol type="1">
+<li>将目标外观向量视为查询，并设计对比损失以使它们更靠近相应的轨迹中心，同时远离其他轨迹中心</li>
+<li>LVS （可学习视图采样）用多个自适应选择的关键点而不是锚点或其 2D
+中心来表示每个目标。</li>
+</ol>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520090626497.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220520090626497" style="zoom:60%;"></p>
+<p>使用LVS方法能够让算法自动地去提取目标未遮挡部分的外观信息。</p>
+<p><em>目标的锚点或 2D 中心被其他对象遮挡，而 LVS
+仍然可以自适应地关注可见区域。</em></p>
+<ol start="3" type="1">
+<li>在推理阶段，我们注意到某些帧的目标特征不清楚，不适合表示轨迹。
+相应地，我们设计了一种相似度引导的特征融合（SGFF）策略，该策略基于历史特征相似度自适应地聚合特征，以减轻这些不良特征对轨迹表示的影响</li>
+</ol>
+<h3 id="可学习视图采样">可学习视图采样</h3>
+<p><strong>基于中心点特征向量表示的缺点：</strong></p>
+<ol type="1">
+<li>目标中心点可能被其他物体遮挡，此时生成的外观向量无法反应目标的特征</li>
+<li>仅用一个向量表示每个目标无法为对比学习算法提供足够的样本。</li>
+</ol>
+<p>提取方法：首先提取目标中心点的特征向量<span class="math inline">\(v_{c}\)</span>表示目标的外观特征，然后使用一个线性变换层去回归<span class="math inline">\(N_k=9\)</span>个采样点相对于中心点的偏置offset，最后限制所有的采样点均在以<span class="math inline">\(c\)</span>为中心点的目标bbox框内。</p>
+<p>对于采样点坐标提取其对应的特征向量<span class="math inline">\(v_i^{k}\)</span>,经过4层FC之后得到增强后的特征表示<span class="math inline">\(\widetilde{v}_i^k\)</span>。</p>
+<blockquote>
+<p>注：在推理阶段，$N_k
+$个外观向量被合并为一个单独的向量来表示它们对应的目标。</p>
+</blockquote>
+<h3 id="轨迹中心向量记忆库">轨迹中心(向量)记忆库</h3>
+<p>bank存储的是从开始到目前帧所有轨迹的中心特征向量,如果有<span class="math inline">\(N\)</span>个轨迹,则bank的向量维度为<span class="math inline">\(N\times
+256\)</span>,(假设一个id-embedding的特征向量是256维)</p>
+<ol type="1">
+<li><p>开发了一种基于动量的更新策略，在每次迭代中动态更新轨迹中心，而不需要历史梯度信息。</p></li>
+<li><p>收集从具有相同轨迹 ID
+的实例中提取的所有外观向量，以更新它们对应的轨迹中心</p></li>
+<li><p>利用所有外观特征向量中与中心特征向量余弦相似度最小的(最难学习)来更新中心特征.
+<span class="math display">\[
+c_{l} \leftarrow \alpha c_{l}+(1-\alpha) p_{m}^{l}
+\]</span> <span class="math inline">\(c_l\)</span>表示中心向量,<span class="math inline">\(\alpha=0.2\)</span>表示更新阈值,$ p_{m}^{l}<span class="math inline">\(表示轨迹\)</span>l$中最难学习的一条外观特征.</p></li>
+<li><p>在训练阶段，使用难样本更新轨迹中心有助于提高网络训练的效率。
+我们的实验结果已经证实了这个问题。</p></li>
+</ol>
+<p>使用InfoNCE loss来监督,使得帧内第<span class="math inline">\(k\)</span>个外观特征<span class="math inline">\(\widetilde{v}_l^k\)</span>,与中心特征<span class="math inline">\(c_l\)</span>更加接近,而与其他轨迹的中心特征<span class="math inline">\(c_{other}\)</span>距离更远. <span class="math display">\[
+L_{N C E}^{k}=-\log \frac{\exp \left(\tilde{v}_{l}^{k} \cdot
+c_{l}\right) / \tau}{\sum_{i=0}^{N_{t}} \exp \left(\tilde{v}_{l}^{k}
+\cdot c_{i}\right) / \tau}
+\]</span></p>
+<p><span class="math display">\[
+L_{t c l}=\frac{1}{N_{a}} \sum_{k=1}^{N_{a}} L_{N C E}^{k}
+\]</span></p>
+<blockquote>
+<p><span class="math inline">\(\tau=0.05\)</span>是一个[0-1]的超参数;<span class="math inline">\(N_t\)</span>表示中心数;<span class="math inline">\(N_a\)</span>表示有LVS确定的外观特征采样点数.</p>
+</blockquote>
+<h3 id="外观特征相似度指导的轨迹融合">外观特征相似度指导的轨迹融合</h3>
+<p>保留轨迹前<span class="math inline">\(Q\)</span>帧的外观特征,然后分别计算当前外观特征与之前外观特征的余弦相似度,得到一个加权值,最后将当前帧的特征融合进去.
+<span class="math display">\[
+\beta^{t}=\max \left\{0, \frac{1}{Q} \sum_{i=1}^{Q}
+\Psi_{d}\left(z_{l}^{t}, z_{l}^{t-i}\right)\right\}
+\]</span></p>
+<blockquote>
+<p><span class="math inline">\(\Psi_{d}\)</span>表示余弦相似度的计算.,<span class="math inline">\(Q=30\)</span></p>
+</blockquote>
+<p>这种以相似度来更新的有BUG，就是如果之前外观特征学得不好，后面学好了但是却一直无法更新,最后的结果就是越学越差。</p>
+<h2 id="总结">总结</h2>
+<p>  LVS从多个目标位置提取外观特征的做法值得借鉴,但是这样提取的特征不足以鲁棒性的表示目标,文章还使用了额外的4个FC来提取更具判别性的特征,这无疑增加了计算成本,同时提出的相似度指导的特征融合能够使用自适应权重,但是其权重却是通过与之前特征的相似度高低的得来的,这样会造成如果之前特征就学习不好的话,后面学好的特征仍无法更新目标外观模型的情况,个人感觉还不如使用可见度或者采样节点的可见度(或者目标的遮挡度)对外观模型进行加权融合.</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520110352302.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220520110352302" style="zoom:50%;"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/MOT/">MOT</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2022/05/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-LMP/">
+                        <span class="hidden-mobile">阅读笔记-Multiple People Tracking by Lifted Multicut and Person Re-identiﬁcation</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","appKey":"wlepdaYUatxn4WD8tudl2BdX","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://uqjw3jet.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/jasonyang.github.io/js/events.js" ></script>
+<script  src="/jasonyang.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/jasonyang.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/jasonyang.github.io/js/local-search.js" ></script>
+
+
+
+
+  <script defer src="/jasonyang.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/jasonyang.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>

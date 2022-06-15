@@ -4,6 +4,120 @@
   
   
   <entry>
+    <title>阅读笔记-Towards Discriminative Representation:Multi-view Trajectory Contrastive Learning for Online Multi-object Tracking (MTtrack)</title>
+    <link href="/jasonyang.github.io/2022/05/27/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-MTtrack/"/>
+    <url>/jasonyang.github.io/2022/05/27/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-MTtrack/</url>
+    
+    <content type="html"><![CDATA[<h1 id="towards-discriminative-representation-multi-view-trajectory-contrastive-learning-for-online-multi-object-tracking">TowardsDiscriminative Representation: Multi-view Trajectory ContrastiveLearning for Online Multi-object Tracking</h1><p>原文链接：https://arxiv.org/pdf/2203.14208.pdf</p><h2 id="阅读疑惑">阅读疑惑</h2><ol type="1"><li>“在推理阶段，开发了一种相似性引导的特征融合策略，以进一步提高轨迹表示的质量。”<ol type="1"><li>计算当前捕获的特征与之前轨迹buffer中的特征的余弦相似度，然后基于此相似度进行加权特征融合。</li></ol></li><li>在回归采样点坐标的时候，中心点特征的维度是<span class="math inline">\(256\times1\)</span>，无论如进行线性变化，最后得到维度都是<span class="math inline">\(N_k \times 1\)</span>，如何确定<span class="math inline">\(x,y\)</span>方向的偏移？<ol type="1"><li>应该是用中心点特征（256）去变换得到<span class="math inline">\(N_k\)</span>个坐标偏移点坐标，即<span class="math inline">\(1 \times 256-&gt;1 \times (N_k \times2)\)</span></li></ol></li></ol><h2 id="行文结构">行文结构</h2><h3 id="提出问题">提出问题</h3><p>最近的工作主要利用单个或相邻帧中的特征来构建度量损失并授权网络来提取目标的表示。尽管这种策略是有效的，但它未能充分利用整个轨迹中包含的信息。许多具有不同身份的对象由于被遮挡或模糊而与相同的轨迹相关联，从而导致学习的表示无法区分。因此，需要提取更有意义和有区别的表示来提高关联的准确性。</p><h3 id="介绍">介绍</h3><ol type="1"><li>将目标外观向量视为查询，并设计对比损失以使它们更靠近相应的轨迹中心，同时远离其他轨迹中心</li><li>LVS （可学习视图采样）用多个自适应选择的关键点而不是锚点或其 2D中心来表示每个目标。</li></ol><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520090626497.png" alt="image-20220520090626497" style="zoom:60%;"></p><p>使用LVS方法能够让算法自动地去提取目标未遮挡部分的外观信息。</p><p><em>目标的锚点或 2D 中心被其他对象遮挡，而 LVS仍然可以自适应地关注可见区域。</em></p><ol start="3" type="1"><li>在推理阶段，我们注意到某些帧的目标特征不清楚，不适合表示轨迹。相应地，我们设计了一种相似度引导的特征融合（SGFF）策略，该策略基于历史特征相似度自适应地聚合特征，以减轻这些不良特征对轨迹表示的影响</li></ol><h3 id="可学习视图采样">可学习视图采样</h3><p><strong>基于中心点特征向量表示的缺点：</strong></p><ol type="1"><li>目标中心点可能被其他物体遮挡，此时生成的外观向量无法反应目标的特征</li><li>仅用一个向量表示每个目标无法为对比学习算法提供足够的样本。</li></ol><p>提取方法：首先提取目标中心点的特征向量<span class="math inline">\(v_{c}\)</span>表示目标的外观特征，然后使用一个线性变换层去回归<span class="math inline">\(N_k=9\)</span>个采样点相对于中心点的偏置offset，最后限制所有的采样点均在以<span class="math inline">\(c\)</span>为中心点的目标bbox框内。</p><p>对于采样点坐标提取其对应的特征向量<span class="math inline">\(v_i^{k}\)</span>,经过4层FC之后得到增强后的特征表示<span class="math inline">\(\widetilde{v}_i^k\)</span>。</p><blockquote><p>注：在推理阶段，$N_k$个外观向量被合并为一个单独的向量来表示它们对应的目标。</p></blockquote><h3 id="轨迹中心向量记忆库">轨迹中心(向量)记忆库</h3><p>bank存储的是从开始到目前帧所有轨迹的中心特征向量,如果有<span class="math inline">\(N\)</span>个轨迹,则bank的向量维度为<span class="math inline">\(N\times256\)</span>,(假设一个id-embedding的特征向量是256维)</p><ol type="1"><li><p>开发了一种基于动量的更新策略，在每次迭代中动态更新轨迹中心，而不需要历史梯度信息。</p></li><li><p>收集从具有相同轨迹 ID的实例中提取的所有外观向量，以更新它们对应的轨迹中心</p></li><li><p>利用所有外观特征向量中与中心特征向量余弦相似度最小的(最难学习)来更新中心特征.<span class="math display">\[c_{l} \leftarrow \alpha c_{l}+(1-\alpha) p_{m}^{l}\]</span> <span class="math inline">\(c_l\)</span>表示中心向量,<span class="math inline">\(\alpha=0.2\)</span>表示更新阈值,$ p_{m}^{l}<span class="math inline">\(表示轨迹\)</span>l$中最难学习的一条外观特征.</p></li><li><p>在训练阶段，使用难样本更新轨迹中心有助于提高网络训练的效率。我们的实验结果已经证实了这个问题。</p></li></ol><p>使用InfoNCE loss来监督,使得帧内第<span class="math inline">\(k\)</span>个外观特征<span class="math inline">\(\widetilde{v}_l^k\)</span>,与中心特征<span class="math inline">\(c_l\)</span>更加接近,而与其他轨迹的中心特征<span class="math inline">\(c_{other}\)</span>距离更远. <span class="math display">\[L_{N C E}^{k}=-\log \frac{\exp \left(\tilde{v}_{l}^{k} \cdotc_{l}\right) / \tau}{\sum_{i=0}^{N_{t}} \exp \left(\tilde{v}_{l}^{k}\cdot c_{i}\right) / \tau}\]</span></p><p><span class="math display">\[L_{t c l}=\frac{1}{N_{a}} \sum_{k=1}^{N_{a}} L_{N C E}^{k}\]</span></p><blockquote><p><span class="math inline">\(\tau=0.05\)</span>是一个[0-1]的超参数;<span class="math inline">\(N_t\)</span>表示中心数;<span class="math inline">\(N_a\)</span>表示有LVS确定的外观特征采样点数.</p></blockquote><h3 id="外观特征相似度指导的轨迹融合">外观特征相似度指导的轨迹融合</h3><p>保留轨迹前<span class="math inline">\(Q\)</span>帧的外观特征,然后分别计算当前外观特征与之前外观特征的余弦相似度,得到一个加权值,最后将当前帧的特征融合进去.<span class="math display">\[\beta^{t}=\max \left\{0, \frac{1}{Q} \sum_{i=1}^{Q}\Psi_{d}\left(z_{l}^{t}, z_{l}^{t-i}\right)\right\}\]</span></p><blockquote><p><span class="math inline">\(\Psi_{d}\)</span>表示余弦相似度的计算.,<span class="math inline">\(Q=30\)</span></p></blockquote><p>这种以相似度来更新的有BUG，就是如果之前外观特征学得不好，后面学好了但是却一直无法更新,最后的结果就是越学越差。</p><h2 id="总结">总结</h2><p>  LVS从多个目标位置提取外观特征的做法值得借鉴,但是这样提取的特征不足以鲁棒性的表示目标,文章还使用了额外的4个FC来提取更具判别性的特征,这无疑增加了计算成本,同时提出的相似度指导的特征融合能够使用自适应权重,但是其权重却是通过与之前特征的相似度高低的得来的,这样会造成如果之前特征就学习不好的话,后面学好的特征仍无法更新目标外观模型的情况,个人感觉还不如使用可见度或者采样节点的可见度(或者目标的遮挡度)对外观模型进行加权融合.</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520110352302.png" alt="image-20220520110352302" style="zoom:50%;"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>多目标跟踪</category>
+      
+      <category>论文总结</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阅读笔记-Multiple People Tracking by Lifted Multicut and Person Re-identiﬁcation</title>
+    <link href="/jasonyang.github.io/2022/05/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-LMP/"/>
+    <url>/jasonyang.github.io/2022/05/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-LMP/</url>
+    
+    <content type="html"><![CDATA[<h1 id="multiple-people-tracking-by-lifted-multicut-and-person-re-identiﬁcation">MultiplePeople Tracking by Lifted Multicut and Person Re-identiﬁcation</h1><p>原文链接：https://openaccess.thecvf.com/content_cvpr_2017/papers/Tang_Multiple_People_Tracking_CVPR_2017_paper.pdf</p><h2 id="主要工作">主要工作</h2><ol type="1"><li><p>将MCLMP融入到多目标跟踪领域</p><p>  MCLMP（Minimum Cost Lifted MulticutProblem）——最小花费改进多边切割问题，之前这类方法主要用在经典的图像分割领域，以像素点或者像素块作为图节点，为节点之间的每条边分配去切断惩罚（边权重，有正有负），在一定的约束条件下对节点间多余的边进行切割（切断图像块与图像块之间的联系，剩余聚合的图像块便可以看作一个具有相同语义的区域）以最小化惩罚，然后得到聚类结果。这类方法最重要的是通过一些合理的节点连接权重的度量函数，衡量节点之间的关系，然后便是利用一些启发式的算法对图进行切割优化。</p><p>  应用到多目标跟踪领域，作者将图的每个节点等效成视频帧中的每个检测到的目标，同一帧中的目标之间可以彼此相连（这里相连的原因是作者对检测得到的bbox没有进行NMS会有一些重复的框），然后对前后相差<span class="math inline">\(\delta_t\)</span>帧的目标也进行连接（通过中心点距离或者bbox或者外观相似的阈值条件确定），此时的连接都是regularedges，另外还有一点就是通过additionaledges去连接部分外观度量特别相似，然后帧间隔大于<span class="math inline">\(\delta_t\)</span>的目标。边的连接权重或者切断惩罚通过下面的向量计算式得到:<span class="math display">\[\begin{array}{c}c_e=\log \frac{1-p_e}{pe}=-&lt;\theta_{\gamma}, f^{(e)}&gt; \\f^{(e)} \leftarrow \left( f_{st}, f_{dm}, f_{reID}, f_{st}^2,f_{st} \dot\ f_{dm} \dots, \xi_{min}^2\right), \ f^{(e)} \in \cal{R}^{14}\end{array}\]</span> 其中：</p><ul><li><span class="math inline">\(\theta_{\gamma}\)</span>为可学习的映射参数（文中在训练跟踪视频的时候使用了一个LogisticRegression来预测这个参数）</li><li><span class="math inline">\(f_{st}\)</span>代表检测框中心点和高相似度：<span class="math inline">\(f_{st}=\frac{\sqrt{\left(x_{v}-x_{w}\right)^{2}+\left(y_{v}-y_{w}\right)^{2}}}{\bar{h}}\)</span></li><li><span class="math inline">\(f_{dm}\)</span>代表两个目标的关键点集合匹配度（感觉有点儿像交并比），但又不完全是（图1是第一篇用这种DeepMatching的论文：Multipersontracking by multicuts and deep matching）</li><li><span class="math inline">\(f_{reID}\)</span>代表融合目标关键点特征的目标相似度（byStackNetPose），具体怎么融合看主要工作2</li><li><span class="math inline">\(\xi_{min}\)</span>表示两个目标检测置信度中，较小的那个置信度。</li></ul><center><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220516211227565.png" alt="image-20220516211227565" style="zoom:50%;"><br></p><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">图1 Deep Matching 示意图</div></center></li></ol><p>​</p><ol start="2" type="1"><li><p>提出融合人体外观和人体姿态的深度评估网络</p><p>  作者提出了融合深度外观和人体关键点的评估网络名为：StackNetPose。具体做法为，先通过单独的人体关键点检测网络，得到各个关键点（每个行人图像14个points）的响应图（宽高与原图一致），然后融合成7张单通道的heatmap，两张行人图像得到14个heatmap（如下图中绿色部分），之后将这些heatmap与两张行人图像的RGB通道堆叠得到一个拥有20个通道输入的特征图，最后通过一个分类网络评估行人图像之间的相似度。</p></li></ol><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517091655746.png" alt="image-20220517091655746" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;         display: inline-block;         color: #999;         padding: 2px;">图2 深度提取网络示意图</div></center><h2 id="mclmp问题建模及约束解释">MCLMP问题建模及约束解释</h2><p>最小花费改进多边切割问题的定义或者用法如第一节所述，下面以一个简单得了例子来表述如何构建一个MCLMP模型。这是一个简单的双向图模型，每条边旁边的数字代表切掉这条表对应的花费或者收益，实线连接的边表示连接（joint），虚线连接的边表示剪掉（cut）。</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517092532052.png" alt="image-20220517092532052" style="zoom:30%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;         display: inline-block;         color: #999;         padding: 2px;">图3 连接关系图</div></center><h3 id="问题建模">问题建模</h3><p>MCLMP的规划模型如下：</p><ol type="1"><li><p>目标函数 <span class="math display">\[\min _{x \in\{0,1\} E^{\prime}} \sum_{e \in E^{\prime}} c_{e} x_{e}\]</span></p><blockquote><p>其中<span class="math inline">\(E'\)</span>表示图中所有的边（包括剪掉和连接的，包括regularedges 和 additional edges，additional edges是自己设置的），<span class="math inline">\(c_e\)</span>表示<span class="math inline">\(e\)</span>这条边剪掉所带来的花费，比如上图中<span class="math inline">\(V_1，V_6\)</span>两个节点的弧形连接边，如果将这个边cut，那么将会花费5。<span class="math inline">\(x_e\)</span>表示边的连接状态，<span class="math inline">\(x_e=1\)</span>表示这条边被cut，<span class="math inline">\(x_e=0\)</span>表示这条边是joint。因此对于一个都是joint关系的图，总体的花费都为0，需要cut掉一些产生收益的负权边（如上图的-1，-0.5的这些边）来进一步减少花费。</p></blockquote></li><li><p>约束条件</p><p>约束1： <span class="math display">\[\forall Y \in \operatorname{cycles}(G), \ \  \forall e \in Y: x_{e} \leq\sum_{e^{\prime} \in Y \backslash\{e\}} x_{e^{\prime}}\]</span></p><blockquote><p>直观表述：对任意一个循环连接（cut的虚线边也算作连接，也存在循环连接），循环圈中的每条边的连接状态值，小于等于剩余边连接状态值的之和。通俗解释，一个循环连接，要么就全都是joint的，此时所有的<span class="math inline">\(x_e=0\)</span>，有<span class="math inline">\(0\le0\)</span>，约束成立；要么就要有两条及以上的边是cut的，此时对被cut的边有<span class="math inline">\(1 \le 1+k\)</span>，<span class="math inline">\(k\)</span>为循环连接中cut边数量-2， <span class="math inline">\(k \ge 0\)</span>。</p></blockquote><p>约束2： <span class="math display">\[\forall v w \in E^{\prime} \backslash E , \ \ \forall P \in v w \text{-paths(G) }: x_{v w} \leq \sum_{e \in P} x_{e}\]</span></p><blockquote><p>直观表述：对任意一条additional edges,其任意一条可行的regularedges组成的path（状态为0才能称之为path），path中所有连接边的状态值之和应该大于additionaledges直接连接的状态值。通俗解释：任意一条additionaledges（比如图3中的V1——V6边）状态为joint的前提是存在一个同样为joint的连接通路，这个通路可以是：V1——V2——V3——V6，也可以是：V1——V2——V5——V6，也可以两个都存在。</p></blockquote><p>约束3： <span class="math display">\[\forall v w \in E^{\prime} \backslash E , \ \ \forall C \in vw-\operatorname{cuts}(G): 1-x_{v w} \leq \sum_{e \inC}\left(1-x_{e}\right)\]</span></p><blockquote><p>通俗表述：对任意一条additionaledges（比如图3中的V1——V6边）状态为cut的前提是所有V1——V6的连接通路均不存在一些状态为cut的边，这些通路包括：V1——V2——V3——V6，也可以是：V1——V2——V5——V6，V1——V4——V5——V6，都要有cut边。</p></blockquote></li></ol><p>图例解释：</p><ol type="1"><li>不满足约束（1）</li></ol><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517102134624.png" alt="image-20220517102134624" style="zoom:45%;"></p><p>假设优化剪边后的图连接关系如上，此时对于V1——V2——V5——V4——V1循环，边<span class="math inline">\(x_{12}=1\)</span>，而其余的边<span class="math inline">\(x_{e^{'}}=0\)</span>，因此对于约束（1）<span class="math inline">\(x_{12}=1 \nleq0\)</span>不满足，不是问题的可行解。</p><ol start="2" type="1"><li>不满足约束（2）</li></ol><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517102844176.png" alt="image-20220517102844176" style="zoom:45%;"></p><p>假设优化剪边后的图连接关系如上，此时因为存在V1——V4——V5——V6的path,所以additional edges <span class="math inline">\(x_{16}\)</span>应该为joint状态。</p><ol start="3" type="1"><li><p>不满足约束（3）</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517103152519.png" alt="image-20220517103152519" style="zoom:45%;"></p></li></ol><p>假设优化剪边后的图连接关系如上，此时因为任何一条从V1——V6的通路都带有cut状态的边，因此additionaledges <span class="math inline">\(x_{16}\)</span>应该为cut状态。</p><p>最后放上正确优化后的图结构：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517103817848.png" alt="image-20220517103817848" style="zoom:40%;"></p><p>此时的多边切割划分为为（-1 + -1 + -1 + -1 =-4），相比原来的花费0，确实更小了。</p><p><strong>相关文献：</strong></p><p>Multi-Person Tracking by Multicut and Deep Matching</p><ul><li><a href="https://arxiv.org/pdf/1608.05404.pdf">Paper</a>;</li></ul><p>Multiple People Tracking by Lifted Multicut and PersonRe-identiﬁcation</p><ul><li><a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Tang_Multiple_People_Tracking_CVPR_2017_paper.pdf">Paper</a></li></ul><p>An Efficient Fusion Move Algorithm for the Minimum Cost LiftedMulticut Problem</p><ul><li><a href="https://hci.iwr.uni-heidelberg.de/sites/default/files/publications/files/1939997197/beier_16_efficient.pdf">Paper</a></li><li><a href="http://www.eccv2016.org/files/posters/O-2A-01.pdf">Poster</a></li><li><a href="http://videolectures.net/site/normal_dl/tag=1078753/eccv2016_beier_efficient_fusion_01.pdf">Lectures&amp;Slides</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>多目标跟踪</category>
+      
+      <category>论文总结</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+      <tag>Minimum Cost Lifted Multicut Problem</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Gaussian Processes for Regression</title>
+    <link href="/jasonyang.github.io/2022/05/18/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B%E5%9B%9E%E5%BD%92%EF%BC%88Gaussian%20Processes%20for%20Regression%EF%BC%89/"/>
+    <url>/jasonyang.github.io/2022/05/18/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B%E5%9B%9E%E5%BD%92%EF%BC%88Gaussian%20Processes%20for%20Regression%EF%BC%89/</url>
+    
+    <content type="html"><![CDATA[<h1 id="高斯过程回归gaussian-processes-for-regression">高斯过程回归（GaussianProcesses for Regression）</h1><hr><h2 id="实际问题">实际问题</h2><p>如下图所示，我们已知<span class="math inline">\(x\)</span>在<span class="math inline">\(\left[\begin{array}{llllll} -1.50 &amp; -1.00&amp; -0.75 &amp; -0.40 &amp; -0.25 &amp; 0.00\end{array}\right]\)</span>处的观测值以及他们在这些点处的观测标准差<span class="math inline">\(\sigma_n=0.3\)</span>，如何根据这些已知信息去求得<span class="math inline">\(x_*=0.2\)</span>时，<span class="math inline">\(y_*=?\)</span>。</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513113623452.png" alt="image-20220513113623452" style="zoom:35%;"></p><h2 id="问题建模">问题建模</h2><h3 id="确定衡量观测点影响重要程度的协方差函数">确定衡量观测点影响重要程度的协方差函数</h3><p>​ 一般选用径向基函数（RBF）来衡量两个观测点之间的协方差（影响程度）：<span class="math display">\[k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp\left[\frac{-\left(x-x^{\prime}\right)^{2}}{2 l^{2}}\right]\]</span></p><blockquote><p><span class="math inline">\(k(x,x')\)</span>表示<span class="math inline">\(x\)</span>与<span class="math inline">\(x'\)</span>之间的协方差，<span class="math inline">\(\sigma_f\)</span>控制影响强度，<span class="math inline">\(l\)</span>控制影响周期。</p></blockquote><h3 id="不同时刻或者位置的观测值">不同时刻或者位置的观测值</h3><p>一个系统或者运动物体在时刻<span class="math inline">\(t\)</span>或者位置<span class="math inline">\(x\)</span>的观测值<span class="math inline">\(y\)</span>有如下计算公式： <span class="math display">\[y=f(x)+\mathcal{N}(0, \sigma_{n}^{2})\]</span></p><blockquote><p><span class="math inline">\(f(.)\)</span>表示依赖或者映射函数，<span class="math inline">\(\mathcal{N}(0,\sigma_{n}^{2})\)</span>表示测量值噪声服从均值为0，方差为<span class="math inline">\(\sigma_{n}^2\)</span>的高斯分布。</p></blockquote><h3 id="融合观测噪声的协方差函数">融合观测噪声的协方差函数</h3><p><span class="math display">\[k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp\left[\frac{-\left(x-x^{\prime}\right)^{2}}{2l^{2}}\right]+\sigma_{n}^{2} \delta\left(x, x^{\prime}\right)\]</span></p><blockquote><p><span class="math inline">\(\delta(.)\)</span>表示Kronecker三角函数，当<span class="math inline">\(x=x'\)</span>时，<span class="math inline">\(\delta(x, x')=1\)</span>,其余时候等于0.</p></blockquote><h3 id="根据任意两个观测点计算得到协方差矩阵">根据任意两个观测点计算得到协方差矩阵</h3><p>根据2.3中的协方差函数以及已知观测点的位置<span class="math inline">\(x\)</span>和未知待预测点的位置<span class="math inline">\(x_*\)</span>计算得到以下协方差阵： <span class="math display">\[K=\left[\begin{array}{cccc}k\left(x_{1}, x_{1}\right) &amp; k\left(x_{1}, x_{2}\right) &amp; \cdots&amp; k\left(x_{1}, x_{n}\right) \\k\left(x_{2}, x_{1}\right) &amp; k\left(x_{2}, x_{2}\right) &amp; \cdots&amp; k\left(x_{2}, x_{n}\right) \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\k\left(x_{n}, x_{1}\right) &amp; k\left(x_{n}, x_{2}\right) &amp; \cdots&amp; k\left(x_{n}, x_{n}\right)\end{array}\right]\]</span></p><p><span class="math display">\[K_{*}=\left[\begin{array}{llll}k\left(x_{*}, x_{1}\right) &amp; k\left(x_{*}, x_{2}\right) &amp; \cdots&amp; k\left(x_{*}, x_{n}\right)\end{array}\right] \quad K_{* *}=k\left(x_{*}, x_{*}\right)\]</span></p><blockquote><p><span class="math inline">\(x_1, ...,x_n\)</span>表示已知观测点，<span class="math inline">\(x_*\)</span>表示待预测的点。可以确定的是依据2.3中的公式，矩阵<span class="math inline">\(K\)</span>的对角线元素为<span class="math inline">\(\sigma_f^2 + \sigma_n^2\)</span>。</p></blockquote><h3 id="基于高斯过程和最大后延概率求解待预测值">基于高斯过程和最大后延概率求解待预测值</h3><p>基于之前的关键假设：观测系统是一个高斯过程。所以目前的观测值和待预测值服从一个多元高斯分布：<span class="math display">\[\left[\begin{array}{c}\mathbf{y} \\y_{*}\end{array}\right] \sim\mathcal{N}\left(\mathbf{0},\left[\begin{array}{ll}K &amp; K_{*}^{\mathrm{T}} \\K_{*} &amp; K_{* *}\end{array}\right]\right)\]</span> 现在需要做的是，求得一个待预测的观测值<span class="math inline">\(y_*\)</span>，使得<span class="math inline">\(p(y_*|\mathbf{y})\)</span>的概率最大，换句话说使得<span class="math inline">\(p(y_*|\mathbf{y})\)</span>概率最大的<span class="math inline">\(y_*\)</span>即为所求的最佳高斯过程回归值。</p><p><span class="math inline">\(y_*|\mathbf{y}\)</span>的条件概率服从：<span class="math display">\[y_{*} \mid \mathbf{y} \sim \mathcal{N}\left(K_{*} K^{-1} \mathbf{y},K_{* *}-K_{*} K^{-1} K_{*}^{\mathrm{T}}\right)\]</span> 综上，<span class="math inline">\(y_*\)</span>的最佳估计和估计的方差为： <span class="math display">\[\bar{y}_{*}=K_{*} K^{-1} \mathbf{y}\]</span></p><p><span class="math display">\[\operatorname{var}\left(y_{*}\right)=K_{* *}-K_{*} K^{-1}K_{*}^{\mathrm{T}}\]</span></p><h2 id="例题">例题</h2><p>依据上述第一节的例题，有6个观测点值<span class="math inline">\(x=\left[\begin{array}{llllll}-1.50 &amp; -1.00 &amp; -0.75 &amp; -0.40&amp; -0.25 &amp; 0.00\end{array}\right]\)</span>，同时可以假定<span class="math inline">\(\sigma_n=0.3\)</span>，设定<span class="math inline">\(\sigma_f=1.27,l=1\)</span>，则依据公式（3）（4）（5）得： <span class="math display">\[K=\left[\begin{array}{llllll}1.70 &amp; 1.42 &amp; 1.21 &amp; 0.87 &amp; 0.72 &amp; 0.51 \\1.42 &amp; 1.70 &amp; 1.56 &amp; 1.34 &amp; 1.21 &amp; 0.97 \\1.21 &amp; 1.56 &amp; 1.70 &amp; 1.51 &amp; 1.42 &amp; 1.21 \\0.87 &amp; 1.34 &amp; 1.51 &amp; 1.70 &amp; 1.59 &amp; 1.48 \\0.72 &amp; 1.21 &amp; 1.42 &amp; 1.59 &amp; 1.70 &amp; 1.56 \\0.51 &amp; 0.97 &amp; 1.21 &amp; 1.48 &amp; 1.56 &amp; 1.70\end{array}\right]\\K_{*}=\left[\begin{array}{llllll}0.38 &amp; 0.79 &amp; 1.03 &amp; 1.35 &amp; 1.46 &amp; 1.58\end{array}\right] ,\ \  \    K_{**}=1.70\]</span> 之后依据公式（8）（9）得到： <span class="math display">\[\bar{y}_{*}=0.95 ，\ \  \operatorname{var}\left(y_{*}\right)=0.21\]</span><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513150426202.png" alt="image-20220513150426202" style="zoom:35%;"></p><blockquote><p>图中黑色实线表示GPR预测值，黑色原点表示实际观测值，蓝色点表示在<span class="math inline">\(x=0.2\)</span>处的观测值，红色区域表示95%的置信度区间（<span class="math inline">\(\bar{y}_{*} \pm 1.96\sqrt{\operatorname{var}\left(y_{*}\right)}\)</span>）。</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>轨迹位置预测</category>
+      
+      <category>预测算法</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Gaussian Processes for Regression</tag>
+      
+      <tag>回归预测</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阅读笔记-YOLO_Pose:Enhancing YOLO for Multi Person Pose Estimation Using Object Keypoint Similarity Loss</title>
+    <link href="/jasonyang.github.io/2022/05/17/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-YOLOPose/"/>
+    <url>/jasonyang.github.io/2022/05/17/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-YOLOPose/</url>
+    
+    <content type="html"><![CDATA[<h1 id="yolo-pose-enhancing-yolo-for-multi-person-pose-estimation-using-object-keypoint-similarity-loss">YOLO-Pose:Enhancing YOLO for Multi Person Pose Estimation Using Object KeypointSimilarity Loss</h1><p>原文链接：https://arxiv.org/pdf/2204.06806.pdf</p><h2 id="行文结构">行文结构</h2><h3 id="摘要">摘要</h3><p><strong>目前算法的问题：</strong></p><ol type="1"><li>不是端到端训练，同时无法直接依据姿态检测的指标OKS进行训练，而是使用L1Loss进行替代。</li></ol><p>所提算法允许进行端到端地训练模型并优化 OKS指标本身。所提出的模型学习在单次前向传递中联合检测多人的边界框及其相应的2D 姿势。</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525201239786.png" alt="image-20220525201239786" style="zoom:23%;"><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525201313195.png" alt="image-20220525201313195" style="zoom:25%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">算法可视化对比 ：YOLO-pose(左)， HigherHRNetW32（右）</div></center><blockquote><p>上图中HRNet需要先运行一次目标检测网络然后才能对框定的bbox进行姿态估计。</p></blockquote><h3 id="介绍">介绍</h3><p><strong>2D人体姿态估计：</strong>多人 2D姿势估计是理解图像中的人类的任务。给定输入图像，目标是检测每个人并定位他们的身体关节。由于图像中的人数可变、比例变化、身体部位的遮挡、人体的非刚性以及各种其他原因，推断图像中多人的姿势可能具有挑战性。</p><p>提出的姿态估计技术可以很容易地集成到任何运行目标检测的计算机视觉系统中，计算量几乎为零。</p><h3 id="yolo-pose整体结构">YOLO-Pose整体结构</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525204036320.png" alt="image-20220525204036320" style="zoom:50%;"></p><p>就是相当于YOLOv5在之前的bbox分支基础上重新增加了一个Head去回归目标的姿态。整体的预测向量如下：<span class="math display">\[\begin{array}{l}P_{v}=\left\{C_{x}, C_{y}, W, H, \text { box }_{\text {conf }}, \text {class }_{\text {conf }}, K_{x}^{1}, K_{y}^{1}, K_{\text {conf }}^{1},\ldots\right., K_{x}^{n}, K_{y}^{n}, K_{\text {conf }\}}^{n}\end{array}\]</span></p><blockquote><p>其中<span class="math inline">\(n=17\)</span>代表需要预测17个人体关键点，每个关键点由位置<span class="math inline">\(x,y\)</span>和关键点置信度<span class="math inline">\(K_{conf}\)</span>衡量。在推理时保留置信度高于0.5的关键点。</p></blockquote><h4 id="oks损失计算">OKS损失计算</h4><p><span class="math display">\[\begin{aligned}\mathcal{L}_{k p t s}(s, i, j, k) &amp;=1-\sum_{n=1}^{N_{k p t s}} O K S\\&amp;=1-\frac{\sum_{n=1}^{N_{k p t s}} \exp \left(\frac{d_{n}^{2}}{2s^{2} k_{n}^{2}}\right) \delta\left(v_{n}&gt;0\right)}{\sum_{n=1}^{N_{kp t s}} \delta\left(v_{n}&gt;0\right)}\end{aligned}\]</span></p><blockquote><p><span class="math inline">\(d_n\)</span>表示第<span class="math inline">\(n\)</span>个关键点GT与Pred之间的欧氏距离；</p><p><span class="math inline">\(s\)</span>表示目标的尺度（也即anchorbbox的尺度），其他描述又说是目标关键点轮廓的面积；</p><p><span class="math inline">\(k_n\)</span>表示第<span class="math inline">\(n\)</span>个关键点的权重；</p><p><span class="math inline">\(\delta(v_n)\)</span>表示关键点可见度符号函数，当真实可见度<span class="math inline">\(v_n &gt; 0\)</span>时，<span class="math inline">\(\delta(v_n)\)</span>等于1。</p></blockquote><h3 id="sota结果对比">SOTA结果对比</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220526093441077.png" alt="image-20220526093441077" style="zoom:67%;"></p><h3 id="l1-loss和oks-loss的对比分析">L1 Loss和OKS Loss的对比分析</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220526093646961.png" alt="image-20220526093646961" style="zoom: 33%;"></p><h3 id="macs与flops的比较">MACs与FLOPs的比较</h3><figure><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/v2-ec81621db83d2e9216d320410d5a8771_b.jpg" alt="img"><figcaption aria-hidden="true">img</figcaption></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>论文总结</category>
+      
+      <category>姿态估计</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>YOLO</tag>
+      
+      <tag>Pose Estimation</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>阅读笔记-Improving Multiple Object Tracking with Single Object Tracking（SOTMOT）</title>
     <link href="/jasonyang.github.io/2022/05/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-SOTMOT/"/>
     <url>/jasonyang.github.io/2022/05/14/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-SOTMOT/</url>
@@ -54,6 +168,33 @@
       <tag>MOT</tag>
       
       <tag>GNN</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阅读笔记-DanceTrack:Multi-Object Tracking in Uniform Appearance and Diverse Motion</title>
+    <link href="/jasonyang.github.io/2022/05/12/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-DanceTrack/"/>
+    <url>/jasonyang.github.io/2022/05/12/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-DanceTrack/</url>
+    
+    <content type="html"><![CDATA[<h1 id="dancetrack-multi-object-tracking-in-uniform-appearance-and-diverse-motion">DanceTrack:Multi-Object Tracking in Uniform Appearance and Diverse Motion</h1><p>原文链接：https://arxiv.org/pdf/2111.14690.pdf</p><h2 id="行文结构">行文结构</h2><p><strong>DanceTrack数据集的特点：</strong></p><ol type="1"><li><p>统一外观：人类具有高度相似且几乎没有区别的外观。</p></li><li><p>多样的运动：它们具有复杂的运动模式和相互作用。</p><blockquote><p>具有频繁的相对位置切换和遮挡。</p></blockquote></li></ol><h3 id="摘要">摘要</h3><p>现有跟踪数据集中的偏差，其中大多数对象往往具有可区分的外观，因此使用re-ID模型足以建立关联，但是当对象外观没有足够的辨别力时，多目标跟踪方法也应该起作用。期待后来的一些算法能够<strong>更少依赖于视觉辨别，更多地依赖于运动分析。</strong></p><h3 id="介绍">介绍</h3><p>现有多目标跟踪数据集的局限性，并观察到许多目标具有不同的外观，并且目标的运动模式非常规则甚至是线性的。最近开发的多目标跟踪算法高度依赖外观匹配来关联检测到的对象，同时几乎不考虑其他线索。</p><p>DanceTrack数据集：</p><ol type="1"><li>该数据集包含超过 100K 的图像帧（几乎是 MOT17 数据集的 10 倍）；</li><li>外观一致：视频中的人穿着非常相似甚至相同的衣服，使得他们的视觉特征很难被re-ID 模型区分；</li><li>多样化运动：人们通常有非常大范围的运动和复杂的身体姿态变化，对运动建模提出了更高的要求。第二个属性也带来了遮挡和交叉作为副作用，即人体彼此重叠的比例很大，并且它们的相对位置经常交换。</li></ol><p>一些对更好的实现DanceTrack上的关联结果有益的结论：</p><ol type="1"><li>目标的细粒度表示，例如分割和姿势，表现出比粗边界框更好的能力；<ol type="1"><li>是否可以融合姿势度量相似度，文末尝试了融合OKS相似度确实带来了很大的提升。</li></ol></li><li>尽管我们正在解决二维跟踪任务，但深度信息显示出对关联对象的积极影响；</li><li>时间动力学的运动建模很重要。</li></ol><h3 id="dancetrack数据集">DanceTrack数据集</h3><p>DanceTrack数据集与MOT17、MOT20的比较：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525145804749.png" alt="image-20220525145804749" style="zoom:50%;"></p><h4 id="数据集构建">数据集构建</h4><p>通过简单地增加感兴趣对象的密度来关注“人群”并不是我们所期望的，MOT20包含行人非常拥挤的视频。但由于行人的运动非常规律，相对位置和遮挡区域保持一致，这样的“人群”并没有为外观匹配设置障碍。</p><p>对于部分被遮挡的对象，标注了一个全身框。<strong>对于完全被遮挡的物体，我们不标注</strong>；当它在未来的帧中重新出现时，它的标识符id在可见时与前一帧保持相同。</p><p>厉害呀，啥工具。标注工具可以自动将注释框从前一帧传播到当前帧，而注释器只需要对当前帧中的框进行细化。</p><h4 id="数据集统计">数据集统计</h4><p>训练集40个，验证集25个，测试集35个。并且在数据集拆分过程中，我们在平均长度、平均边界框数、包含场景和运动多样性方面保持子集的分布接近。</p><p>一些具有挑战性的场景：</p><ol type="1"><li>低光照和远距离相机</li><li>Group Dance，最多40人</li><li>体操比赛视频：极其多样化的身体姿势、频繁的姿势变化和复杂的运动模式。</li></ol><p>目标之间的外观相似度、相邻帧的重叠IoU、目标中心的相对位置切换在不用数据集上的比较：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525151644078.png" alt="image-20220525151644078" style="zoom:67%;"></p><h4 id="数据集的性能评价指标">数据集的性能评价指标</h4><p>HOTA：综合指标</p><p>AssA、IDF1：衡量关联性能</p><p>DetA、MOTA：衡量检测性能</p><h4 id="当前工作的局限">当前工作的局限</h4><ol type="1"><li>考虑到上述动机和建议的数据集，我们没有提供一种高度优于以前的多目标跟踪算法的算法，但将其作为未来研究的一个悬而未决的问题。</li><li>我们在这项工作中强调的情况，人体姿势或分割掩码的注释对于更细粒度的研究应该很重要。但受限于时间和资源，我们在这个版本中只提供了边界框的标注。</li></ol><h3 id="对比实验分析">对比实验分析</h3><p>CenterTrack论文中提供了一种MOT17训练集拆分为训练集和验证集的方法。</p><h4 id="oracle-analysisgt关联分析">Oracle Analysis（GT关联分析）</h4><p>用具有不同关联算法的GT边界框来实现预期的算法上限性能。</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525152911459.png" alt="image-20220525152911459" style="zoom:67%;"></p><blockquote><p>从结果来看，就 MOT17 上的所有指标而言，跟踪输出接近完美。而且，有趣的是，仅使用 IoU 匹配可以获得最佳性能，这证明 MOT17包含具有简单和规则运动模式的对象，并且在大多数情况下瓶颈不在于关联。在DanceTrack上同样最佳性能仅在于IoU匹配，即使结合线性运动模型或附加外观信息也无济于事。当使用外观相似性时，所有指标都比不使用任何外观提示要差。</p></blockquote><p>MOT17和DanceTrack数据集目标外观特征Tt-SNE聚类可视化</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525153305733.png" alt="image-20220525153305733" style="zoom:33%;"></p><p><strong>GT分析结论：现有数据集存在严重偏差，更多地关注检测质量，并且所涉及的简单轨迹模式限制了该领域的研究。相反，DanceTrack对开发具有提高关联能力的多对象跟踪器提出了更高的要求。</strong></p><h4 id="目前先进算法在dancetrack上的表现">目前先进算法在DanceTrack上的表现</h4><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525153730867.png" alt="image-20220525153730867" style="zoom:67%;"></p><blockquote><p>检测不是在 DanceTrack上具有良好跟踪性能的瓶颈，如何针对目标的统一外观和多样化运动建立稳健的关联才是。</p></blockquote><h4 id="不同关联算法在dancetrack数据集上的性能比较">不同关联算法在DanceTrack数据集上的性能比较</h4><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525154132253.png" alt="image-20220525154132253" style="zoom: 40%;"></p><blockquote><p>以上关联方法均是基于YOLOX的检测结果。</p></blockquote><h4 id="多任务融合学习分析">多任务融合学习分析</h4><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525154922769.png" alt="image-20220525154922769" style="zoom:67%;"></p><ol type="1"><li><p>融合COCO目标mask监督</p><p>训练数据是 DanceTrack 训练集和 COCO Mask的组合。 如果输入图像来自DanceTrack，我们将其 mask loss 设置为 0。在推理过程中，匹配度量是bounding box IoU 和 mask IoU的加权和。<em>但是从图中看联合训练之后只用bbox匹配就可以达到很好的效果了呀</em></p></li><li><p>融合COCO目标pose监督</p><p>训练数据是 DanceTrack 训练集和 COCO 人体姿势 [24] 的组合。如果输入图像来自 DanceTrack，我们将其位姿损失设置为0。在推理过程中，匹配度量是边界框 IoU 和对象关键点相似度 (OKS)的加权和。</p><blockquote><p>当人体的大部分区域已经被遮挡时，分割模型通常不能提供可靠的输出，而专注于某些人体关键点的姿态估计模型通常表现出更高的鲁棒性。</p></blockquote></li><li><p>融合深度信息</p><p>和KITII数据集中的车辆数据一起训练，有较大的域Gap，因此造成了性能下降；感觉深度信息和姿态信息都是能用的。</p></li><li><p>融合运动模型的作用</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525160839057.png" alt="image-20220525160839057" style="zoom:40%;"></p><blockquote><p>使用弱监督学习来估计其他模式（深度、遮罩掩膜、姿态估计）</p></blockquote></li></ol><h2 id="储备知识">储备知识</h2><ol type="1"><li>有度量关键点相似度的算法：Object Keypoint Similarity(OKS)（COCO数据集里面提供的）</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>多目标跟踪</category>
+      
+      <category>数据集介绍</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
       
     </tags>
     
