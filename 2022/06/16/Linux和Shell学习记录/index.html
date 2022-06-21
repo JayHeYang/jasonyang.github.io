@@ -230,167 +230,126 @@
             <h1 style="display: none">Linux和Shell学习记录</h1>
             
             <div class="markdown-body">
-              <h1>Linux和Shell学习记录</h1>
+              <h1 id="linux和shell学习记录">Linux和Shell学习记录</h1>
 <p>总结记录韩顺平老师《2021图解Linux》课程里面的内容，主要是基础部分。</p>
-<p>课程链接：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Sv411r7vd/">https://www.bilibili.com/video/BV1Sv411r7vd/</a></p>
+<p>课程链接：https://www.bilibili.com/video/BV1Sv411r7vd/</p>
 <h2 id="vim使用">vim使用</h2>
 <h3 id="进入vim编辑器">进入vim编辑器</h3>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim hello.txt<br></code></pre></td></tr></tbody></table></figure>
 <p>进入后模型是<code>查看（一般）模式</code>，此模式下可进行快捷操作例如：<code>删除、复制、撤销</code>等。键盘键入<code>i</code>即可进入<code>编辑（插入）模式</code>，此模型下可进行文本编辑。键盘键入<code>ESC</code>回到<code>查看模式</code>，在此基础上键入<code>:</code>进入命令行模式，进行文件的保存。</p>
 <p><strong>三种模式的切换示意图：</strong></p>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220615160727673.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220615160727673" style="zoom:50%;">
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220615160727673.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220615160727673" style="zoom:50%;"></p>
 <h3 id="快捷键">快捷键</h3>
-<ol>
+<ol type="1">
 <li>查看模式
-<ol>
+<ol type="1">
 <li><code>yy</code>拷贝光标所在的行，此时移动光标至需要粘贴的位置，键入<code>p</code>粘贴；
-<ol>
+<ol type="1">
 <li><code>5yy</code>拷贝光标行及以下4行，同样键入<code>p</code>粘贴；</li>
-</ol>
-</li>
+</ol></li>
 <li><code>dd</code>删除光标所在的行；
-<ol>
+<ol type="1">
 <li><code>5dd</code>删除光标行及以下4行；</li>
-</ol>
-</li>
+</ol></li>
 <li><code>u</code>撤销上一次操作；</li>
 <li><code>gg</code>将光标快速跳到文件最首行；</li>
 <li><code>G</code>将光标快速跳到文件最末行；
-<ol>
+<ol type="1">
 <li><code>20 shift+g</code>，将光标跳到第20行；</li>
-</ol>
-</li>
+</ol></li>
 <li><code>.</code>单独的小数点，表示重复上一个动作；上一条指令是<code>dd</code>，则键入<code>.</code>代表删除光标所在行。</li>
-</ol>
-</li>
+</ol></li>
 <li>命令行模式
-<ol>
+<ol type="1">
 <li>取消、显示行号
-<ol>
+<ol type="1">
 <li>命令行模式下输入<code>:set nu</code>显示文件行号；</li>
 <li>命令行模式下输入<code>:set nonu</code>关闭显示文件行号；</li>
-</ol>
-</li>
+</ol></li>
 <li>查找关键字符
-<ol>
+<ol type="1">
 <li>键入<code>/abc</code>，并回车，向下查找文件中是否存在<code>abc</code>，默认返回字符的第一个位置，然后键入<code>n</code>继续查找下一个匹配的字符；</li>
 <li>键入<code>?abc</code>，并回车，向上查找文件中是否存在<code>abc</code>，默认返回字符上面最近位置，然后键入<code>n</code>继续查找下一个匹配的字符；</li>
-</ol>
-</li>
+</ol></li>
 <li>保存及退出
-<ol>
+<ol type="1">
 <li>命令行模式下键入<code>:wq</code>保存并退出文件；</li>
 <li><code>:wq!</code>强制保存退出；</li>
 <li><code>:q!</code>强制退出不保存；</li>
 <li><code>:q</code>普通退出。</li>
+</ol></li>
+</ol></li>
 </ol>
-</li>
-</ol>
-</li>
-</ol>
-<h2 id="Linux-开关机和用户登录注销">Linux 开关机和用户登录注销</h2>
+<h2 id="linux-开关机和用户登录注销">Linux 开关机和用户登录注销</h2>
 <h3 id="关机和重启">关机和重启</h3>
-<ol>
-<li>
-<p>关机</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">shutdown -h now # 立该进行关机<br>shutdown -h 1 # "hello, 1 分钟后会关机了"<br>halt # 立刻关机<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>重启</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">shutdown -r now # 立即重启<br>reboot # 立即重启<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>同步（将内存中的数据写到磁盘）</p>
+<ol type="1">
+<li><p>关机</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">shutdown -h now # 立该进行关机<br>shutdown -h 1 # "hello, 1 分钟后会关机了"<br>halt # 立刻关机<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>重启</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">shutdown -r now # 立即重启<br>reboot # 立即重启<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>同步（将内存中的数据写到磁盘）</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sync # 把内存的数据同步到磁盘.<br></code></pre></td></tr></tbody></table></figure>
 <blockquote>
 <p>注：一般在关机或者重启前先执行一遍<code>sync</code>指令。</p>
-</blockquote>
-</li>
+</blockquote></li>
 </ol>
 <h3 id="用户登录于注销">用户登录于注销</h3>
-<ol>
-<li>
-<p>登录</p>
+<ol type="1">
+<li><p>登录</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">su - root<br></code></pre></td></tr></tbody></table></figure>
-<p>然后输入root账户的密码即可；从高权限用于切换到低权限用户不需要密码；反之则需要。</p>
-</li>
-<li>
-<p>注销</p>
+<p>然后输入root账户的密码即可；从高权限用于切换到低权限用户不需要密码；反之则需要。</p></li>
+<li><p>注销</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">logout<br></code></pre></td></tr></tbody></table></figure>
-<p>退出当前登录的用户，一般在ssh连接时常用。</p>
-</li>
+<p>退出当前登录的用户，一般在ssh连接时常用。</p></li>
 </ol>
-<h2 id="Linux-用户管理">Linux 用户管理</h2>
-<h3 id="添加、查看、切换、删除用户">添加、查看、切换、删除用户</h3>
+<h2 id="linux-用户管理">Linux 用户管理</h2>
+<h3 id="添加查看切换删除用户">添加、查看、切换、删除用户</h3>
 <p>只有<code>root</code>用户才能进行其它用户的管理。</p>
-<ol>
-<li>
-<p>添加用户</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">useradd tom # 添加tom用户 ubuntu系统默认不创建家目录，但是CentOS会自动创建<br>useradd -m tom # 添加tom用户，并创建tom的家目录<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>设置用户密码</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">passwd tom<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>查看用户</p>
+<ol type="1">
+<li><p>添加用户</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">useradd tom # 添加tom用户 ubuntu系统默认不创建家目录，但是CentOS会自动创建<br>useradd -m tom # 添加tom用户，并创建tom的家目录<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>设置用户密码</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">passwd tom<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>查看用户</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">id tom<br></code></pre></td></tr></tbody></table></figure>
-<p>查看<code>tom</code>用户所处的组</p>
-</li>
-<li>
-<p>切换用户</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">su - tom<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>删除用户</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">userdel tom # 只删除用户，保留用户文件<br>userdel -r tom # 删除用户及其家目录文件<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<p>查看<code>tom</code>用户所处的组</p></li>
+<li><p>切换用户</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">su - tom<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>删除用户</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">userdel tom # 只删除用户，保留用户文件<br>userdel -r tom # 删除用户及其家目录文件<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h3 id="用户组管理——添加、修改、删除组">用户组管理——添加、修改、删除组</h3>
+<h3 id="用户组管理添加修改删除组">用户组管理——添加、修改、删除组</h3>
 <p>Linux内每个用户是以用户组来进行管理的，同组内的用户权限相同，因此可根据需要将不同用户放入不同的组中，然后给不同的组赋予不同的权限。</p>
 <p>Linux在创建用户时，默认会创建与用户名一致的组，并把该用户放到该组中。如果需要在创建用户时指定对应的组，需使用<code>-g</code>参数。</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">useradd -g students -m tom # 创建tom，并将其移动到students组中<br></code></pre></td></tr></tbody></table></figure>
-<ol>
-<li>
-<p>添加组</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">groupadd students # 添加 students 组<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>修改组成员</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">usermod -g students jack # 将jack移动到students组<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>删除组</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">groupdel students <br></code></pre></td></tr></tbody></table></figure>
-</li>
+<p><code>useradd -g students -m tom # 创建tom，并将其移动到students组中</code></p>
+<ol type="1">
+<li><p>添加组</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">groupadd students # 添加 students 组<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>修改组成员</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">usermod -g students jack # 将jack移动到students组<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>删除组</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">groupdel students <br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h3 id="用户组管理——权限管理">用户组管理——权限管理</h3>
-<p>在 linux 中的每个用户必须属于一个组，不能独立于组外。在 linux 中每个文件有<code>所有者、所在组、其它组</code>的概念。一般而言，用户创建了文件，这个文件的所有者就是该用户，同时用户所在的组就是文件在的所在组，而剩下的组就是该文件的其他组。所有者以及不同组，对文件的权限（读、写、可执行）一般不同。</p>
-<ol>
-<li>
-<p>修改文件的所有者</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">chown jack apple.txt # 将apple.txt文件的所有者修改成jack<br>chown -R jack /home/test # 将/home/test目录下所有的文件和目录的所有者都修改成 jack<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>修改文件/目录所在的组</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">chgrp fruit orange.txt # 将orange.txt文件的所在组更改为fruit<br>chgrp -R fruit /home/test # 将/home/test目录下所有的文件和目录的所在组都修改成 fruit<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>修改用户的初始登录文件夹</p>
+<h3 id="用户组管理权限管理">用户组管理——权限管理</h3>
+<p>在 linux 中的每个用户必须属于一个组，不能独立于组外。在 linux
+中每个文件有<code>所有者、所在组、其它组</code>的概念。一般而言，用户创建了文件，这个文件的所有者就是该用户，同时用户所在的组就是文件在的所在组，而剩下的组就是该文件的其他组。所有者以及不同组，对文件的权限（读、写、可执行）一般不同。</p>
+<ol type="1">
+<li><p>修改文件的所有者</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">chown jack apple.txt # 将apple.txt文件的所有者修改成jack<br>chown -R jack /home/test # 将/home/test目录下所有的文件和目录的所有者都修改成 jack<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>修改文件/目录所在的组</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">chgrp fruit orange.txt # 将orange.txt文件的所在组更改为fruit<br>chgrp -R fruit /home/test # 将/home/test目录下所有的文件和目录的所在组都修改成 fruit<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>修改用户的初始登录文件夹</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">usermod -d tom2 tom # 将tom用户的文件夹由tom变为tom2<br></code></pre></td></tr></tbody></table></figure>
 <blockquote>
 <p>注：用户需要有进入新目录的权限。</p>
-</blockquote>
-</li>
-<li>
-<p>赋予用户root权限</p>
+</blockquote></li>
+<li><p>赋予用户root权限</p>
 <p>用<code>root</code>账户登录，然后使用<code>vim /etc/sudoers</code>打开，在<code>root</code>下面添加一行一样的语句，即可赋予其他用户root权限。</p>
-<figure class="highlight pgsql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">## Allow root <span class="hljs-keyword">to</span> run <span class="hljs-keyword">any</span> commands anywhere<br>root    <span class="hljs-keyword">ALL</span>=(<span class="hljs-keyword">ALL</span>)     <span class="hljs-keyword">ALL</span><br>tom   <span class="hljs-keyword">ALL</span>=(<span class="hljs-keyword">ALL</span>)     <span class="hljs-keyword">ALL</span><br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight pgsql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">## Allow root <span class="hljs-keyword">to</span> run <span class="hljs-keyword">any</span> commands anywhere<br>root    <span class="hljs-keyword">ALL</span>=(<span class="hljs-keyword">ALL</span>)     <span class="hljs-keyword">ALL</span><br>tom   <span class="hljs-keyword">ALL</span>=(<span class="hljs-keyword">ALL</span>)     <span class="hljs-keyword">ALL</span><br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h4 id="文件-目录权限介绍">文件/目录权限介绍</h4>
+<h4 id="文件目录权限介绍">文件/目录权限介绍</h4>
 <p>键入<code>ls -l</code>查看目录内所含文件、子目录的详细信息</p>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220616094134969.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220616094134969" style="zoom:80%;">
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220616094134969.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220616094134969" style="zoom:80%;"></p>
 <p>第0位，确定文件类型：<code>d、-、l、c、b</code></p>
 <ul>
 <li><code>d</code>——表示是一个目录</li>
@@ -408,49 +367,41 @@
 <p>第4-6位，确定文件所在组成员对该文件的权限，同样是<code>rwx</code>，如果没有相应权限则用<code>-</code>代替</p>
 <p>第7-9位，确定其他组成员对该文件的权限。</p>
 <p>举例：<code>drwxrwxr-x  4 hjy hjy 4096 6月   9 14:26 apps</code>，表示这是一个目录，然后目录所有者<code>hjy</code>对该目录有<code>rwx</code>权限，目录所在组<code>hjy</code>也有<code>rwx</code>权限，最后其他组对该目录有<code>rx</code>权限，目录中有<code>4</code>个子文件或文件，最后修改时间是<code>6月9日14：26</code>，此目录名为<code>apps</code>。</p>
-<h4 id="rwx权限：作用到目录和作用到文件">rwx权限：作用到目录和作用到文件</h4>
-<ol>
+<h4 id="rwx权限作用到目录和作用到文件">rwx权限：作用到目录和作用到文件</h4>
+<ol type="1">
 <li>作用到文件
-<ol>
+<ol type="1">
 <li><code>r</code>，读取，查看</li>
-<li><code>w</code>，可以修改，但是不代表可以删除该文件，删除一个文件的前提条件是对该文件所在的目录有写权 限，才能删除该文件。</li>
+<li><code>w</code>，可以修改，但是不代表可以删除该文件，删除一个文件的前提条件是对该文件所在的目录有写权
+限，才能删除该文件。</li>
 <li><code>x</code>，可以被执行</li>
-</ol>
-</li>
+</ol></li>
 <li>作用到目录
-<ol>
+<ol type="1">
 <li><code>r</code>，可以读取，ls 查看目录内容</li>
 <li><code>w</code>，可以修改, 对目录内创建+删除+重命名目录</li>
 <li><code>x</code>，可以进入到该目录</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <h4 id="chmod-修改文件权限">chmod 修改文件权限</h4>
-<ol>
-<li>
-<p>通过<code>+ - = </code>变更权限</p>
+<ol type="1">
+<li><p>通过<code>+ - =</code>变更权限</p>
 <p><code>u</code>，所有者；<code>g</code>,所在组，<code>o</code>，表示其他组，<code>a</code>，表示所有</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">chmod u=rwx,g=rx,o=x my_task # 赋予所有者对my_task目录rwx的权限，赋予其它组成员对my_task可执行的权限。<br>chmod o+r my_task # 给其他组成员赋予可读的权限<br>chmod a-r my_task # 对所有成员都赋予可读权限<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>通过数字变更权限</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">chmod u=rwx,g=rx,o=x my_task # 赋予所有者对my_task目录rwx的权限，赋予其它组成员对my_task可执行的权限。<br>chmod o+r my_task # 给其他组成员赋予可读的权限<br>chmod a-r my_task # 对所有成员都赋予可读权限<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>通过数字变更权限</p>
 <p><code>r=4,w=2,x=1</code>，可读权限用4表示，可执行权限用2表示，因此下述两条语句等价</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs shell">   chmod u=rwx,g=rx,o=x my_task<br>   chmod 751 my_task<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"><span class="hljs-comment">## 用户管理相关的文件</span></span><br><br>1. 用户配置文件——`/etc/passwd`<br><br>   `cat /etc/passwd `部分显示如下：<br><br>   &lt;img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220615173659819.png" alt="image-20220615173659819" style="zoom:100%;" /&gt;<br><br>   每列含义：`用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录 Shell`<br><br>2. 口令配置文件——`/etc/shadow`<br><br>   都是一些加密的信息，感觉没啥用。<br><br>   每列含义：`登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志`<br><br>3.  组配置文件——`/etc/group`<br><br>   `cat /etc/group `部分显示如下：<br><br>   &lt;img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220615174208846.png" alt="image-20220615174208846" style="zoom:100%;" /&gt;<br><br>   每列含义：`组名:口令:组标识号:组内用户列表`<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"><span class="hljs-comment"># 设置、查看Linux运行级别</span></span><br><br>1. 运行级别：<br><br>   1. `0`- 关机<br>   2. `1`- 单用户（用于找回root密码）<br>   3. `2`- 多用户状态没有网络服务<br>   4. `3`- 多用户状态有网络服务<br>   5. `4` - 系统未使用，保留给用户<br>   6. `5`- 图形界面<br>   7. `6`- 系统重启<br><br>2. 查看运行级别<br><br>   ```shell<br>   systemctl get-default <br></code></pre></td></tr></tbody></table></figure>
 <p>一般返回是<code>graphical.target</code>，代表上述的级别<code>5</code>-图形界面。</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 对应关系</span><br>multi-user.target: analogous to runlevel 3 <br>graphical.target: analogous to runlevel 5<br></code></pre></td></tr></tbody></table></figure>
 <p>设置为多用户有网络的级别：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl set-default multi-user.target<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl set-default multi-user.target<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h2 id="Linux文件目录类指令">Linux文件目录类指令</h2>
-<ol>
-<li>
-<p>pwd 指令</p>
+<h2 id="linux文件目录类指令">Linux文件目录类指令</h2>
+<ol type="1">
+<li><p>pwd 指令</p>
 <p>显示当前工作目录的绝对路径。</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pwd<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>ls 和 ll 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pwd<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>ls 和 ll 指令</p>
 <p>显示当前的路径中下的文件和目录。<code>ls</code>一般只显示可见的文件，且文件显示的信息较少；<code>ll</code>能够较全的显示文件、目录信息（包括修改时间、大小、权限等等。）</p>
 <p><code>ls</code>选项参数：</p>
 <ul>
@@ -461,50 +412,34 @@
 <blockquote>
 <p><code>ll</code>直接就是全信息显示，也会显示隐藏文件，只有一个<code>-h</code>参数。</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ls -ahl  # 带参数使用<br>ll -h<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>cd 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ls -ahl  # 带参数使用<br>ll -h<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>cd 指令</p>
 <p>切换到指定目录</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd ~ # 切换到home目录<br>cd .. # 切换到上一级目录<br>cd ../.. # 切换到上上级目录<br>cd / # 切换到根目录<br>cd /home/tom/downloads # 切换到tom的downloads目录<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>mkdir 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd ~ # 切换到home目录<br>cd .. # 切换到上一级目录<br>cd ../.. # 切换到上上级目录<br>cd / # 切换到根目录<br>cd /home/tom/downloads # 切换到tom的downloads目录<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>mkdir 指令</p>
 <p>创建文件夹（目录）</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">mkdir my_task # 创建文件夹<br>mkdir -p my_task/task1 # 创建多级目录 <br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>rm 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">mkdir my_task # 创建文件夹<br>mkdir -p my_task/task1 # 创建多级目录 <br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>rm 指令</p>
 <p>删除文件或者文件夹</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">rm task.zip # 删除文件<br>rm -rf my_task # 递归删除文件夹（目录）<br></code></pre></td></tr></tbody></table></figure>
 <p><code>-r</code>，表示递归删除</p>
-<p><code>-f</code>，表示直接删除不报告，不用确认删除过程。</p>
-</li>
-<li>
-<p>touch 指令</p>
+<p><code>-f</code>，表示直接删除不报告，不用确认删除过程。</p></li>
+<li><p>touch 指令</p>
 <p>生成普通文件</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">touch hello.txt<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>cp 指令</p>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">touch hello.txt<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>cp 指令</p></li>
 </ol>
 <p>拷贝文件</p>
-   <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">cp hello.txt /home/my_task # 拷贝hello.txt文件到my_task目录下<br>cp -r /home/my_task /home/my_test/  # 拷贝my_task目录至my_test目录下<br><span class="hljs-meta">#</span><span class="bash"> 进入my_test目录，可以看到有my_task子目录</span><br></code></pre></td></tr></tbody></table></figure>
+<p></p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">cp hello.txt /home/my_task # 拷贝hello.txt文件到my_task目录下<br>cp -r /home/my_task /home/my_test/  # 拷贝my_task目录至my_test目录下<br><span class="hljs-meta">#</span><span class="bash"> 进入my_test目录，可以看到有my_task子目录</span><br></code></pre></td></tr></tbody></table></figure><p></p>
 <p><code>-f</code>，覆盖已经存在的目标文件而不给出提示。</p>
-<ol start="8">
-<li>
-<p>mv 指令</p>
+<ol start="8" type="1">
+<li><p>mv 指令</p>
 <p>移动文件或者目录，或者为其重命名</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">mv /home/task1 /home/task # 将task1目录移动到task目录下<br>mv hello_copy.txt hello.txt # 相同目录下移动就是重命名，将hello_copy改为hello<br>mv hello.txt /home/task # 将hello.txt移动到task目录下<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>cat 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">mv /home/task1 /home/task # 将task1目录移动到task目录下<br>mv hello_copy.txt hello.txt # 相同目录下移动就是重命名，将hello_copy改为hello<br>mv hello.txt /home/task # 将hello.txt移动到task目录下<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>cat 指令</p>
 <p>查看文件内容，不能修改文件</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat /etc/profile # 查看profile文件，打印在终端<br>cat -n /etc/profile # 查看profile文件并显示行号<br>cat -n /etc/profile | more # 查看profile文件并交给more指令交互展示<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>more 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat /etc/profile # 查看profile文件，打印在终端<br>cat -n /etc/profile # 查看profile文件并显示行号<br>cat -n /etc/profile | more # 查看profile文件并交给more指令交互展示<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>more 指令</p>
 <p>交互式显示文件内容</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">more /etc/profile # 交互式查看profile文件<br></code></pre></td></tr></tbody></table></figure>
 <p>more 交互键说明：</p>
@@ -515,101 +450,75 @@
 <p><code>:f</code>——输出文件名和当前行行号。</p>
 <blockquote>
 <p>注：<code>q,=,:f</code>这些指令在敲出来的时候都不会在终端上有显示，直接敲就行。</p>
-</blockquote>
-</li>
-<li>
-<p>less 指令</p>
-<p>less 和 more 类似都可以用来交互式查看文件，不过less 指令在显示文件内容时，并不是一次将整个文件加载之后才显示，而是根据显示需要加载内容，对于显示大型文件具有较高的效率。</p>
+</blockquote></li>
+<li><p>less 指令</p>
+<p>less 和 more 类似都可以用来交互式查看文件，不过less
+指令在显示文件内容时，并不是一次将整个文件加载之后才显示，而是根据显示需要加载内容，对于显示大型文件具有较高的效率。</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">less /etc/profile<br></code></pre></td></tr></tbody></table></figure>
 <p>less 交互键说明：</p>
 <p><code>空格</code>——下翻一页；</p>
-<p><code>/abc</code>——+ 回车，向下搜索<code>abc</code>字符，键入<code>n</code>查询下一个，键入<code>N</code>查询上一个；</p>
-<p><code>?abc</code>——+ 回车，向上搜索<code>abc</code>字符，键入<code>n</code>查询下一个，键入<code>N</code>查询上一个；</p>
-<p><code>q</code>——退出查看。</p>
-</li>
-<li>
-<p>echo 指令</p>
+<p><code>/abc</code>——+
+回车，向下搜索<code>abc</code>字符，键入<code>n</code>查询下一个，键入<code>N</code>查询上一个；</p>
+<p><code>?abc</code>——+
+回车，向上搜索<code>abc</code>字符，键入<code>n</code>查询下一个，键入<code>N</code>查询上一个；</p>
+<p><code>q</code>——退出查看。</p></li>
+<li><p>echo 指令</p>
 <p>相当于Python里面的<code>print()</code>，打印输出内容；主要还是在<code>.sh</code>文件内使用。</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">echo "hello world!"<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>head 指令</p>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">echo "hello world!"<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>head 指令</p></li>
 </ol>
 <pre><code>查看文件前面几行的内容
 
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">head /etc/profile # 查看profile前10行的内容<br>head -n 20 /etc/profile # 查看profile前20行的内容<br></code></pre></td></tr></tbody></table></figure>
-</code></pre>
-<ol start="14">
-<li>
-<p>tail 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">head /etc/profile # 查看profile前10行的内容<br>head -n 20 /etc/profile # 查看profile前20行的内容<br></code></pre></td></tr></tbody></table></figure></code></pre>
+<ol start="14" type="1">
+<li><p>tail 指令</p>
 <p>查看文件最后几行的内容</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">tail /etc/profile # 查看profile末尾10行的内容<br>tail -n 20 /etc/profile # 查看profile末尾20行的内容<br>tail -f /etc/profile # 实时监控profile文件的改动<br></code></pre></td></tr></tbody></table></figure>
-<p><code>-f</code>，参数指定后tail进程为一直占据终端窗口，可使用<code>ctrl + c</code>终止进程。</p>
-</li>
-<li>
-<p><code>&gt;</code> 指令和 <code>&gt;&gt;</code>指令</p>
+<p><code>-f</code>，参数指定后tail进程为一直占据终端窗口，可使用<code>ctrl + c</code>终止进程。</p></li>
+<li><p><code>&gt;</code> 指令和 <code>&gt;&gt;</code>指令</p>
 <p><code>&gt;</code>表示输出重定向，<code>&gt;&gt;</code>表示重定向追加</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">ls -l &gt; log.txt # 将当前目录下的文件和子目录以文本形式写入log.txt中<br>ls -al &gt;&gt; log.txt # 将目录信息追加（补充）到log.txt中<br>cat /etc/profile &gt; my_profile # 将/etc/profile中的内容重定向到my_profile文件中<br>echo "hello world!" &gt;&gt; my_log.txt<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>ln 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">ls -l &gt; log.txt # 将当前目录下的文件和子目录以文本形式写入log.txt中<br>ls -al &gt;&gt; log.txt # 将目录信息追加（补充）到log.txt中<br>cat /etc/profile &gt; my_profile # 将/etc/profile中的内容重定向到my_profile文件中<br>echo "hello world!" &gt;&gt; my_log.txt<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>ln 指令</p>
 <p>软连接，相当于Windows里面的快捷方式</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ln -s /root /home/myroot # 在/home目录下创建一个软连接myroot，连接到/root目录<br>rm /home/myroot # 删除软链接<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>history 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ln -s /root /home/myroot # 在/home目录下创建一个软连接myroot，连接到/root目录<br>rm /home/myroot # 删除软链接<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>history 指令</p>
 <p>查看已经执行过历史命令,也可以执行历史指令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">history # 查看之前已执行的历史命令<br>history 10 # 查看前10条已执行的历史命令<br>!476 # 执行之前id为476的历史命令<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">history # 查看之前已执行的历史命令<br>history 10 # 查看前10条已执行的历史命令<br>!476 # 执行之前id为476的历史命令<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h2 id="Linux时间日期类指令">Linux时间日期类指令</h2>
-<ol>
-<li>
-<p>date 显示与设置日期</p>
+<h2 id="linux时间日期类指令">Linux时间日期类指令</h2>
+<ol type="1">
+<li><p>date 显示与设置日期</p>
 <p>显示相关</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">date # 显示当前时间<br>date +%Y # 显示当前年份<br>date +%m # 显示当前月份<br>date +%d # 显示当前天数<br>date "+%Y-%m-%d %H:%M:%S" # 显示年月日时分秒<br></code></pre></td></tr></tbody></table></figure>
 <p>设置相关</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">date -s "2020-11-03 20:02:10" # 设置时间 -s代表set<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>cal 日历指令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">cal # 显示当前日历<br>cal 2022 # 显示2022年日历<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">date -s "2020-11-03 20:02:10" # 设置时间 -s代表set<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>cal 日历指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">cal # 显示当前日历<br>cal 2022 # 显示2022年日历<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h2 id="Linux搜索查找类指令">Linux搜索查找类指令</h2>
-<ol>
-<li>
-<p>find 指令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">find /home/tom -name hello.txt # 在/home/tom下通过文件名查找hello.txt<br>find /home/tom -user tom # 在/home/tom下查找属于用户tom的文件<br>find /home/tom -size +200M # 在/home/tom下查找大于200M的文件<br>find /home/tom -size -200M # 在/home/tom下查找小于200M的文件<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>locate 指令</p>
-<p>locate 指令利用事先建立的系统中所有文件名称及路径的 locate 数据库实现快速 定位给定的文件。Locate 指令无需遍历整个文件系统，查询速度较快。</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">updatedb # 先创建更新locate数据库<br>locate hello.txt # 全局查找hello.txt文件，并返回文件路径<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>grep 指令</p>
+<h2 id="linux搜索查找类指令">Linux搜索查找类指令</h2>
+<ol type="1">
+<li><p>find 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">find /home/tom -name hello.txt # 在/home/tom下通过文件名查找hello.txt<br>find /home/tom -user tom # 在/home/tom下查找属于用户tom的文件<br>find /home/tom -size +200M # 在/home/tom下查找大于200M的文件<br>find /home/tom -size -200M # 在/home/tom下查找小于200M的文件<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>locate 指令</p>
+<p>locate 指令利用事先建立的系统中所有文件名称及路径的 locate
+数据库实现快速 定位给定的文件。Locate
+指令无需遍历整个文件系统，查询速度较快。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">updatedb # 先创建更新locate数据库<br>locate hello.txt # 全局查找hello.txt文件，并返回文件路径<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>grep 指令</p>
 <p>查找过滤文件，得到想看的字符内容</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat -n /home/hello.txt | grep "yes" # 在hello.txt文件中，查找"yes"所在行，并且显示行号<br>grep -n 'yes' /home/hello.txt # 在hello.txt文件中，查找"yes"所在行，并且显示行号<br></code></pre></td></tr></tbody></table></figure>
-<p><code>-i</code>，表示筛选时忽略大小写。</p>
-</li>
+<p><code>-i</code>，表示筛选时忽略大小写。</p></li>
 </ol>
-<h2 id="Linux压缩和解压指令">Linux压缩和解压指令</h2>
-<ol>
-<li>
-<p>gzip 和 gunzip 指令</p>
+<h2 id="linux压缩和解压指令">Linux压缩和解压指令</h2>
+<ol type="1">
+<li><p>gzip 和 gunzip 指令</p>
 <p>压缩和解压<code>.gz</code>后缀的文件</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">gzip /home/my_task/hello.txt # 压缩hello.txt文件并存入my_task目录下<br>gunzip /home/my_task/hello.txt.gz # 解压文件<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>zip 和 unzip 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">gzip /home/my_task/hello.txt # 压缩hello.txt文件并存入my_task目录下<br>gunzip /home/my_task/hello.txt.gz # 解压文件<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>zip 和 unzip 指令</p>
 <p>压缩和解压<code>.zip</code>后缀的文件</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zip -r myhome.zip /home/ # 将home目录及其包含的文件和子文件夹都压缩<br>unzip -d /opt/tmp /home/myhome.zip # 将myhome.zip解压到/opt/tmp目录下<br></code></pre></td></tr></tbody></table></figure>
-<p><code>-d</code>，指定解压目录</p>
-</li>
-<li>
-<p>tar 指令</p>
+<p><code>-d</code>，指定解压目录</p></li>
+<li><p>tar 指令</p>
 <p>打包指令，用于处理<code>.tar.gz</code>后缀的文件</p>
 <p><code>-c</code>，产生<code>.tar</code>打包文件</p>
 <p><code>-v</code>，显示处理过程信息</p>
@@ -617,129 +526,94 @@
 <p><code>-z</code>，打包同时压缩</p>
 <p><code>-x</code>，解包<code>.tar</code>文件</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -zcvf pc.tar.gz /home/pig.txt /home/cat.txt # 打包压缩多个文件<br>tar -zcvf myhome.tar.gz /home/ # 将/home 的文件夹 压缩成 myhome.tar.gz<br>tar -zxvf pc.tar.gz # 解压到当前目录<br>tar -zxvf /home/myhome.tar.gz -C /opt/tmp # 解压到/opt/tmp目录<br></code></pre></td></tr></tbody></table></figure>
-<p><code>-C</code>，指定解压目录</p>
-</li>
+<p><code>-C</code>，指定解压目录</p></li>
 </ol>
-<h2 id="Linux-磁盘挂载情况以及占用空间查看">Linux 磁盘挂载情况以及占用空间查看</h2>
-<ol>
-<li>
-<p>使用 lsblk 或 lsblk -f 查看当前主机的磁盘挂载情况</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lsblk -f <br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>du -h 指令</p>
+<h2 id="linux-磁盘挂载情况以及占用空间查看">Linux
+磁盘挂载情况以及占用空间查看</h2>
+<ol type="1">
+<li><p>使用 lsblk 或 lsblk -f 查看当前主机的磁盘挂载情况</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lsblk -f <br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>du -h 指令</p>
 <p>查询指定目录下磁盘的占用情况，默认为当前目录</p>
 <p><code>-h</code>——human格式显示</p>
 <p><code>-a</code>——包含文件和目录</p>
 <p><code>--max-depth=1</code>——查询占用情况时使用的子目录深度，一般设定1即可</p>
 <p><code>-c</code>——列出各文件明细的同时，增加汇总情况</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">du -hac --max-depth=1 /my_task # 查看my_task目录中一级子目录的磁盘占用情况<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>磁盘情况实用指令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">ls -l /opt | grep "^-" | wc -l  # 统计/opt文件夹下文件的个数<br>ls -lR /opt | grep "^-" | wc -l # 统计/opt文件夹下文件的个数，包括子文件夹里的<br>ls -l /opt | grep "^d" | wc -l # 统计/opt文件夹下目录的个数<br>ls -lR /opt | grep "^d" | wc -l # 统计/opt文件夹下目录的个数，包括子目录里的<br>tree /home/my_task # 以树状图的形式显示my_task下的目录结构<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">du -hac --max-depth=1 /my_task # 查看my_task目录中一级子目录的磁盘占用情况<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>磁盘情况实用指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">ls -l /opt | grep "^-" | wc -l  # 统计/opt文件夹下文件的个数<br>ls -lR /opt | grep "^-" | wc -l # 统计/opt文件夹下文件的个数，包括子文件夹里的<br>ls -l /opt | grep "^d" | wc -l # 统计/opt文件夹下目录的个数<br>ls -lR /opt | grep "^d" | wc -l # 统计/opt文件夹下目录的个数，包括子目录里的<br>tree /home/my_task # 以树状图的形式显示my_task下的目录结构<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h2 id="Linux-进程管理">Linux 进程管理</h2>
+<h2 id="linux-进程管理">Linux 进程管理</h2>
 <h3 id="普通进程管理">普通进程管理</h3>
-<ol>
-<li>
-<p>ps -aux 指令</p>
+<ol type="1">
+<li><p>ps -aux 指令</p>
 <p>显示当前运行进程的所有信息，其中<code>PID</code>表示进程号，<code>PPID</code>表示其父进程号</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ps -aux<br></code></pre></td></tr></tbody></table></figure>
 <ul>
-<li>
-<p><code>-A</code> 列出所有的进程</p>
-</li>
-<li>
-<p><code>-w </code>显示加宽可以显示较多的资讯</p>
-</li>
-<li>
-<p><code>-au </code>显示较详细的资讯</p>
-</li>
-<li>
-<p><code>-aux </code>显示所有包含其他使用者的行程</p>
-</li>
-</ul>
-</li>
-<li>
-<p>ps -ef 指令</p>
-<p>以全格式显示当前所有的进程的信息，包括其父进程；<code>-e</code>表示显示所有进程，<code>-f</code>表示全格式显示</p>
-</li>
-<li>
-<p>top 指令</p>
+<li><p><code>-A</code> 列出所有的进程</p></li>
+<li><p><code>-w</code>显示加宽可以显示较多的资讯</p></li>
+<li><p><code>-au</code>显示较详细的资讯</p></li>
+<li><p><code>-aux</code>显示所有包含其他使用者的行程</p></li>
+</ul></li>
+<li><p>ps -ef 指令</p>
+<p>以全格式显示当前所有的进程的信息，包括其父进程；<code>-e</code>表示显示所有进程，<code>-f</code>表示全格式显示</p></li>
+<li><p>top 指令</p>
 <p>实时显示主机当前进程信息，默认以CPU使用率从高到低排序</p>
 <p><code>-d</code>——动态更新间隔时间，默认是3秒</p>
 <p><code>-i</code>——不显示闲置或者僵死进程</p>
 <p><code>-p</code>——只监控指定pid的进程</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">top -p 1079 -d 1 # 只监控1079进程的变化情况，每隔一秒更新<br></code></pre></td></tr></tbody></table></figure>
-<p>top交互指令：<br>
-<code>P</code>——以CPU使用率排名，默认此项</p>
+<p>top交互指令： <code>P</code>——以CPU使用率排名，默认此项</p>
 <p><code>M</code>——以内存使用率排名</p>
 <p><code>N</code>——以PID序号排序</p>
 <p><code>u</code>——+ tom 只查询tom用户相关的进程</p>
 <p><code>k</code>——+ 11421 终止pid为11421的进程</p>
-<p><code>q</code>——退出top</p>
-</li>
-<li>
-<p>kill 和 killall 指令</p>
+<p><code>q</code>——退出top</p></li>
+<li><p>kill 和 killall 指令</p>
 <p>终止某个进程</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">kill 11421 # 终止pid号为11421的进程<br>kill -9 11421 # 强制终止pid号为11421的进程<br>killall gedit # 终止所有名字为gedit的进程<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>pstree 指令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">kill 11421 # 终止pid号为11421的进程<br>kill -9 11421 # 强制终止pid号为11421的进程<br>killall gedit # 终止所有名字为gedit的进程<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>pstree 指令</p>
 <p>以树状图的结构显示进程信息</p>
-<p><code>-p</code>，显示进程的pid；<code>-u</code>，指定查看属于某个用户的进程</p>
-</li>
+<p><code>-p</code>，显示进程的pid；<code>-u</code>，指定查看属于某个用户的进程</p></li>
 </ol>
 <h3 id="服务进程管理">服务进程管理</h3>
-<p>服务(service) 本质就是进程，但是是运行在后台的，通常都会监听某个端口，等待其它程序的请求，比如(mysqld， sshd 防火墙等)，因此又可称为守护进程。</p>
-<ol>
-<li>
-<p>通过<code>service</code>管理服务</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">service 服务名 [start | stop | restart | reload | status]<br>service sshd start # 开启sshd服务<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>通过<code>systemctl</code>管理服务</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl [start | stop | restart | status] 服务名<br>systemctl start sshd<br><br>systemctl list-unit-files # 查看服务是否开机自启<br>systemctl list-unit-files | grep sshd # 查看sshd服务<br>systemctl enable sshd # 设置服务开机启动<br>systemctl disable sshd <br>systemctl is-enabled sshd  # 查询某个服务是否是自启动<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<p>服务(service)
+本质就是进程，但是是运行在后台的，通常都会监听某个端口，等待其它程序的请求，比如(mysqld，
+sshd 防火墙等)，因此又可称为守护进程。</p>
+<ol type="1">
+<li><p>通过<code>service</code>管理服务</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">service 服务名 [start | stop | restart | reload | status]<br>service sshd start # 开启sshd服务<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>通过<code>systemctl</code>管理服务</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl [start | stop | restart | status] 服务名<br>systemctl start sshd<br><br>systemctl list-unit-files # 查看服务是否开机自启<br>systemctl list-unit-files | grep sshd # 查看sshd服务<br>systemctl enable sshd # 设置服务开机启动<br>systemctl disable sshd <br>systemctl is-enabled sshd  # 查询某个服务是否是自启动<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h2 id="Shell-介绍">Shell 介绍</h2>
-<p>Shell是一个命令行解释器，可以用 Shell 来启动、挂起、停止甚至是编写一些程序。</p>
+<h2 id="shell-介绍">Shell 介绍</h2>
+<p>Shell是一个命令行解释器，可以用 Shell
+来启动、挂起、停止甚至是编写一些程序。</p>
 <p><strong>Shell 脚本格式要求：</strong></p>
-<ol>
+<ol type="1">
 <li>脚本以<code>#!/bin/bash</code>开头</li>
 <li>脚本需要有可执行权限</li>
 </ol>
 <p>如果脚本<code>.sh</code>文件没有可执行权限也可以通过<code>sh my_shell.sh</code>进行执行。</p>
-<h3 id="Shell-变量">Shell 变量</h3>
-<p>命名规则和一般脚本语言的规则一致，变量由字母、数字、下划线组成，但是不能以数字开头；Shell中的变量有系统变量和自定义变量之分，其中系统变量包括<code>$HOME、$PWD、$SHELL、$USER </code>等等。</p>
-<ol>
-<li>
-<p>定义普通变量</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>A=100 # 定义变量A<br>echo A=$A # 输出A变量的值<br>echo "A=$A" # 同上<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>撤销普通变量</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>A=100 # 定义变量A<br>unset A # 撤销变量A<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>定义静态变量</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>readonly B=10<br><span class="hljs-meta">#</span><span class="bash"> <span class="hljs-built_in">unset</span> B <span class="hljs-comment"># 静态变量不能被撤销</span></span><br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>使用环境变量</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>echo "local_path=$PWD"<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> shell 多行注释 :&lt;&lt;! 注释内容 !</span><br>:&lt;&lt;! <br>C=`date` <br>D=$(date) <br>echo "C=$C" <br>echo "D=$D" <br>!<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>定义环境变量，供所有Shell脚本使用</p>
+<h3 id="shell-变量">Shell 变量</h3>
+<p>命名规则和一般脚本语言的规则一致，变量由字母、数字、下划线组成，但是不能以数字开头；Shell中的变量有系统变量和自定义变量之分，其中系统变量包括<code>$HOME、$PWD、$SHELL、$USER</code>等等。</p>
+<ol type="1">
+<li><p>定义普通变量</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>A=100 # 定义变量A<br>echo A=$A # 输出A变量的值<br>echo "A=$A" # 同上<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>撤销普通变量</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>A=100 # 定义变量A<br>unset A # 撤销变量A<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>定义静态变量</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>readonly B=10<br><span class="hljs-meta">#</span><span class="bash"> <span class="hljs-built_in">unset</span> B <span class="hljs-comment"># 静态变量不能被撤销</span></span><br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>使用环境变量</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>echo "local_path=$PWD"<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> shell 多行注释 :&lt;&lt;! 注释内容 !</span><br>:&lt;&lt;! <br>C=`date` <br>D=$(date) <br>echo "C=$C" <br>echo "D=$D" <br>!<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>定义环境变量，供所有Shell脚本使用</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">export A=100 # 定义A为环境变量（临时添加），在另一个.sh脚本中也能使用到A<br>unset A # 撤销环境变量<br></code></pre></td></tr></tbody></table></figure>
-<p>进入<code>/etc/profile</code>文件或者<code>.bashrc</code>文件，在文件末尾加入<code>export A=100</code>，并执行<code>source /etc/profile</code>或者<code>source .bashrc</code>则环境变量立即生效，并永久存在。</p>
-</li>
+<p>进入<code>/etc/profile</code>文件或者<code>.bashrc</code>文件，在文件末尾加入<code>export A=100</code>，并执行<code>source /etc/profile</code>或者<code>source .bashrc</code>则环境变量立即生效，并永久存在。</p></li>
 </ol>
-<h2 id="Shell-位置参数变量和预定义变量">Shell 位置参数变量和预定义变量</h2>
+<h2 id="shell-位置参数变量和预定义变量">Shell
+位置参数变量和预定义变量</h2>
 <p>位置参数变量用于获取执行<code>.sh</code>脚本时，附加的一些额外参数信息，预定义变量用于一些查询描述。</p>
-<ol>
+<ol type="1">
 <li><code>$n</code>，n可以为0-9是个数字，或者用<code>${12}</code>来表示两位数字。<code>$0</code>表示执行命令本身，<code>$1</code>表示<code>.sh</code>命令后接的第一个参数，<code>$2</code>表示命令后接的第二个参数，以此类推。</li>
 <li><code>$*</code>，一次性获取命令后的所有参数，把所有参数看成一个整体</li>
 <li><code>$@</code>，一次性获取命令后的所有参数，把每个参数区别对待</li>
@@ -750,7 +624,7 @@
 </ol>
 <p>示例：</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>echo "pos 0 = $0, pos 1 = $1, pos 2 = $2"<br>echo "all augrements:$*"<br>echo "all : $@"<br>echo "count: $#"<br>echo "current pid : $$"<br>echo "$?"<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 输出</span><br><span class="hljs-meta">#</span><span class="bash"> 执行 sh test.sh  10 100 1000</span><br>:&lt;&lt;!<br>pos 0 = test.sh, pos 1 = 10, pos 2 = 100<br>all augrements:10 100 1000<br>all : 10 100 1000<br>count: 3<br>current pid : 89830<br>0<br>!<br></code></pre></td></tr></tbody></table></figure>
-<h2 id="Shell-运算符和条件语句">Shell 运算符和条件语句</h2>
+<h2 id="shell-运算符和条件语句">Shell 运算符和条件语句</h2>
 <h3 id="运算符">运算符</h3>
 <p>基本表达式：<code>$[运算式]</code>；运算符号：<code>+ - * / %</code>，加减乘除和取余</p>
 <p>示例：</p>
@@ -758,15 +632,12 @@
 <h3 id="条件语句">条件语句</h3>
 <p>基本语法：<code>[ condition ]</code>，注condition前后有空格，如果非空则返回true</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>[ hjy ] # 返回 true <br>[ ]  # 返回 false<br>[ hjy ] &amp;&amp; echo OK || echo No  # 条件满足 输出 OK， 不满足 输出 No<br></code></pre></td></tr></tbody></table></figure>
-<ol>
-<li>
-<p><code>if</code>判断</p>
+<ol type="1">
+<li><p><code>if</code>判断</p>
 <p>语法格式：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">if [ condition ]<br>then<br>coding<br>elif [ condition ]<br>then<br>coding<br>fi <br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>常用判断字符</p>
-<ol>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">if [ condition ]<br>then<br>coding<br>elif [ condition ]<br>then<br>coding<br>fi <br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>常用判断字符</p>
+<ol type="1">
 <li>字符串比较：<code>=</code></li>
 <li>两个整数比较：<code>-lt -le -eq -gt -ge -ne</code></li>
 <li>按照文件权限判断：<code>-r -w -x</code></li>
@@ -775,65 +646,54 @@
 <p>示例：</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>if [ "ok" = "ok" ]<br>then<br>        echo "equal"<br>fi<br>if [ 23 -ge 22 ]<br>then<br>        echo "大于"<br>fi<br>if [ -f ./hello.txt ]<br>then<br>        echo "存在"<br>fi<br>if [ -d ./hello.txt ]<br>then<br>        echo "存在"<br>else<br>        echo "不存在"<br>fi<br></code></pre></td></tr></tbody></table></figure>
 <p>输出：</p>
-<figure class="highlight applescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-keyword">equal</span><br>大于<br>存在<br>不存在<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p><code>case</code>判断</p>
+<figure class="highlight applescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-keyword">equal</span><br>大于<br>存在<br>不存在<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p><code>case</code>判断</p>
 <p>语法格式：</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell">case $变量 in<br>"情况1")<br>coding<br>;;<br>"情况2")<br>coding<br>;;<br>*) # 其它情况<br>coding<br>;;<br>esac<br></code></pre></td></tr></tbody></table></figure>
 <p>示例：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>case $1 in<br>"1")<br>	echo "a"<br>;;<br>"2")<br>	echo "b"<br>;;<br>"3")<br>	echo "c"<br>;;<br>*)<br>	echo "d"<br>;;<br>esac<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 执行 sh test.sh 1</span><br><span class="hljs-meta">#</span><span class="bash"> 输出 a</span><br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>case $1 in<br>"1")<br>	echo "a"<br>;;<br>"2")<br>	echo "b"<br>;;<br>"3")<br>	echo "c"<br>;;<br>*)<br>	echo "d"<br>;;<br>esac<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 执行 sh test.sh 1</span><br><span class="hljs-meta">#</span><span class="bash"> 输出 a</span><br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
 <h3 id="循环">循环</h3>
-<ol>
-<li>
-<p>for 循环</p>
+<ol type="1">
+<li><p>for 循环</p>
 <p>示例：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>for i in "$*"<br>do<br>	echo "num is $i"<br>done<br><br>for i in "$@"<br>do<br>	echo "num is $i"<br>done<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 输入： sh test.sh 10 20 30</span><br><span class="hljs-meta">#</span><span class="bash"> 输出：</span> <br><span class="hljs-meta">#</span><span class="bash"> num is 10 20 30</span><br><span class="hljs-meta">#</span><span class="bash"> num is 10</span><br><span class="hljs-meta">#</span><span class="bash"> num is 20</span><br><span class="hljs-meta">#</span><span class="bash"> num is 30</span><br><br>SUM=0<br>for(( i=1; i&lt;=$1; i++))<br>do<br>	SUM=$[$SUM+$i]<br>done<br>echo "sum is $SUM"<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p>while 循环</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>for i in "$*"<br>do<br>	echo "num is $i"<br>done<br><br>for i in "$@"<br>do<br>	echo "num is $i"<br>done<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 输入： sh test.sh 10 20 30</span><br><span class="hljs-meta">#</span><span class="bash"> 输出：</span> <br><span class="hljs-meta">#</span><span class="bash"> num is 10 20 30</span><br><span class="hljs-meta">#</span><span class="bash"> num is 10</span><br><span class="hljs-meta">#</span><span class="bash"> num is 20</span><br><span class="hljs-meta">#</span><span class="bash"> num is 30</span><br><br>SUM=0<br>for(( i=1; i&lt;=$1; i++))<br>do<br>	SUM=$[$SUM+$i]<br>done<br>echo "sum is $SUM"<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p>while 循环</p>
 <p>示例：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>SUM=0<br>i=0<br>while [ $i -le $1]<br>do<br>	SUM=$[$SUM+$i]<br>	i=$[$i+1]<br>done<br>echo "sum is $SUM"<br></code></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>SUM=0<br>i=0<br>while [ $i -le $1]<br>do<br>	SUM=$[$SUM+$i]<br>	i=$[$i+1]<br>done<br>echo "sum is $SUM"<br></code></pre></td></tr></tbody></table></figure></li>
 </ol>
 <h3 id="控制台交互式输入">控制台交互式输入</h3>
 <p>指令<code>read</code>,参数<code>-p</code>，提示语句，<code>-t</code>，读取参数时的等待时间（秒）。<code>-t</code>参数在Ubuntu里面貌似会报错。</p>
 <p>示例：</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>read -p "plase input num1=" num1<br>echo "num1=$num1"<br><br>read -p "plase input num2=" num2<br>echo "num2=$num2"<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 执行：sh test.sh</span> <br><span class="hljs-meta">#</span><span class="bash"> 输入： 10 20</span><br><span class="hljs-meta">#</span><span class="bash"> 输出：</span> <br><span class="hljs-meta">#</span><span class="bash"> plase input num1=10</span><br><span class="hljs-meta">#</span><span class="bash"> num1=10</span><br><span class="hljs-meta">#</span><span class="bash"> plase input num2=20</span><br><span class="hljs-meta">#</span><span class="bash"> num2=20</span><br></code></pre></td></tr></tbody></table></figure>
 <h3 id="函数相关">函数相关</h3>
-<ol>
-<li>
-<p>系统函数</p>
-<ol>
-<li>
-<p><code>basename</code>——返回文件名；</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">basename /home/hello.txt # 打印hello.txt<br></code></pre></td></tr></tbody></table></figure>
-</li>
-<li>
-<p><code>dirname</code>——返回除去文件名后剩下的绝对路径</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">dirnaem /home/hello.txt # 打印/home<br></code></pre></td></tr></tbody></table></figure>
-</li>
-</ol>
-</li>
-<li>
-<p>自定义函数</p>
+<ol type="1">
+<li><p>系统函数</p>
+<ol type="1">
+<li><p><code>basename</code>——返回文件名；</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">basename /home/hello.txt # 打印hello.txt<br></code></pre></td></tr></tbody></table></figure></li>
+<li><p><code>dirname</code>——返回除去文件名后剩下的绝对路径</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">dirnaem /home/hello.txt # 打印/home<br></code></pre></td></tr></tbody></table></figure></li>
+</ol></li>
+<li><p>自定义函数</p>
 <p>示例：</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br>funWithReturn(){<br>    echo "这个函数会对输入的两个数字进行相加运算..."<br>    echo "输入第一个数字: "<br>    read aNum<br>    echo "输入第二个数字: "<br>    read anotherNum<br>    echo "两个数字分别为 $aNum 和 $anotherNum !"<br>    return $(($aNum+$anotherNum))<br>}<br>funWithReturn<br>echo "输入的两个数字之和为 $? !"<br><br>:&lt;&lt;!<br>输出：<br>这个函数会对输入的两个数字进行相加运算...<br>输入第一个数字: <br>1<br>输入第二个数字: <br>2<br>两个数字分别为 1 和 2 !<br>输入的两个数字之和为 3 !<br>!<br></code></pre></td></tr></tbody></table></figure>
 <h2 id="apt相关指令">apt相关指令</h2>
 <p><code>sudo apt-get update</code> ** 更新源**</p>
 <p><code>sudo apt-get install package</code> <strong>安装包</strong></p>
 <p><code>sudo apt-get remove package</code> <strong>删除包</strong></p>
-<p><code>sudo apt-cache search package</code> <strong>搜索软件包</strong></p>
-<p><code>sudo apt-cache show package</code> <strong>获取包的相关信息：大小、说明、版本</strong></p>
-<p><code>sudo apt-get install package --reinstall</code> <strong>重新安装包</strong></p>
+<p><code>sudo apt-cache search package</code>
+<strong>搜索软件包</strong></p>
+<p><code>sudo apt-cache show package</code>
+<strong>获取包的相关信息：大小、说明、版本</strong></p>
+<p><code>sudo apt-get install package --reinstall</code>
+<strong>重新安装包</strong></p>
 <p><code>sudo apt-get -f install</code> 修复安装</p>
-<p><code>sudo apt-get remove package --purge</code> <strong>删除包，包括配置文件等</strong></p>
+<p><code>sudo apt-get remove package --purge</code>
+<strong>删除包，包括配置文件等</strong></p>
 <p><code>sudo apt-get build-dep package</code> 安装相关的编译环境</p>
-<p><code>sudo apt-get upgrade</code>  <strong>更新已安装的包</strong></p>
-<p><code>sudo apt-get source package</code> 下载该包的源代码</p>
-</li>
+<p><code>sudo apt-get upgrade</code> <strong>更新已安装的包</strong></p>
+<p><code>sudo apt-get source package</code> 下载该包的源代码</p></li>
 </ol>
 
             </div>
