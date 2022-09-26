@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>（转载）Pytorch运行时指定对应序号的显卡</title>
+    <link href="/jasonyang.github.io/2022/09/26/Python%E6%8C%87%E5%AE%9A%E5%AF%B9%E5%BA%94%E5%BA%8F%E5%8F%B7%E7%9A%84%E6%98%BE%E5%8D%A1/"/>
+    <url>/jasonyang.github.io/2022/09/26/Python%E6%8C%87%E5%AE%9A%E5%AF%B9%E5%BA%94%E5%BA%8F%E5%8F%B7%E7%9A%84%E6%98%BE%E5%8D%A1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="pytorch运行时指定对应序号的显卡">Pytorch运行时指定对应序号的显卡</h1><p>原文链接：https://zhuanlan.zhihu.com/p/166161217</p><h2 id="在代码中指定">1. 在代码中指定</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os <br>os.environ[<span class="hljs-string">'CUDA_VISIBLE_DEVICES'</span>] = <span class="hljs-string">'2'</span> <br></code></pre></td></tr></tbody></table></figure><h2 id="在命令行中执行代码时指定">2. 在命令行中执行代码时指定</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">CUDA_VISIBLE_DEVICES='2' python3 train.py<br></code></pre></td></tr></tbody></table></figure><h2 id="在命令行中执行脚本文件时指定">3.在命令行中执行脚本文件时指定</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">CUDA_VISIBLE_DEVICES='2' sh run.sh<br></code></pre></td></tr></tbody></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>杂记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>python</tag>
+      
+      <tag>pytorch</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>（转载）详解IoU、GIoU、DIoU、CIoU、EIoU和DIoU-NMS</title>
     <link href="/jasonyang.github.io/2022/09/20/%E8%AF%A6%E8%A7%A3IoU%E3%80%81GIoU%E3%80%81DIoU%E3%80%81CIoU%E3%80%81EIoU%E5%92%8CDIoU-NMS/"/>
     <url>/jasonyang.github.io/2022/09/20/%E8%AF%A6%E8%A7%A3IoU%E3%80%81GIoU%E3%80%81DIoU%E3%80%81CIoU%E3%80%81EIoU%E5%92%8CDIoU-NMS/</url>
