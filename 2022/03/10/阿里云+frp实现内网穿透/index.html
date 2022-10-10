@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.6k 字
+      2.8k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      31
+      32
        分钟
     </span>
   
@@ -231,6 +231,9 @@
             
             <div class="markdown-body">
               <h2 id="阿里云frp实现内网穿透">阿里云+frp实现内网穿透</h2>
+<blockquote>
+<p>最近更新：2022年10月10日10:39:12</p>
+</blockquote>
 <h3 id="云服务器购买">1. 云服务器购买</h3>
 <hr>
 <p>随便买一个就行，主要是需要服务的一个公网ip。（点击<code>立即购买</code>默认创建即可，操作系统可选<code>CentOS</code>）</p>
@@ -346,6 +349,10 @@ frps 服务（frpc 服务类似）。</p>
 <p>选择第二种方式部署<code>frp</code>服务，执行步骤：</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在etc目录下创建frp文件夹</span><br><span class="hljs-built_in">cd</span> /etc<br>mkdir frp<br><br><span class="hljs-comment"># 返回刚才的systemd目录，复制文件</span><br><span class="hljs-built_in">cd</span> ~<br><span class="hljs-built_in">cd</span> frp_0.39.1_linux_amd64/systemd/<br><br><span class="hljs-comment"># 先拷贝.service文件， 需要在系统的目录下才能自启运行</span><br>sudo cp frps.service /usr/lib/systemd/system/<br><br><span class="hljs-comment"># 回到上一级，拷贝frp和.ini文件</span><br><span class="hljs-built_in">cd</span> ..<br>sudo cp frps /usr/bin/<br>sudo cp frps.ini /etc/frp/<br><br><span class="hljs-comment"># 启动frps服务</span><br>sudo systemctl start frps<br><br><span class="hljs-comment"># 停止frps服务</span><br>sudo systemctl stop frps<br><br><span class="hljs-comment"># 开启 frps 服务开机自启动</span><br>sudo systemctl <span class="hljs-built_in">enable</span> frps<br><br><span class="hljs-comment"># 禁用 frps 服务开机自启动</span><br>sudo systemctl <span class="hljs-built_in">disable</span> frps<br></code></pre></td></tr></tbody></table></figure>
 <p>至此阿里云<code>frps</code>程序的配置部署完整结束，接下来是内网主机的客户端设置。</p>
+<blockquote>
+<p>2022年10月10日更新：</p>
+<p>查看服务启动状态：<code>systemctl status frps</code></p>
+</blockquote>
 <h3 id="内网主机的frp客户端配置">5. 内网主机的frp客户端配置</h3>
 <hr>
 <blockquote>
@@ -357,11 +364,11 @@ frps 服务（frpc 服务类似）。</p>
 <p>解压同样可以看到<code>frpc  frpc_full.ini  frpc.ini  frps  frps_full.ini  frps.ini  LICENSE  systemd</code>这些文件，在配置客户端时只需要<code>frpc</code>和<code>frpc.ini</code>两个文件，其余都可以删掉（如果你的内网主机仍是Linux可以保留<code>systemd</code>文件）。</p>
 <p>打开<code>frpc.ini</code>进行如下配置：</p>
 <figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[common]</span><br><span class="hljs-attr">tls_enable</span>=<span class="hljs-literal">true</span>  <span class="hljs-comment"># 这一行是我后面自己加的，原因是之前有段时间frps服务一直连不上，按照网上教程才添加的，最开始可以删除这一行。</span><br><span class="hljs-attr">server_addr</span> = <span class="hljs-number">120.77</span>.<span class="hljs-number">61.888</span> <span class="hljs-comment"># 这是你的阿里云服务器公网ip地址，在"云服务器ECS-&gt;实例"进入实例管理界面可以看到</span><br><span class="hljs-attr">server_port</span> = <span class="hljs-number">7000</span> <span class="hljs-comment"># 这是和frps服务器端绑定的端口，这是阿里云服务器安全组中开放的入端口</span><br><br><span class="hljs-section">[ssh]</span><br><span class="hljs-attr">type</span> = tcp <span class="hljs-comment"># 默认</span><br><span class="hljs-attr">local_ip</span> = <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span> <span class="hljs-comment"># 默认内网主机的本地回环地址</span><br><span class="hljs-attr">local_port</span> = <span class="hljs-number">22</span> <span class="hljs-comment"># 内网主机的端口，用于SSH连接</span><br><span class="hljs-attr">remote_port</span> = <span class="hljs-number">6000</span> <span class="hljs-comment"># 这是阿里云服务器安全组中开放的另一个入端口</span><br></code></pre></td></tr></tbody></table></figure>
-<h3 id="利用winsw将frpc客户端程序封装成windows服务">6.
-利用winsw将frpc客户端程序封装成windows服务</h3>
-<hr>
-<p>完成<code>.ini</code>文件的修改配置之后，同样可以通过执行下面的命令行语句手动运行frpc客户端程序。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 前台启动 （frp_windows文件夹下运行cmd）</span><br>frps -c frps.ini  <br></code></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>2022年10月10日更新：</p>
+<p>可以添加多个内网主机（服务器）：</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[ssh2]</span><br><span class="hljs-attr">type</span> = tcp <span class="hljs-comment"># 默认</span><br><span class="hljs-attr">local_ip</span> = <span class="hljs-number">127.62</span>.<span class="hljs-number">113.61</span> <span class="hljs-comment"># 内网服务器地址</span><br><span class="hljs-attr">local_port</span> = <span class="hljs-number">22</span> <span class="hljs-comment"># 内网服务器的端口，用于SSH连接</span><br><span class="hljs-attr">remote_port</span> = <span class="hljs-number">6001</span> <span class="hljs-comment"># 这是阿里云服务器安全组中开放的另一个入端口</span><br><br><br><br><span class="hljs-comment">### 6. 利用winsw将frpc客户端程序封装成windows服务</span><br><br>-------<br><br>完成`.ini`文件的修改配置之后，同样可以通过执行下面的命令行语句手动运行frpc客户端程序。<br><br>```bash<br><span class="hljs-comment"># 前台启动 （frp_windows文件夹下运行cmd）</span><br>frps -c frps.ini  <br></code></pre></td></tr></tbody></table></figure>
+</blockquote>
 <p>但是当你的cmd窗口关闭之后吧，程序就自动停止了，如果内网主机是Linux的话同样可以采用之前类似的方法将对应<code>frpc.xxx</code>的文件移入相应路径，windows主机的话则需要winsw来对程序进行封装。</p>
 <blockquote>
 <p>winsw下载地址：https://github.com/winsw/winsw/releases</p>
@@ -376,6 +383,11 @@ frps 服务（frpc 服务类似）。</p>
 <p>添加好后命名为<code>winsw.xml</code>
 同样放在<code>frp</code>文件夹的目录。</p>
 <p>然后在当前<code>frp</code>路径下打开<code>cmd</code>窗口，输入<code>winsw install</code>就可以创建服务了，配置成功后可以看到如下输出：</p>
+<blockquote>
+<p>2022年10月10日更新：</p>
+<p>如果要使用<code>winsw</code>进行服务部署，则需要把之前的下载的<code>WinSW-x64.exe</code>更改为<code>winsw.exe</code>如此才能找到指令。</p>
+<p>服务卸载使用<code>winsw uninstall</code>指令，如果显示<code>已被标记删除</code>则重启一次电脑便会彻底删除。</p>
+</blockquote>
 <figure>
 <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220310151324896.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220310151324896">
 <figcaption aria-hidden="true">image-20220310151324896</figcaption>
@@ -388,13 +400,16 @@ frps 服务（frpc 服务类似）。</p>
 <p>然后便可通过在你的外网主机上配置<code>120.77.61.888:6000</code>端口连接访问你的内网主机了，windows用户，用户名和密码就是开机的时候的用户名和密码，提供一份我的配置。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs conf">Host my_pc<br>  HostName 120.77.61.888 # 自己的公网ip<br>  Port 6000 # 自己开放的安全组的入端口，需要与frpc.ini中的remote_port一直。<br>  User Administrator # windows一般是这个用户名<br></code></pre></td></tr></tbody></table></figure>
 <p>终于，完结撒花，特别感谢教研室硕哥的帮助指导。</p>
+<blockquote>
+<p>2022年10月10日更新：</p>
+<p>如果需要连接windows（内网主机）作为服务器，则需要在<code>windows -&gt;设置-&gt;应用-&gt;可选应用</code>里面搜索安装openssh服务端程序，安装完成后用管理员权限打开cmd，输入<code>net start sshd</code>开启ssh服务，输入<code>net stop sshd</code>关闭ssh服务。</p>
+</blockquote>
 <h3 id="参考文章">参考文章</h3>
 <hr>
 <p>【知乎】使用 systemd 管理 frp
 服务：https://zhuanlan.zhihu.com/p/382950791</p>
 <p>【CSDN】阿里云服务器实现frp内网穿透（<a target="_blank" rel="noopener" href="https://blog.csdn.net/hesongzefairy/article/details/105543161?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164629271016780264082198%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164629271016780264082198&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-4-105543161.pc_search_result_cache&amp;utm_term=%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&amp;spm=1018.2226.3001.4187">完整教程</a>）</p>
-<p>【CSDN】阿里云服务器实现 frp
-内网穿透：https://blog.csdn.net/cao0507/article/details/82758288?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164629271016780264082198%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164629271016780264082198&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2<sub>all</sub>first_rank_ecpm_v1~rank_v31_ecpm-7-82758288.pc_search_result_cache&amp;utm_term=%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&amp;spm=1018.2226.3001.4187</p>
+<p>【CSDN】阿里云服务器实现 frp 内网穿透：（<a target="_blank" rel="noopener" href="https://blog.csdn.net/cao0507/article/details/82758288?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164629271016780264082198%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164629271016780264082198&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-7-82758288.pc_search_result_cache&amp;utm_term=%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&amp;spm=1018.2226.3001.4187">完整教程</a>）</p>
 <blockquote>
 <p>文章名称一样，内容稍有不同。</p>
 </blockquote>
