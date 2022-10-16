@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      16
+      17
        分钟
     </span>
   
@@ -287,7 +287,7 @@ k\left(x_{*}, x_{1}\right) &amp; k\left(x_{*}, x_{2}\right) &amp; \cdots
 <p><span class="math inline">\(x_1, ...,
 x_n\)</span>表示已知观测点，<span class="math inline">\(x_*\)</span>表示待预测的点。可以确定的是依据2.3中的公式，矩阵<span class="math inline">\(K\)</span>的对角线元素为<span class="math inline">\(\sigma_f^2 + \sigma_n^2\)</span>。</p>
 </blockquote>
-<h3 id="基于高斯过程和最大后延概率求解待预测值">基于高斯过程和最大后延概率求解待预测值</h3>
+<h3 id="基于高斯过程和最大后验概率求解待预测值">基于高斯过程和最大后验概率求解待预测值</h3>
 <p>基于之前的关键假设：观测系统是一个高斯过程。所以目前的观测值和待预测值服从一个多元高斯分布：
 <span class="math display">\[
 \left[\begin{array}{c}
@@ -310,6 +310,9 @@ K_{* *}-K_{*} K^{-1} K_{*}^{\mathrm{T}}\right)
 \operatorname{var}\left(y_{*}\right)=K_{* *}-K_{*} K^{-1}
 K_{*}^{\mathrm{T}}
 \]</span></p>
+<blockquote>
+<p>这里的估计均值和方差在协方差矩阵中没有显式的声明<span class="math inline">\(\sigma_{n}^{2}I\)</span>的原因在于公式（3）中已经融合了协方差值</p>
+</blockquote>
 <h2 id="例题">例题</h2>
 <p>依据上述第一节的例题，有6个观测点值<span class="math inline">\(x=
 \left[\begin{array}{llllll}-1.50 &amp; -1.00 &amp; -0.75 &amp; -0.40

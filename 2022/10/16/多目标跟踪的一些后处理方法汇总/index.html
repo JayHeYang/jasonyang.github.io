@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jasonyang.github.io/img/panda.png">
+  <link rel="icon" href="/jasonyang.github.io/img/panda.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="jasonyang">
+  <meta name="keywords" content="">
+  
+  <title>多目标跟踪中的一些后处理方法汇总 - jasonyang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/jasonyang.github.io/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/jasonyang.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/jasonyang.github.io/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","app_key":"wlepdaYUatxn4WD8tudl2BdX","server_url":"https://uqjw3jet.lc-cn-n1-shared.com"}},"search_path":"//jayheyang.github.io/jasonyang.github.io/search.xml"};
+  </script>
+  <script  src="/jasonyang.github.io/js/utils.js" ></script>
+  <script  src="/jasonyang.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/jasonyang.github.io/">&nbsp;<strong>Morvan</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/jasonyang.github.io/img/zelda2.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="多目标跟踪中的一些后处理方法汇总">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-10-16 14:50" pubdate>
+        2022年10月16日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      37
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">多目标跟踪中的一些后处理方法汇总</h1>
+            
+            <div class="markdown-body">
+              <h1 id="多目标跟踪中的一些后处理方法汇总">多目标跟踪中的一些后处理方法汇总</h1>
+<h2 id="轨迹插值">1.轨迹插值</h2>
+<h3 id="线性插值">1.1 线性插值</h3>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>原理：</strong>
+对于一段中间突然中断的轨迹（中断的帧数一般得小于20帧，才会进行线性插值），其消失期间的轨迹大致可描述为轨迹消失时的位置与轨迹再次出现时的位置与消失时间的比值，公式可描述为：
+<span class="math display">\[
+\hat{\mathbf{z}}_{t}=\mathbf{z}_{t_{1}}+\frac{t-t_{1}}{t_{2}-t_{1}}\left(\mathbf{z}_{t_{2}}-\mathbf{z}_{t_{1}}\right),
+t_{1}&lt;t&lt;t_{2}
+\]</span> 其中<span class="math inline">\(\mathbf{z}_{t_{1}}=[x_1, y_1,
+x_2, y_2]\)</span>表示轨迹消失时所在图像中的位置，<span class="math inline">\(\mathbf{z}_{t_{2}}\)</span>表示轨迹再次出现时所在图像中的位置，<span class="math inline">\(\hat{\mathbf{z}}_{t}\)</span>则表示轨迹消失的中间时刻<span class="math inline">\(t\)</span>由线性插值估计出来的位置。</p>
+<blockquote>
+<p>一般而言要求，中断的轨迹长度不能超过20帧（<span class="math inline">\(t_2 - t_1 \le
+20\)</span>），否则线性插值会带来严重的位置估计误差。</p>
+</blockquote>
+<h3 id="高斯平滑插值">1.2 高斯平滑插值</h3>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>原理：</strong>
+假定目标的运动轨迹服从高斯过程，且每个已知的运动位置均会存在观测噪声（观测噪声服从高斯分布），那么其中断时刻<span class="math inline">\(t\)</span>的预测值就可以通过以下等式进行估计：
+<span class="math display">\[
+\begin{array}{c}
+\bar{y}_{*}=K_{*} K^{-1} \mathbf{y} \\
+\operatorname{var}\left(y_{*}\right)=K_{* *}-K_{*} K^{-1}
+K_{*}^{\mathrm{T}}
+\end{array}
+\]</span></p>
+<blockquote>
+<p>具体推导过程可参看：<a target="_blank" rel="noopener" href="https://jayheyang.github.io/jasonyang.github.io/2022/05/18/%E9%AB%98%E6%96%AF%E8%BF%87%E7%A8%8B%E5%9B%9E%E5%BD%92%EF%BC%88Gaussian%20Processes%20for%20Regression%EF%BC%89/">高斯过程回归</a></p>
+</blockquote>
+<p>具体到轨迹的边界框估计方面，一般是以目标的中心点（构建两个高斯过程回归器，目标的<span class="math inline">\(w,h\)</span>固定）或者左上角点和宽高（宽高也要预测）分别预测坐标的时序位置。此外一般在使用高斯过程回归的时候都输入的观测坐标，不仅有轨迹未中断时刻的位置，也有轨迹中断后又线性补帧估计的位置信息，整合这些所有的信息之后再对某一个中断时刻<span class="math inline">\(t\)</span>的位置进行估计。</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221015114226729.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221015114226729" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+高斯平滑插值与线性插值的理论效果对比（图源：StrongSORT）
+</div>
+</center>
+<h3 id="代码实现">1.3 代码实现</h3>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>OC-SORT：</strong>https://github.com/noahcao/OC_SORT/blob/master/tools/gp_interpolation.py</p>
+<blockquote>
+<p>在<code>tools</code>目录内有线性插值和高斯平滑插值，GSI只估计目标的中心点，目标宽高恒定。</p>
+</blockquote>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>StrongSORT：</strong>https://github.com/dyhBUPT/StrongSORT/blob/master/GSI.py</p>
+<blockquote>
+<p>估计左上角点和宽高</p>
+</blockquote>
+<h2 id="轨迹分裂">2.轨迹分裂</h2>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+<strong>原理：</strong>面对一段身份信息不一致的轨迹序列，采用轨迹的外观特征（主要）或者运动特征（方向、相对位置变化等，次要）将不合理的轨迹序列（通常是存在ID
+switch）断开成几段身份信息一致的小轨迹段。</p>
+<blockquote>
+<p>一般来说轨迹分裂与缝合都是一起出现的。</p>
+</blockquote>
+<h3 id="非参数化的方法">2.1 非参数化的方法</h3>
+<p>这类方法主要是通过计算轨迹前后帧外观特征的相似度的突变时刻找出合理的轨迹断点，或者分析当前帧与之前多帧轨迹外观特征的相似度从而确定当前帧是否存在ID跳变。但是这种非参数化的方法面对目标尺度突然变化时（比如从站着变成蹲着）也会发生较大的相似度下降，引起断点误判。
+<span class="math display">\[
+\{t| \operatorname{Max}_{i=1，\dots，N}\{ \operatorname{cosim}(s_{t_i},
+s_t) \} &lt; Thr_s \}
+\]</span> 其中，<span class="math inline">\(s_t\)</span>表示<span class="math inline">\(t\)</span>时刻轨迹的外观特征，<span class="math inline">\(\operatorname{cosim}\)</span>表示外观特征向量之间的余弦相似度。</p>
+<h3 id="参数化的方法">2.2 参数化的方法</h3>
+<h4 id="split-and-connect-a-universal-tracklet-booster-for-multi-object-tracking">2.2.1
+Split and Connect: A Universal Tracklet Booster for Multi-Object
+Tracking</h4>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2105.02426</p>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+<strong>处理流程：</strong>文中定义了一个基于特征提取和轨迹断点预测的<code>spliter</code>，具体结构是一个堆叠的一维卷积block+两个全连接，网络的输入是一个T帧轨迹段的bbox和embedding特征向量，shape为<span class="math inline">\((2048+4)\times 1\times T\)</span>；输出为两个<span class="math inline">\(1\times
+(T-1)\)</span>的帧间断点概率值阈值向量<span class="math inline">\(\widehat{\boldsymbol{m}}\)</span>和自适应高斯平滑方差向量<span class="math inline">\(\widehat{\boldsymbol{\sigma}}\)</span>。</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221015152955482.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221015152955482" style="zoom: 35%;">
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221016115848143.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221016115848143" style="zoom:42%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+【上】spliter网络结构；【下】帧间断点GT标签示意
+</div>
+</center>
+<p>然后使用高斯平滑后的帧间断点标签监督网络进行学习，损失计算公式如下：
+<span class="math display">\[
+\mathcal{L}_{s}=\sum_{t}\left(\hat{\boldsymbol{m}}_{t}-\min
+\left(\sum_{\tau} \boldsymbol{m}_{\tau}^{*} \exp
+\left(-\frac{(\tau-t)^{2}}{\tilde{\boldsymbol{\sigma}}_{\tau}^{2}}\right),
+1\right)\right)^{2}
+\\ 其中，\tilde{\boldsymbol{\sigma}}=\max (\min
+(\hat{\boldsymbol{\sigma}}, 10), \epsilon), \epsilon=0.001
+\]</span></p>
+<p>模型训练的话就是通过一个简单的IoU跟踪器在带有ID信息的、bbox随机抖动的（稍微偏移变换一点儿）的GT框上进行不同关联阈值的关联，得到轨迹，然后根据轨迹中ID信息的变化情况确定轨迹的标签并进行训练。</p>
+<blockquote>
+<p>感觉参数化模型训练的方法效果要比根据直观的相似度阈值进行人工判定要有效且可靠一些，但是可惜的是该方法代码没开源。</p>
+</blockquote>
+<h2 id="轨迹缝合">3. 轨迹缝合</h2>
+<h3 id="非参数化的方法-1">3.1 非参数化的方法</h3>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+<strong>流程：</strong>主要还是通过两个轨迹段外观特征的相似度击中（大于阈值）的次数，以及从轨迹开始与终止的时刻是否合理（一段轨迹的开始时间应该在另一段轨迹终止时间的一定范围内）。</p>
+<h4 id="sportstrack-技术方案">3.1.1 SportsTrack 技术方案</h4>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 技术方案:
+https://deeperaction.github.io/results/track3_1st.pdf</p>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>GitHub: https://github.com/vghost2008/sportstrack</p>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+<strong>处理流程：</strong>首先跟踪轨迹的外观特征相似度的方差确定轨迹是<code>stable</code>轨迹还是<code>unstable</code>轨迹，对于<code>stable</code>的两个分别有M帧和N帧的轨迹段，如果出现的时间上合理，则计算两段轨迹的相似度矩阵<span class="math inline">\(\text{simmatrix} \in R^{M \times
+N}\)</span>,在<span class="math inline">\(M \times
+N\)</span>个相似度值中如果高于阈值的值达到了<span class="math inline">\((M \times
+N)/2\)</span>个则认为两段轨迹拥有相同的身份id应该予以合并。</p>
+<h3 id="参数化的方法-1">3.2 参数化的方法</h3>
+<h4 id="split-and-connect-a-universal-tracklet-booster-for-multi-object-tracking-1">3.2.1
+Split and Connect: A Universal Tracklet Booster for Multi-Object
+Tracking</h4>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2105.02426</p>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+<strong>处理流程：</strong>使用transformer来聚合得到轨迹段的时序信息，然后通过分类头分类轨迹所属ID，交叉熵损失和triplet
+loss用于监督模型学出更具判别性的特征。最后去掉分类头，仅用经过transformer编码后的特征作为轨迹的特征嵌入，轨迹段之间使用L2距离（满足合理的轨迹出现和终止时间要求）即可判定是否属于同一段轨迹。</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221015164043929.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221015164043929" style="zoom:50%;"></p>
+<h4 id="giaotracker-a-comprehensive-framework-for-mcmot-with-global-information-and-optimizing-strategies-in-visdrone-2021">3.2.2
+GIAOTracker: A comprehensive framework for MCMOT with global information
+and optimizing strategies in VisDrone 2021</h4>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2202.11983</p>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>处理流程：</strong>
+首先使用了一种融合全局加局部外观特征编码的特征提取网络，然后仍然使用Transformer聚合轨迹的时序特征信息（当作轨迹的外观特征表示），特征嵌入的损失方面只用了triplet
+loss进行监督，训练完成之后使用外观度量+轨迹段间隔度量+轨迹bbox的距离度量（具体如何度量后面两种不同的轨迹距离文章并没有详细介绍，猜测可能是前一段轨迹最后的bbox位置与后一段轨迹开始的Bbox位置之间的距离）判定两段轨迹是否为同一身份ID。</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221016101306964.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221016101306964" style="zoom: 33%;"></p>
+<h4 id="strongsort-make-deepsort-great-again">3.2.3 StrongSORT: Make
+DeepSORT Great Again</h4>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv：https://arxiv.org/abs/2202.13514</p>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>GitHub: https://github.com/dyhBUPT/StrongSORT</p>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+<strong>处理流程：</strong>和前面的GIAOTracker是同一作者，在这篇文章中作者又提出了新的轨迹缝合策略：<strong>直接建模轨迹的出现帧与位置对轨迹进行时序建模</strong>。具体而言作者仅用N帧轨迹位置描述一个轨迹段<span class="math inline">\(T_{*}=\left\{f_{k}, x_{k},
+y_{k}\right\}_{k=1}^{N}\)</span> ，其中<span class="math inline">\(f_k\)</span>表示目标k次出现时的帧序号，<span class="math inline">\(x_k,
+y_k\)</span>分别表示目标k次出现时所在图像的位置。由此形成一个<span class="math inline">\(1 \times N \times
+3\)</span>的伪图像，然后运用<span class="math inline">\(7 \times
+1\)</span>的卷积融合轨迹时序信息，再利用<span class="math inline">\(1
+\times
+3\)</span>的卷积融合不同通道的特征，最后对特征进行全局平均池化以获取该轨迹段的特征表示并与其它时空关系合理（帧间隔不太远，位置间隔不太远）的轨迹段进行concat融入MLP网络评判相似度。</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221016104444957.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221016104444957" style="zoom:40%;"></p>
+<p>训练数据方面，作者从GT轨迹中以1:3的比例随机筛选截取部分轨迹段当作正负样本，同时引入了时序扰动和空间位置扰动（在帧序号和出现位置加上一定偏差），训练损失为交叉熵损失函数。</p>
+<h2 id="模型集成">4. 模型集成</h2>
+<h3 id="融合多个检测器的结果">4.1 融合多个检测器的结果</h3>
+<p>汇总对个检测器的检测结果，然后使用NMS（或者SoftNMS）进行高度重叠框的滤除，滤除后的检测结果作为当前帧的检测框送入跟踪器。</p>
+<h3 id="model-soup">4.2 Model soup</h3>
+<p>一种类似EMA机制的模型集成方法，之前的集成学习需要一次前向传播多个不同超参数的模型，得到多个预测结果，然后进行投票，而model
+soup直接将多个不同超参的模型对应的参数权重进行平均融合，最后得到一个结合不同超参数的模型，只执行一次前向传播。（感觉作用不大）</p>
+<h3 id="融合多个跟踪器的结果">4.3 融合多个跟踪器的结果</h3>
+<h4 id="ensemblemot-a-step-towards-ensemble-learning-of-multiple-object-tracking">4.3.1
+EnsembleMOT: A Step towards Ensemble Learning of Multiple Object
+Tracking</h4>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2210.05278</p>
+<ol type="1">
+<li>提出一种融合多个跟踪器跟踪结果的方法（以前都是融合多个检测器，无法从实例级角度完成轨迹的去重），具体操作是：有两段具有重叠时间段的轨迹<span class="math inline">\(\left\{T_{i}, t_{i}^{0},
+t_{i}^{1}\right\}\)</span>和<span class="math inline">\(\left\{T_{j},
+t_{j}^{0}, t_{j}^{1}\right\}\)</span>，假设<span class="math inline">\(t_{i}^{0} \leq t_{j}^{0} \leq t_{i}^{1} \leq
+t_{j}^{1}\)</span>，计算重叠时间段内两段轨迹bbox框的IoU（<span class="math inline">\(s I o U_{i,
+j}=\left\{\operatorname{IoU}\left(b_{i}^{t},
+b_{j}^{t}\right)\right\}_{t=t_{j}^{0}}^{t=t_{i}^{1}}\)</span>）,
+并统计IoU超过阈值的帧数<span class="math inline">\(\text { inter }_{i,
+j}=\left|\{i o u&gt;T h r_{s} \mid i o u \in s I o U_{i,
+j}\right\}|\)</span>,
+最后通过这计算超过阈值帧数所占较短轨迹帧数的比例<span class="math inline">\(\text { stIoU }_{i, j}=\frac{\text { inter }_{i,
+j}}{\text { union }_{i, j}}, \ \text { union }_{i, j}=\min
+\left(t_{i}^{1}-t_{i}^{0},
+t_{j}^{1}-t_{j}^{0}\right)\)</span>，确定两段轨迹的相似度实现轨迹去重。对于确定的身份ID相同的轨迹，在重合时间段使用长轨迹的bbox做为跟踪的位置。</li>
+<li>提出帧内bbox-level
+NMS，使用轨迹段长度作为NMS的排序目标，从长轨迹的bbox开始，剔除掉与其IoU大于0.7的较短轨迹的bbox；</li>
+</ol>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221015173211023.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221015173211023" style="zoom:50%;"></p>
+<p>从消融实验来说这两部分还是提升蛮大的（第三行表示使用重叠轨迹段两个bbox的平均值作为跟踪结果）。</p>
+<h2 id="相机运动补偿与卡尔曼滤波的一些改进">5.
+相机运动补偿与卡尔曼滤波的一些改进</h2>
+<blockquote>
+<p>不算是后处理，可以计算之后存起来或者在线计算</p>
+</blockquote>
+<p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>流程：</strong>简单来说就是根据相邻两帧之间的参考对照点（一般是图像中的静止物体）的相关位置关系，解算岀相邻帧之间由于相机视角变换带来的相对位置变化，即求解一个仿射变换矩阵用于补偿因为相机运动的导致卡尔曼滤波不准的情况。下面列岀可以使用的相机运动补偿代码实现：</p>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+BoT-SORT：https://github.com/NirAharon/BoT-SORT/blob/main/tracker/gmc.py</p>
+<p>融合了ECC， ORB， SIFT等好几种不同的相机运动补偿方式。</p>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>
+StrongSORT：https://github.com/dyhBUPT/StrongSORT/blob/master/others/ecc.py</p>
+<p>对卡尔曼滤波的改进在上述两个方法均有涉及，其中StrongSORT依据轨迹置信度确定观测噪声的卡尔曼滤波；BoT-SORT则将预测的状态向量改为了预测轨迹的中心点位置+宽高，具体请参看这两篇论文。</p>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>BoT-SORT:https://arxiv.org/abs/2206.14651</p>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>StrongSORT:
+https://arxiv.org/abs/2202.13514</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/MOT/">MOT</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/Post-Processing/">Post-Processing</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2022/09/26/Python%E6%8C%87%E5%AE%9A%E5%AF%B9%E5%BA%94%E5%BA%8F%E5%8F%B7%E7%9A%84%E6%98%BE%E5%8D%A1/">
+                        <span class="hidden-mobile">（转载）Pytorch运行时指定对应序号的显卡</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","appKey":"wlepdaYUatxn4WD8tudl2BdX","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://uqjw3jet.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/jasonyang.github.io/js/events.js" ></script>
+<script  src="/jasonyang.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/jasonyang.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/jasonyang.github.io/js/local-search.js" ></script>
+
+
+
+
+  <script defer src="/jasonyang.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/jasonyang.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>
