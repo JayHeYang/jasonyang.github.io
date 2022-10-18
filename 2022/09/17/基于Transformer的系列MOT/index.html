@@ -230,84 +230,259 @@
             <h1 style="display: none">论文总结-基于Transformer的MOT系列论文</h1>
             
             <div class="markdown-body">
-              <h1 id="基于Transformer的MOT系列论文"><a href="#基于Transformer的MOT系列论文" class="headerlink" title="基于Transformer的MOT系列论文"></a>基于Transformer的MOT系列论文</h1><h2 id="1-Unified-Transformer-Tracker-for-Object-Tracking-CVPR-2022"><a href="#1-Unified-Transformer-Tracker-for-Object-Tracking-CVPR-2022" class="headerlink" title="1. Unified Transformer Tracker for Object Tracking (CVPR 2022)"></a>1. Unified Transformer Tracker for Object Tracking (CVPR 2022)</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831100309975.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831100309975"></p>
-<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.15175">https://arxiv.org/abs/2203.15175</a> </p>
-<h3 id="1-1-摘要"><a href="#1-1-摘要" class="headerlink" title="1.1 摘要"></a>1.1 摘要</h3><p>作为计算机视觉中的一个重要领域，目标跟踪已经形成了两个独立的社区，分别研究单目标跟踪（SOT）和多目标跟踪（MOT）。 然而，由于两个任务的训练数据集和跟踪对象不同，当前一种跟踪场景中的方法不容易适应另一种。 尽管 UniTrack [45] 证明了具有多个头部的共享外观模型可用于处理单个跟踪任务，但它未能利用大规模跟踪数据集进行训练，并且在单个对象跟踪上表现不佳。 在这项工作中，我们提出了统一transformer跟踪器 (Unified Transformer Tracker)，以使用一种范式解决不同场景中的跟踪问题。 在我们的 UTT 中开发了一个跟踪转换器（track transformer）来跟踪 SOT 和 MOT 中的目标，其中利用目标特征和跟踪框架特征之间的相关性来定位目标。 我们证明了 SOT 和 MOT 任务都可以在这个框架内解决，并且可以通过交替优化单个任务数据集上的 SOT 和 MOT 目标来同时对模型进行端到端训练。 在 SOT 和 MOT 数据集上训练的统一模型在多个基准上进行了广泛的实验。</p>
-<h3 id="1-2-方法与总结"><a href="#1-2-方法与总结" class="headerlink" title="1.2 方法与总结"></a>1.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831102300539.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831102300539"></p>
+              <h1 id="基于transformer的mot系列论文">基于Transformer的MOT系列论文</h1>
+<h2 id="unified-transformer-tracker-for-object-tracking-cvpr-2022">1.
+Unified Transformer Tracker for Object Tracking (CVPR 2022)</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831100309975.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831100309975"></p>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2203.15175</p>
+<h3 id="摘要">1.1 摘要</h3>
+<p>作为计算机视觉中的一个重要领域，目标跟踪已经形成了两个独立的社区，分别研究单目标跟踪（SOT）和多目标跟踪（MOT）。
+然而，由于两个任务的训练数据集和跟踪对象不同，当前一种跟踪场景中的方法不容易适应另一种。
+尽管 UniTrack [45]
+证明了具有多个头部的共享外观模型可用于处理单个跟踪任务，但它未能利用大规模跟踪数据集进行训练，并且在单个对象跟踪上表现不佳。
+在这项工作中，我们提出了统一transformer跟踪器 (Unified Transformer
+Tracker)，以使用一种范式解决不同场景中的跟踪问题。 在我们的 UTT
+中开发了一个跟踪转换器（track transformer）来跟踪 SOT 和 MOT
+中的目标，其中利用目标特征和跟踪框架特征之间的相关性来定位目标。
+我们证明了 SOT 和 MOT
+任务都可以在这个框架内解决，并且可以通过交替优化单个任务数据集上的 SOT
+和 MOT 目标来同时对模型进行端到端训练。 在 SOT 和 MOT
+数据集上训练的统一模型在多个基准上进行了广泛的实验。</p>
+<h3 id="方法与总结">1.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831102300539.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831102300539">
+<figcaption aria-hidden="true">image-20220831102300539</figcaption>
+</figure>
 <p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>前向传播流程：</strong></p>
-<p>给定参考帧图像和目标的bbox（对应SOT参考帧为第1帧，MOT参考帧为当前帧的前一帧），首先经过一个共享权重的特征提取网络，得到参考帧和当前帧的特征图$\mathbf{R, S<em>t}$。然后在参考帧特征图的目标所在区域进行ROI 1x1 池化,的到目标向量当做Query, $Q=F</em>{origin} \in \mathbb{R}^{N \times C}$, $N$为待跟踪目标数，$C$为特征嵌入的维度。同时当前帧展平后的特征图（$HW$个特征向量）作为Key和Value，进行Transformer交叉注意力的运算，得到融合空间信息（本身的Query可理解为提取了目标的外观特征）的目标特征嵌入$F<em>o$。之后增强后的目标特征嵌入$F_o$与当前帧的特征进行相关注意力的计算并根据相关注意力的相应度提取候选区域$S</em>{RoI}^{t}$。最后嵌入特征再经过L层自注意力融合，然后再与候选区域$S_{RoI}^{t}$计算相关注意力，最后增强后的特征$F’_o$送入bbox 回归head得到跟踪结果。PS：这里的L层注意力都会输出一次bbox的预测结果，当前层的预测结果为后面层提供候选区域。</p>
+<p>给定参考帧图像和目标的bbox（对应SOT参考帧为第1帧，MOT参考帧为当前帧的前一帧），首先经过一个共享权重的特征提取网络，得到参考帧和当前帧的特征图
+<span class="math inline">\(\mathbf{R,S_t}\)</span>
+。然后在参考帧特征图的目标所在区域进行ROI 1x1
+池化,的到目标向量当做Query, <span class="math inline">\(Q=F_{origin} \in
+\mathbb{R}^{N \times C}\)</span>, <span class="math inline">\(N\)</span>为待跟踪目标数，<span class="math inline">\(C\)</span>为特征嵌入的维度。同时当前帧展平后的特征图（<span class="math inline">\(HW\)</span>个特征向量）作为Key和Value，进行Transformer交叉注意力的运算，得到融合空间信息（本身的Query可理解为提取了目标的外观特征）的目标特征嵌入<span class="math inline">\(F_o\)</span>。之后增强后的目标特征嵌入<span class="math inline">\(F_o\)</span>与当前帧的特征进行相关注意力的计算并根据相关注意力的相应度提取候选区域<span class="math inline">\(S_{RoI}^{t}\)</span>。最后嵌入特征再经过L层自注意力融合，然后再与候选区域<span class="math inline">\(S_{RoI}^{t}\)</span>计算相关注意力，最后增强后的特征<span class="math inline">\(F'_o\)</span>送入bbox
+回归head得到跟踪结果。PS：这里的L层注意力都会输出一次bbox的预测结果，当前层的预测结果为后面层提供候选区域。</p>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>这篇论文将Siamese + Transformer结构较好的结合了起来，通过给定参考帧特征和bbox位置，提取待跟踪目标特征嵌入，之后结合当前帧特征图，融合目标上下文信息。之后增强后的特征嵌入与当前帧特征进行相关滤波提取目标潜在候选区域，减少了后续Transformer交叉注意力（文中为进一步减少计算量，改进为相关注意力）的计算量。最后多层级精细化预测的bbox预测方法，也能较好修正预测结果，每层都有相应的监督信息，模型更好收敛。</p>
+<p>这篇论文将Siamese +
+Transformer结构较好的结合了起来，通过给定参考帧特征和bbox位置，提取待跟踪目标特征嵌入，之后结合当前帧特征图，融合目标上下文信息。之后增强后的特征嵌入与当前帧特征进行相关滤波提取目标潜在候选区域，减少了后续Transformer交叉注意力（文中为进一步减少计算量，改进为相关注意力）的计算量。最后多层级精细化预测的bbox预测方法，也能较好修正预测结果，每层都有相应的监督信息，模型更好收敛。</p>
 <p>不足的是，这篇论文提出的融合SOT和MOT，但是其在跟踪多个目标时，无法独立解决新目标出现的问题，还需融入一个目标检测模块去更新新出现的目标，造成较大的时延。</p>
-<h2 id="2-MeMOT-Multi-Object-Tracking-with-Memory（CVPR-2022-Oral）"><a href="#2-MeMOT-Multi-Object-Tracking-with-Memory（CVPR-2022-Oral）" class="headerlink" title="2. MeMOT: Multi-Object Tracking with Memory（CVPR 2022 Oral）"></a>2. MeMOT: Multi-Object Tracking with Memory（CVPR 2022 Oral）</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> </p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831162305234.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831162305234"></p>
-<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.16761">https://arxiv.org/abs/2203.16761</a></p>
-<h3 id="2-1-摘要"><a href="#2-1-摘要" class="headerlink" title="2.1 摘要"></a>2.1 摘要</h3><p>我们提出了一种在线跟踪算法，该算法在一个通用框架下执行<strong>目标检测和数据关联</strong>，能够在很长一段时间后关联目标。 这是通过保留一个大的时空内存来存储被跟踪目标的身份嵌入，并根据需要自适应地引用和聚合来自内存的有用信息来实现的。 我们的模型称为 MeMOT，由三个主要模块组成，它们都是基于 Transformer 的：1）Hypothesis Generation，在当前视频帧中生成目标提议； 2) Memory Encoding，从内存中提取每个被跟踪目标的核心（主要是外观）信息； 3) Memory Decoding，同时解决多目标跟踪的目标检测和数据关联任务。 在广泛采用的 MOT 基准数据集上进行评估时， 观察到MeMOT达到具有竞争力的跟踪性能。</p>
-<h3 id="2-2-方法与总结"><a href="#2-2-方法与总结" class="headerlink" title="2.2 方法与总结"></a>2.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831162857555.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831162857555"></p>
+<h2 id="memot-multi-object-tracking-with-memorycvpr-2022-oral">2. MeMOT:
+Multi-Object Tracking with Memory（CVPR 2022 Oral）</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831162305234.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831162305234">
+<figcaption aria-hidden="true">image-20220831162305234</figcaption>
+</figure>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2203.16761</p>
+<h3 id="摘要-1">2.1 摘要</h3>
+<p>我们提出了一种在线跟踪算法，该算法在一个通用框架下执行<strong>目标检测和数据关联</strong>，能够在很长一段时间后关联目标。
+这是通过保留一个大的时空内存来存储被跟踪目标的身份嵌入，并根据需要自适应地引用和聚合来自内存的有用信息来实现的。
+我们的模型称为 MeMOT，由三个主要模块组成，它们都是基于 Transformer
+的：1）Hypothesis Generation，在当前视频帧中生成目标提议； 2) Memory
+Encoding，从内存中提取每个被跟踪目标的核心（主要是外观）信息； 3) Memory
+Decoding，同时解决多目标跟踪的目标检测和数据关联任务。 在广泛采用的 MOT
+基准数据集上进行评估时， 观察到MeMOT达到具有竞争力的跟踪性能。</p>
+<h3 id="方法与总结-1">2.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831162857555.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831162857555">
+<figcaption aria-hidden="true">image-20220831162857555</figcaption>
+</figure>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>论文的亮点在于在一个模型框架实现了目标检测与数据关联（跟踪），而不需要额外的匈牙利匹配算法，且能够完成长时丢失目标找回。具体实现是在跟踪过程中维持一个较大的目标外观特征嵌入表（300 x 24, 主要就是外观特征吧，虽然有Transformer的位置编码，但是还是缺少显式的目标前帧位置信息，或许可以再添加一个buffer？）,各自目标的嵌入表进行长短期嵌入的特征聚合（交叉注意力+自注意力，具体看论文Fig 3），以此得到待跟踪目标的特征嵌入并作为跟踪查询$Q<em>{trk}$，同时基于Transformer检测器的范式，也会在当前帧生成检测查询$Q</em>{det}$，之后这两个查询concat起来以当前帧的编码后特征$E^t$作为K，V进行解码，最后查询特征在经过一个预测头得到各自查询条目（对应检测目标or跟踪目标）的可见度，唯一性以及bbox。后续匹配就是根据可见度和唯一性的乘积大小阈值化处理，不存在检测与跟踪双端匹配的问题。</p>
-<p>PS：模型唯一性输出大小影响着最后跟踪的性能，论文中查询条目唯一性是指这个是否是新目标的概率，在设置唯一性标签时，跟踪查询$Q<em>{trk}$中条目的唯一性为1、检测查询$Q</em>{det}$中条目只有之前未被跟踪时（新进入场景的目标）其唯一性标签才为1。然后当条目分配到背景时（基于Transformer的目标检测都有一个双端匹配，看条目是匹配到目标还是背景），其唯一性标签为1，但是可见度标签为0。</p>
+<p>论文的亮点在于在一个模型框架实现了目标检测与数据关联（跟踪），而不需要额外的匈牙利匹配算法，且能够完成长时丢失目标找回。具体实现是在跟踪过程中维持一个较大的目标外观特征嵌入表（300
+x 24,
+主要就是外观特征吧，虽然有Transformer的位置编码，但是还是缺少显式的目标前帧位置信息，或许可以再添加一个buffer？）,各自目标的嵌入表进行长短期嵌入的特征聚合（交叉注意力+自注意力，具体看论文Fig
+3），以此得到待跟踪目标的特征嵌入并作为跟踪查询<span class="math inline">\(Q_{trk}\)</span>，同时基于Transformer检测器的范式，也会在当前帧生成检测查询<span class="math inline">\(Q_{det}\)</span>，之后这两个查询concat起来以当前帧的编码后特征<span class="math inline">\(E^t\)</span>作为K，V进行解码，最后查询特征在经过一个预测头得到各自查询条目（对应检测目标or跟踪目标）的可见度，唯一性以及bbox。后续匹配就是根据可见度和唯一性的乘积大小阈值化处理，不存在检测与跟踪双端匹配的问题。</p>
+<p>PS：模型唯一性输出大小影响着最后跟踪的性能，论文中查询条目唯一性是指这个是否是新目标的概率，在设置唯一性标签时，跟踪查询<span class="math inline">\(Q_{trk}\)</span>中条目的唯一性为1、检测查询<span class="math inline">\(Q_{det}\)</span>中条目只有之前未被跟踪时（新进入场景的目标）其唯一性标签才为1。然后当条目分配到背景时（基于Transformer的目标检测都有一个双端匹配，看条目是匹配到目标还是背景），其唯一性标签为1，但是可见度标签为0。</p>
 <p>所思，感觉这种基于Transformer进行目标特征（外观或者位置）聚合的方式获取特征向量进行跟踪目标的找回特别适合soccerNet和DanceTrack这种人物进入和离开场景较少的数据集，感觉可以尝试发力。</p>
-<h2 id="3-TransTrack-Multiple-Object-Tracking-with-Transformer"><a href="#3-TransTrack-Multiple-Object-Tracking-with-Transformer" class="headerlink" title="3. TransTrack: Multiple Object Tracking with Transformer"></a>3. TransTrack: Multiple Object Tracking with Transformer</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> </p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831215354450.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831215354450"></p>
-<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2012.15460">https://arxiv.org/abs/2012.15460</a></p>
+<h2 id="transtrack-multiple-object-tracking-with-transformer">3.
+TransTrack: Multiple Object Tracking with Transformer</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831215354450.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831215354450">
+<figcaption aria-hidden="true">image-20220831215354450</figcaption>
+</figure>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2012.15460</p>
 <p><span class="github-emoji"><span>🍃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f343.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> github: https: //github.com/PeizeSun/TransTrack</p>
-<h3 id="3-1-摘要"><a href="#3-1-摘要" class="headerlink" title="3.1 摘要"></a>3.1 摘要</h3><p>在这篇工作中，我们提出了 TransTrack，这是一个简单有效解决多目标跟踪问题的方案。 TransTrack 利用了Transformer架构，这是一种基于注意力的查询键机制（Query-Key）。 它应用前一帧的目标特征作为当前帧的查询，并引入一组可学习的目标查询（learnable object query）以检测新来的目标。 它通过一次前向传播完成目标检测和目标关联，建立了一种新颖的联合检测和跟踪范式，简化了检测跟踪方法中复杂的多步骤设置。 在 MOT17 和 MOT20 基准上，TransTrack 分别实现了 74.5% 和 64.5% 的 MOTA，达到了与SOTA可竞争的性能。 我们希望 TransTrack 能够为多目标跟踪提供一个新颖的视角。 本篇工作的代码位于：<a target="_blank" rel="noopener" href="https://github.com/PeizeSun/TransTrack。">https://github.com/PeizeSun/TransTrack。</a></p>
-<h3 id="3-2-方法与总结"><a href="#3-2-方法与总结" class="headerlink" title="3.2 方法与总结"></a>3.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831221548727.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831221548727"></p>
+<h3 id="摘要-2">3.1 摘要</h3>
+<p>在这篇工作中，我们提出了
+TransTrack，这是一个简单有效解决多目标跟踪问题的方案。 TransTrack
+利用了Transformer架构，这是一种基于注意力的查询键机制（Query-Key）。
+它应用前一帧的目标特征作为当前帧的查询，并引入一组可学习的目标查询（learnable
+object query）以检测新来的目标。
+它通过一次前向传播完成目标检测和目标关联，建立了一种新颖的联合检测和跟踪范式，简化了检测跟踪方法中复杂的多步骤设置。
+在 MOT17 和 MOT20 基准上，TransTrack 分别实现了 74.5% 和 64.5% 的
+MOTA，达到了与SOTA可竞争的性能。 我们希望 TransTrack
+能够为多目标跟踪提供一个新颖的视角。
+本篇工作的代码位于：https://github.com/PeizeSun/TransTrack。</p>
+<h3 id="方法与总结-2">3.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220831221548727.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220831221548727">
+<figcaption aria-hidden="true">image-20220831221548727</figcaption>
+</figure>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>这篇工作应该是最早将Transformer引入MOT领域的吧，实现思路也比较简单直接，就是使用两组query，一组检测query（来自于可学习的一组参数，依照DETR设定），另一组跟踪query（来自于之前检测query并经过了交叉注意力加权）。然后分别得到检测框、跟踪框，最后再对两组框进行匹配，达到滤除重复框的作用。这样来看上面两篇工作都是对其的改进，第一篇Unified tracking改进了搜索特征精细化提取的方式（不用在整张图上进行查询），并精简化了交叉注意力机制，改为了相关注意力；第二篇则是主要聚焦于如何得到鲁棒的轨迹（以及跟踪上的目标一般叫做轨迹）特征，以此设计了一个buffer去聚合轨迹长时间的特征，以期实现鲁棒跟踪。</p>
-<p>比较喜欢其中一句话：将检测器编程跟踪器只需要加运动模型（KF）或者夹外观模型（ReID）（Two commonly used signals to upgrade a detector to a tracker are motion and appearance features.）</p>
+<p>这篇工作应该是最早将Transformer引入MOT领域的吧，实现思路也比较简单直接，就是使用两组query，一组检测query（来自于可学习的一组参数，依照DETR设定），另一组跟踪query（来自于之前检测query并经过了交叉注意力加权）。然后分别得到检测框、跟踪框，最后再对两组框进行匹配，达到滤除重复框的作用。这样来看上面两篇工作都是对其的改进，第一篇Unified
+tracking改进了搜索特征精细化提取的方式（不用在整张图上进行查询），并精简化了交叉注意力机制，改为了相关注意力；第二篇则是主要聚焦于如何得到鲁棒的轨迹（以及跟踪上的目标一般叫做轨迹）特征，以此设计了一个buffer去聚合轨迹长时间的特征，以期实现鲁棒跟踪。</p>
+<p>比较喜欢其中一句话：将检测器编程跟踪器只需要加运动模型（KF）或者夹外观模型（ReID）（Two
+commonly used signals to upgrade a detector to a tracker are motion and
+appearance features.）</p>
 <p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 论文还顺带证明了几个观点：</p>
 <ul>
 <li>大训练数据集对模型效果提升显著，同时混合大数据集进行微调，比单独微调效果要好；</li>
-<li>直接适用FPN的特征，比用ResNet + 普通Transformer Encoder之后特征要好不少，但是比不上Deformable Encoder之后的特征；</li>
+<li>直接适用FPN的特征，比用ResNet + 普通Transformer
+Encoder之后特征要好不少，但是比不上Deformable Encoder之后的特征；</li>
 </ul>
-<p>有一点不是很明白，就是文章为什么没有将后续的两个单独但是相同结构的解码器合并成一个呢？把两组query 拼接起来送入一个解码器也可以目标检测与匹配呀？文章最后也没有进行消融实验或是说明原因。</p>
+<p>有一点不是很明白，就是文章为什么没有将后续的两个单独但是相同结构的解码器合并成一个呢？把两组query
+拼接起来送入一个解码器也可以目标检测与匹配呀？文章最后也没有进行消融实验或是说明原因。</p>
 <blockquote>
-<p>刚发现原因，因为在文章中object query 和 track query 需要单独自注意力编码，如果合在一起就容易两者特征融合在一起了（但是貌似用mask也能实现特征屏蔽呀。）</p>
+<p>刚发现原因，因为在文章中object query 和 track query
+需要单独自注意力编码，如果合在一起就容易两者特征融合在一起了（但是貌似用mask也能实现特征屏蔽呀。）</p>
 </blockquote>
-<h2 id="4-TransCenter-Transformers-with-Dense-Representations-for-Multiple-Object-Tracking"><a href="#4-TransCenter-Transformers-with-Dense-Representations-for-Multiple-Object-Tracking" class="headerlink" title="4. TransCenter: Transformers with Dense Representations for Multiple-Object Tracking"></a>4. TransCenter: Transformers with Dense Representations for Multiple-Object Tracking</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> </p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220907142132229.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220907142132229"></h2><p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.15145">https://arxiv.org/abs/2103.15145</a></p>
-<h3 id="4-1-摘要"><a href="#4-1-摘要" class="headerlink" title="4.1 摘要"></a>4.1 摘要</h3><p>自推出以来，Transformer 已在各种任务中证明了卓越的性能，近年来引起了视觉界的关注，在这些领域进行了图像分类和目标检测等工作。尽管有这一波浪潮，但使用 Transformer 构建准确高效的多目标跟踪 (MOT) 方法并非易事。我们认为，直接应用具有二次复杂性和噪声初始化稀疏查询不足的（基础）Transformer架构对于 MOT 来说不是最优的。受最近研究的启发，我们提出了 TransCenter，这是一种基于Transformer的 MOT 架构，具有密集表示，用于准确跟踪所有目标，同时保持合理的运行时间。在方法论上，我们建议使用由高效Transformer（PVT）架构产生的密集图像相关的多尺度检测查询。查询允许从密集的热图输出中全局且稳健地推断目标的位置。同时，一组高效的稀疏跟踪查询与 TransCenter 解码器中的图像特征交互，以随时间关联对象位置。 TransCenter 在具有两个跟踪（公共/私有）设置的两个标准 MOT 基准测试中表现出显着的性能改进并大大优于当前最先进的基准。所提出的用于 MOT 的高效且准确的变压器架构已通过广泛的消融研究得到证明，与更幼稚的替代方案和并行工作相比，证明了它的优势。代码将在 <a target="_blank" rel="noopener" href="https://github.com/yihongxu/transcenter">https://github.com/yihongxu/transcenter</a> 上公开（只有一个README）。</p>
-<h3 id="4-2-方法与总结"><a href="#4-2-方法与总结" class="headerlink" title="4.2 方法与总结"></a>4.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220907144056412.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220907144056412"></p>
+<h2 id="transcenter-transformers-with-dense-representations-for-multiple-object-tracking">4.
+TransCenter: Transformers with Dense Representations for Multiple-Object
+Tracking</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong></p>
+<h2 id="image-20220907142132229"><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220907142132229.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220907142132229"></h2>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2103.15145</p>
+<h3 id="摘要-3">4.1 摘要</h3>
+<p>自推出以来，Transformer
+已在各种任务中证明了卓越的性能，近年来引起了视觉界的关注，在这些领域进行了图像分类和目标检测等工作。尽管有这一波浪潮，但使用
+Transformer 构建准确高效的多目标跟踪 (MOT)
+方法并非易事。我们认为，直接应用具有二次复杂性和噪声初始化稀疏查询不足的（基础）Transformer架构对于
+MOT 来说不是最优的。受最近研究的启发，我们提出了
+TransCenter，这是一种基于Transformer的 MOT
+架构，具有密集表示，用于准确跟踪所有目标，同时保持合理的运行时间。在方法论上，我们建议使用由高效Transformer（PVT）架构产生的密集图像相关的多尺度检测查询。查询允许从密集的热图输出中全局且稳健地推断目标的位置。同时，一组高效的稀疏跟踪查询与
+TransCenter 解码器中的图像特征交互，以随时间关联对象位置。 TransCenter
+在具有两个跟踪（公共/私有）设置的两个标准 MOT
+基准测试中表现出显着的性能改进并大大优于当前最先进的基准。所提出的用于
+MOT
+的高效且准确的变压器架构已通过广泛的消融研究得到证明，与更幼稚的替代方案和并行工作相比，证明了它的优势。代码将在
+https://github.com/yihongxu/transcenter 上公开（只有一个README）。</p>
+<h3 id="方法与总结-3">4.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220907144056412.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220907144056412">
+<figcaption aria-hidden="true">image-20220907144056412</figcaption>
+</figure>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>我感觉这篇文章的两点在于描述了如何在Transformer中融入多尺度检测，至于提出的将原始DETR系列延续下来的可学习的检测查询（learnable detection query）替换成所谓“密集表示的detection query”其本质就是特征图经过连接层之后的特征表示，况且为了算法性能与效率的平衡也舍弃了查询与键值的交互，遂感觉这个密集查询有点儿“不正规”。在“检测密集查询”的多尺度特征融合方面采用上采样、拼接、卷积的模式，然后基于此预测Heatmaps和宽高；跟踪查询是常规的Transformer范式：前一帧特征嵌入与当前帧特征图交互，然后FFN预测输出，不过本篇文章回归的是待跟踪目标的中心坐标偏置，而不是单独的bbox。最后论文的方法比较和消融实验做得特别详细，不同训练数据集、私有还是公共检测器以及各种模块组合搭配的消融实验都有。</p>
+<p>我感觉这篇文章的两点在于描述了如何在Transformer中融入多尺度检测，至于提出的将原始DETR系列延续下来的可学习的检测查询（learnable
+detection query）替换成所谓“密集表示的detection
+query”其本质就是特征图经过连接层之后的特征表示，况且为了算法性能与效率的平衡也舍弃了查询与键值的交互，遂感觉这个密集查询有点儿“不正规”。在“检测密集查询”的多尺度特征融合方面采用上采样、拼接、卷积的模式，然后基于此预测Heatmaps和宽高；跟踪查询是常规的Transformer范式：前一帧特征嵌入与当前帧特征图交互，然后FFN预测输出，不过本篇文章回归的是待跟踪目标的中心坐标偏置，而不是单独的bbox。最后论文的方法比较和消融实验做得特别详细，不同训练数据集、私有还是公共检测器以及各种模块组合搭配的消融实验都有。</p>
 <p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>有用的观点：</p>
 <ul>
-<li>之前使用ResNet50提取初级特征，然后在融合Transformer Encoder的方式并没有直接使用图像Patch进行编码的PVT系列提取的特征有效，且前者更耗时。</li>
+<li>之前使用ResNet50提取初级特征，然后在融合Transformer
+Encoder的方式并没有直接使用图像Patch进行编码的PVT系列提取的特征有效，且前者更耗时。</li>
 </ul>
-<h2 id="5-TransMOT-Spatial-Temporal-Graph-Transformer-for-Multiple-Object-Tracking"><a href="#5-TransMOT-Spatial-Temporal-Graph-Transformer-for-Multiple-Object-Tracking" class="headerlink" title="5.TransMOT: Spatial-Temporal Graph Transformer for Multiple Object Tracking"></a>5.TransMOT: Spatial-Temporal Graph Transformer for Multiple Object Tracking</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> </p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220911093629577.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220911093629577"></p>
-<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2104.00194">https://arxiv.org/abs/2104.00194</a></p>
-<h3 id="5-1-摘要"><a href="#5-1-摘要" class="headerlink" title="5.1 摘要"></a>5.1 摘要</h3><p>跟踪视频中的多个目标依赖于对目标的时空交互进行建模（文章聚焦于轨迹和检测之间的亲和度矩阵）。在本文中，我们提出了一种名为 TransMOT 的解决方案，它利用强大的基于图的Transformer来有效地模拟目标之间的空间和时间交互。 TransMOT 通过将跟踪目标的轨迹安排为一组稀疏加权图，并构建空间图transformer编码器层、时间transformer编码器层和空间图transformer解码器层，从而有效地对大量物体的交互进行建模。在图表上。 TransMOT 不仅比传统的 Transformer 计算效率更高，而且还实现了更好的跟踪精度。为了进一步提高跟踪速度和准确性，我们提出了一个级联关联框架来处理需要大量计算资源在 TransMOT 中建模的低分检测和长期遮挡。所提出的方法在包括 MOT15、MOT16、MOT17 和 MOT20 在内的多个基准数据集上进行了评估，并在所有数据集上实现了最先进的性能。</p>
-<h3 id="5-2-方法与总结"><a href="#5-2-方法与总结" class="headerlink" title="5.2 方法与总结"></a>5.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220911094721534.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220911094721534"></p>
+<h2 id="transmot-spatial-temporal-graph-transformer-for-multiple-object-tracking">5.TransMOT:
+Spatial-Temporal Graph Transformer for Multiple Object Tracking</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220911093629577.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220911093629577">
+<figcaption aria-hidden="true">image-20220911093629577</figcaption>
+</figure>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv: https://arxiv.org/abs/2104.00194</p>
+<h3 id="摘要-4">5.1 摘要</h3>
+<p>跟踪视频中的多个目标依赖于对目标的时空交互进行建模（文章聚焦于轨迹和检测之间的亲和度矩阵）。在本文中，我们提出了一种名为
+TransMOT
+的解决方案，它利用强大的基于图的Transformer来有效地模拟目标之间的空间和时间交互。
+TransMOT
+通过将跟踪目标的轨迹安排为一组稀疏加权图，并构建空间图transformer编码器层、时间transformer编码器层和空间图transformer解码器层，从而有效地对大量物体的交互进行建模。在性能对比上，
+TransMOT 不仅比传统的 Transformer
+计算效率更高，而且还实现了更好的跟踪精度。为了进一步提高跟踪速度和准确性，我们提出了一个级联关联框架来处理需要大量计算资源在
+TransMOT 中建模的低分检测和长期遮挡。所提出的方法在包括
+MOT15、MOT16、MOT17 和 MOT20
+在内的多个基准数据集上进行了评估，并在所有数据集上实现了最先进的性能。</p>
+<h3 id="方法与总结-4">5.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220911094721534.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220911094721534">
+<figcaption aria-hidden="true">image-20220911094721534</figcaption>
+</figure>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>文章依据之前多帧的轨迹信息，构建了多个以边界框IoU为邻接关系和邻接权重，以嵌入后的外观特征（+位置特征，这里不清楚加没加位置特征）为节点特征的图结构。然后基于这些关系图，在单帧维度上聚合轨迹的空间信息，在单个轨迹（T帧）维度上聚合轨迹的时间线索。对于当前帧检测候选目标，仍构建关系图，聚合空间线索。然后编码后的检测候选目标特征复制N份（N为之前带匹配的轨迹个数），用作“Query”查询，与编码后轨迹特征计算交叉注意力，最后得到MxN的关联矩阵。此外为了应对轨迹消失或者新轨迹生成，文章还在之前多帧和当前帧各添加了一个虚拟节点，当前帧的虚拟节点可连接多个之前轨迹节点，表示轨迹消失（或被遮挡）；之前帧的虚拟节点，也可以连接多个当前帧检测节点，表示新轨迹生成。最后文章还提出了级联匹配的策略，用KF加IoU匹配滤除掉置信度的框，以缓解transformer计算过大的问题；同时结合轨迹最后出现的位置和外观特征，利用所提的正则化的顶距离和欧拉距离处理长时遮挡。</p>
+<p>文章依据之前多帧的轨迹信息，构建了多个以边界框IoU为邻接关系和邻接权重，以嵌入后的外观特征（+位置特征，这里不清楚加没加位置特征）为节点特征的图结构。然后基于这些关系图，在单帧维度上聚合轨迹的空间信息，在单个轨迹（T帧）维度上聚合轨迹的时间线索。对于当前帧检测候选目标，仍构建关系图，聚合空间线索。然后编码后的检测候选目标特征复制N份（N为之前带匹配的轨迹个数），用作“Query”查询，与编码后轨迹特征计算交叉注意力，最后得到MxN的关联矩阵。此外为了应对轨迹消失或者新轨迹生成，文章还在之前多帧和当前帧各添加了一个虚拟节点，当前帧的虚拟节点可连接多个之前轨迹节点，表示轨迹消失（或被遮挡）；之前帧的虚拟节点，也可以连接多个当前帧检测节点，表示新轨迹生成。最后文章还提出了级联匹配的策略，用KF预测结果加IoU匹配滤除掉低置信度的框，以缓解transformer计算过大的问题；同时结合轨迹最后出现的位置和外观特征，利用所提的正则化的顶距离（normalized
+top distance）和欧拉距离处理长时遮挡。</p>
 <p>这篇文章主要工作在于利用transformer和图结构的时空建模能力去构建轨迹与检测的亲和度矩阵，利用IoU构建邻接网络的思路值得借鉴，能够较好的减少自注意力机制的计算量。最后的疑惑是文章在节点特征的选取以及某些轨迹在之前的某一帧缺失时如何补偿的问题没有详细说明。</p>
-<h2 id="6-TrackFormer-Multi-Object-Tracking-with-Transformers"><a href="#6-TrackFormer-Multi-Object-Tracking-with-Transformers" class="headerlink" title="6. TrackFormer: Multi-Object Tracking with Transformers"></a>6. TrackFormer: Multi-Object Tracking with Transformers</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> </p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220914195000699.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220914195000699"></p>
-<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv:<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2101.02702">https://arxiv.org/abs/2101.02702</a></p>
-<p><span class="github-emoji"><span>🍃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f343.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> github: <a target="_blank" rel="noopener" href="https://github.com/timmeinhardt/trackformer">https://github.com/timmeinhardt/trackformer</a></p>
-<h3 id="6-1-摘要"><a href="#6-1-摘要" class="headerlink" title="6.1  摘要"></a>6.1  摘要</h3><p>多目标跟踪 (MOT) 任务的挑战性在于需要同时完成跟踪初始化、身份匹配和时空轨迹关联。我们将此任务表述为帧到帧集合预测（set prediction）问题，并引入 TrackFormer，这是一种基于编码器-解码器 Transformer 架构的可端到端训练 MOT 方法。我们的模型通过基于视频序列的集合轨迹预测的注意力实现帧间数据关联。 Transformer 解码器从静态目标查询（object query）初始化新轨道，提出一个新的带有目标身份信息的“轨迹查询（track query ）”用于在空间和时间上自回归地跟踪已有轨迹。这两种查询类型都受益于自注意力和编码器-解码器（交叉注意力）对全局帧级特征的交互，从而省去了任何额外的图优化、运动或外观建模。 TrackFormer 引入了一种新的注意力跟踪范式，虽然其设计简单，但能够在多目标跟踪（MOT17 和 MOT20）和分割（MOTS20）任务上实现最先进的性能。该代码可在 <a target="_blank" rel="noopener" href="https://github.com/timmeinhardt/trackformer">https://github.com/timmeinhardt/trackformer</a> 获取。</p>
-<h3 id="6-2-方法与总结"><a href="#6-2-方法与总结" class="headerlink" title="6.2 方法与总结"></a>6.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220914203831332.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220914203831332"></p>
+<h2 id="trackformer-multi-object-tracking-with-transformers">6.
+TrackFormer: Multi-Object Tracking with Transformers</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220914195000699.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220914195000699">
+<figcaption aria-hidden="true">image-20220914195000699</figcaption>
+</figure>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv:https://arxiv.org/abs/2101.02702</p>
+<p><span class="github-emoji"><span>🍃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f343.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> github: https://github.com/timmeinhardt/trackformer</p>
+<h3 id="摘要-5">6.1 摘要</h3>
+<p>多目标跟踪 (MOT)
+任务的挑战性在于需要同时完成跟踪初始化、身份匹配和时空轨迹关联。我们将此任务表述为帧到帧集合预测（set
+prediction）问题，并引入 TrackFormer，这是一种基于编码器-解码器
+Transformer 架构的可端到端训练 MOT
+方法。我们的模型通过基于视频序列的集合轨迹预测的注意力实现帧间数据关联。
+Transformer 解码器从静态目标查询（object
+query）初始化新轨道，提出一个新的带有目标身份信息的“轨迹查询（track
+query
+）”用于在空间和时间上自回归地跟踪已有轨迹。这两种查询类型都受益于自注意力和编码器-解码器（交叉注意力）对全局帧级特征的交互，从而省去了任何额外的图优化、运动或外观建模。
+TrackFormer
+引入了一种新的注意力跟踪范式，虽然其设计简单，但能够在多目标跟踪（MOT17
+和 MOT20）和分割（MOTS20）任务上实现最先进的性能。该代码可在
+https://github.com/timmeinhardt/trackformer 获取。</p>
+<h3 id="方法与总结-5">6.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220914203831332.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220914203831332">
+<figcaption aria-hidden="true">image-20220914203831332</figcaption>
+</figure>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>我感觉这篇文章读起来好拗口呀，以为它是第一篇基于transformer的MOT，但是从arXiv上面的时间来看也没有Transtrack这篇文章出来的早（20年12月和21年1月），不过也算同时期的工作吧。文章的主要做法也是和TransTrack相似的：在传统DETR检测器的“object query”的基础上增加了“track query”（这个query来自上一帧经过交叉注意力交互之后的object query），同样对所有query进行解码，然后回归每个查询对应的bbox和class。两者的不同在于，transtrack对两种不同的query单独解码预测回归，而本篇文章会将两种类型的query拼接起来，进行自注意力交互。因此在transtrack中主要是想通过更多的query来实现跟踪的查全率，而这篇文章则更想明确两种不同query的分工，object query只用负责检测新出现的目标就好了，跟踪的任务交给track query,所以本篇文章在GT框分配时，优先分配（目前在当前帧仍存在）给track query预测的bbox。这个应该就是两篇文章思路上的不同了。</p>
+<p>我感觉这篇文章读起来好拗口呀，以为它是第一篇基于transformer的MOT，但是从arXiv上面的时间来看也没有Transtrack这篇文章出来的早（20年12月和21年1月），不过也算同时期的工作吧。文章的主要做法也是和TransTrack相似的：在传统DETR检测器的“object
+query”的基础上增加了“track
+query”（这个query来自上一帧经过交叉注意力交互之后的object
+query），同样对所有query进行解码，然后回归每个查询对应的bbox和class。两者的不同在于，transtrack对两种不同的query单独解码预测回归，而本篇文章会将两种类型的query拼接起来，进行自注意力交互。因此在transtrack中主要是想通过更多的query来实现跟踪的查全率，而这篇文章则更想明确两种不同query的分工，object
+query只用负责检测新出现的目标就好了，跟踪的任务交给track
+query,所以本篇文章在GT框分配时，优先分配（目前在当前帧仍存在）给track
+query预测的bbox。这个应该就是两篇文章思路上的不同了。</p>
 <p>最后就是文章使用的三种数据增强感觉挺有帮助的：</p>
 <ul>
 <li>不顺序采用邻近两帧图像进行训练，而是随机从前后邻近帧中选择两个图像组成训练对；</li>
-<li>为每次随机屏蔽一些track query（来自前一帧的前景objecy query）,这个操作可以减少对track query的依赖，从而保证检测和跟踪的平衡性。</li>
-<li>每次从预测为背景的object query中选择一些加入track query，用于改善模型在面对目标被遮挡时的轨迹误删除。</li>
+<li>为每次随机屏蔽一些track query（来自前一帧的前景objecy
+query）,这个操作可以减少对track
+query的依赖，从而保证检测和跟踪的平衡性。</li>
+<li>每次从预测为背景的object query中选择一些加入track
+query，用于改善模型在面对目标被遮挡时的轨迹误删除。</li>
 </ul>
-<h2 id="7-MOTR-End-to-End-Multiple-Object-Tracking-with-Transformer"><a href="#7-MOTR-End-to-End-Multiple-Object-Tracking-with-Transformer" class="headerlink" title="7. MOTR: End-to-End Multiple-Object Tracking with Transformer"></a>7. MOTR: End-to-End Multiple-Object Tracking with Transformer</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong> </p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220916200914128.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220916200914128"></p>
-<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv:<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2105.03247">https://arxiv.org/abs/2105.03247</a></p>
-<p><span class="github-emoji"><span>🍃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f343.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> github: <a target="_blank" rel="noopener" href="https://github.com/megvii-research/MOTR">https://github.com/megvii-research/MOTR</a></p>
-<h3 id="7-1-摘要"><a href="#7-1-摘要" class="headerlink" title="7.1 摘要"></a>7.1 摘要</h3><p>目标的时间建模是多目标跟踪 (MOT) 中的一个关键挑战。现有方法通过基于运动和基于外观相似性的启发式的关联检测来进行跟踪。关联的后处理特性阻止了对视频序列中时间变化的端到端利用。在本文中，我们提出了 MOTR，它扩展了 DETR [6]，并引入了“跟踪查询”（track query）来对整个视频中的跟踪实例进行建模。跟踪查询被逐帧传输和更新，以随着时间的推移执行迭代预测。我们建议使用 tracklet 感知标签（tracklet-aware label assignment）分配来训练跟踪查询(track query)和新生目标查询（object query）。我们进一步提出时间聚合网络（temporal aggregation networkl）和集体平均损失（collective average loss）来增强时间关系建模。 DanceTrack 上的实验结果表明，MOTR 在 HOTA 指标上显着优于最先进的方法 ByteTrack [42] 6.5%。在 MOT17 上，MOTR 在关联性能方面优于我们的同期工作 TrackFormer [18] 和 TransTrack [29]。 MOTR 可以作为未来时间建模和基于 Transformer 的跟踪器研究的更强大的基线。代码可在 <a target="_blank" rel="noopener" href="https://github.com/megvii-research/MOTR">https://github.com/megvii-research/MOTR</a> 获得。</p>
-<h3 id="7-2-方法与总结"><a href="#7-2-方法与总结" class="headerlink" title="7.2 方法与总结"></a>7.2 方法与总结</h3><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220916202136510.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220916202136510"></p>
+<h2 id="motr-end-to-end-multiple-object-tracking-with-transformer">7.
+MOTR: End-to-End Multiple-Object Tracking with Transformer</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>作者：</strong></p>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220916200914128.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220916200914128">
+<figcaption aria-hidden="true">image-20220916200914128</figcaption>
+</figure>
+<p><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> arXiv:https://arxiv.org/abs/2105.03247</p>
+<p><span class="github-emoji"><span>🍃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f343.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> github: https://github.com/megvii-research/MOTR</p>
+<h3 id="摘要-6">7.1 摘要</h3>
+<p>目标的时间建模是多目标跟踪 (MOT)
+中的一个关键挑战。现有方法通过基于运动和基于外观相似性的启发式的关联检测来进行跟踪。关联的后处理特性阻止了对视频序列中时间变化的端到端利用。在本文中，我们提出了
+MOTR，它扩展了 DETR [6]，并引入了“跟踪查询”（track
+query）来对整个视频中的跟踪实例进行建模。跟踪查询被逐帧传输和更新，以随着时间的推移执行迭代预测。我们建议使用
+tracklet 感知标签（tracklet-aware label
+assignment）分配来训练跟踪查询(track query)和新生目标查询（object
+query）。我们进一步提出时间聚合网络（temporal aggregation
+networkl）和集体平均损失（collective average loss）来增强时间关系建模。
+DanceTrack 上的实验结果表明，MOTR 在 HOTA 指标上显着优于最先进的方法
+ByteTrack [42] 6.5%。在 MOT17 上，MOTR 在关联性能方面优于我们的同期工作
+TrackFormer [18] 和 TransTrack [29]。 MOTR 可以作为未来时间建模和基于
+Transformer 的跟踪器研究的更强大的基线。代码可在
+https://github.com/megvii-research/MOTR 获得。</p>
+<h3 id="方法与总结-6">7.2 方法与总结</h3>
+<figure>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220916202136510.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220916202136510">
+<figcaption aria-hidden="true">image-20220916202136510</figcaption>
+</figure>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
-<p>这篇文章主要看重于目标跟踪的时序建模，也算是第一个将track query和object query 明确分工的工作。track query 负责从始至终预测前一帧的轨迹；object query 则只负责预测每帧相对于前帧新出现的目标（具体GT分配上就只给object query分配每帧新出现的带有新id的Bbox）。这样的一种指定方式能够保证其在DanceTrack这种人员基本不退出也不进入场景的目标带来极大的好处，只用管好之前帧的目标当前在哪儿就行。track query 同样是从前一帧的object query中传播过来，但还增加了一个时间特征聚合模块（就是将不同帧同id的目标的特征表示self-attention聚合一下，然后再用作track query）。因为取消了轨迹关联这一步，MOTR需要每次依据query预测的置信度分数进行目标的初始化和删除，此外在模型训练作者也使用了类似于TrackFormer的真轨迹删除和假轨迹添加的情况，增强模型的稳定性。</p>
+<p>这篇文章主要看重于目标跟踪的时序建模，也算是第一个将track
+query和object query 明确分工的工作。track query
+负责从始至终预测前一帧的轨迹；object query
+则只负责预测每帧相对于前帧新出现的目标（具体GT分配上就只给object
+query分配每帧新出现的带有新id的Bbox）。这样的一种指定方式能够保证其在DanceTrack这种人员基本不退出也不进入场景的目标带来极大的好处，只用管好之前帧的目标当前在哪儿就行。track
+query 同样是从前一帧的object
+query中传播过来，但还增加了一个时间特征聚合模块（就是将不同帧同id的目标的特征表示self-attention聚合一下，然后再用作track
+query）。因为取消了轨迹关联这一步，MOTR需要每次依据query预测的置信度分数进行目标的初始化和删除，此外在模型训练作者也使用了类似于TrackFormer的真轨迹删除和假轨迹添加的情况，增强模型的稳定性。</p>
 <blockquote>
-<p>不过最后作者也提到这种明确query分工的模式，与object query检测前景的设计初衷是相违背的，所以本文方法在MOTA指标上并不高，object query 被track query 抑制了。</p>
+<p>不过最后作者也提到这种明确query分工的模式，与object
+query检测前景的设计初衷是相违背的，所以本文方法在MOTA指标上并不高，object
+query 被track query 抑制了。</p>
 </blockquote>
 
             </div>
