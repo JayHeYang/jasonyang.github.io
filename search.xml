@@ -4,6 +4,64 @@
   
   
   <entry>
+    <title>论文总结-SportsMOT Track on Multi-actor Tracking, DeeperAction Challenge at ECCV 2022 获奖方案总结</title>
+    <link href="/jasonyang.github.io/2022/10/21/SportsMOT%20Track%20on%20Multi-actor%20Tracking,%20DeeperAction%20Challenge%20at%20ECCV%202022%20%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/"/>
+    <url>/jasonyang.github.io/2022/10/21/SportsMOT%20Track%20on%20Multi-actor%20Tracking,%20DeeperAction%20Challenge%20at%20ECCV%202022%20%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/</url>
+    
+    <content type="html"><![CDATA[<h1 id="sportsmot-track-on-multi-actor-tracking-deeperaction-challenge-at-eccv-2022-获奖方案总结">SportsMOTTrack on Multi-actor Tracking, DeeperAction Challenge at ECCV 2022获奖方案总结</h1><h2 id="st-sportstrack">1st SportsTrack</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>作者：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021164609553.png" alt="image-20221021164609553"><span class="github-emoji"><span>📘</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d8.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>论文链接：https://deeperaction.github.io/results/track3_1st.pdf</p><p><span class="github-emoji"><span>🍃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f343.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>实现代码：https://github.com/vghost2008/sportstrack</p><h3 id="方法与总结">1. 方法与总结</h3><p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>主要工作：</strong></p><ol type="1"><li>多级匹配：先所有检测框（高IoU限制），再高分框，再低分框；</li><li>判定待跟踪的目标是不是被遮挡了，如果是被遮挡的目标则可以让一个检测框对应多个被遮挡的目标，弥补检测器漏检；</li><li>对暂时丢失目标进行分类：从边缘丢失和在场景中间丢失。边缘丢失则从同方向，ReID特征相似的新的预备轨迹找回；中间丢失的轨迹通过Byte策略二次关联找回；</li><li>新的预备轨迹在高分框+未匹配的基础上还要与目前已匹配的检测框的IOU阈值小于0.5才行。防止新生成轨迹（基于根据序列的先验知识，目标基本不新增。</li></ol><p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> <strong>关联策略：</strong></p><ol type="1"><li><p>获取检测框（YOLOX），执行NMS，同时记录每帧出现重复检测框（IoU&gt; 0.7）次数（不知道用在哪儿？）</p></li><li><p>提取检测框的ReID特征</p></li><li><p>更新除了“从边缘暂时消失的轨迹”之外的所有轨迹的位置，KFprediction</p></li><li><p>处理从边缘暂时消失的轨迹，如果其最近30帧的ReID特征与最近初始化的短轨迹（不超过30帧）的ReID特征有3次及以上距离比较近（cosinedist &lt;0.2），且出现的方向与之前从边缘消失轨迹的方向一致，则认为是同一个轨迹，把这个轨迹赋予相同id（这样不就是相当于更改了跟踪结果了,不是在线的方法）</p></li><li><p>对于活跃的轨迹，先判断他们之间是否存在遮挡（IoU大于0.45），对应被遮挡的轨迹，直接从检测框中选取IoU高于0.6的检测框，存入其候选框</p></li><li><p>融合关键点距离+IOU距离+ReID距离对所有轨迹和所有检测框执行高阈值的匈牙利匹配;</p></li><li><p>未匹配的检测分为高分和低分框，同样融合之前几种距离度量，对高分框分两次进行阈值不同的匹配</p></li><li><p>低分框和未匹配轨迹融合三种距离度量进行较低阈值的匈牙利匹配</p></li><li><p>对于仍未匹配的轨迹，如果是遮挡轨迹，同时存在有候选框，则用候选框去更新轨迹位置</p></li><li><p>最后未匹配的轨迹分类从边缘暂时消失和从场景中暂时消失，并计算从边缘消失的轨迹的消失方向。</p></li><li><p>暂时消失的轨迹最多保留120帧</p></li><li><p>未匹配的高分框执行NMS，与之前已匹配的高分框的阈值高于0.45的进行移除</p></li><li><p>最后剩下的高分检测初始化为新目标。</p></li></ol><blockquote><p>用了单独的、较好的HRNET关键点检测网络（已在COCO上预训练）</p></blockquote><ol start="14" type="1"><li><p>模型后处理部分：</p><ol type="1"><li><p>先根据轨迹的ReID方差判定轨迹是不是稳定的轨迹段；</p></li><li><p>是稳定的轨迹段，则使用序列ReID相似度阈值超过一定数量的限制要求，超过一半以上轨迹段就说明两段轨迹相似，将轨迹合并；</p></li><li><p>轨迹（线性）插值与短轨迹删除；</p></li></ol></li></ol><h2 id="nd-a-technical-report-for-sportsmot-track-on-multi-actor-tracking">2ndA Technical Report for SportsMOT Track on Multi-actor Tracking</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>作者：</p><figure><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021164624333.png" alt="image-20221021164624333"><figcaption aria-hidden="true">image-20221021164624333</figcaption></figure><p><span class="github-emoji"><span>📘</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d8.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>论文链接：https://deeperaction.github.io/results/track3_2nd.pdf</p><h3 id="方法与总结-1">1. 方法与总结</h3><p>这篇文章感觉没有什么针对场景的trick，就是强大的检测器加上不同的匹配策略，针对不同的跟踪序列用了两个不同的检测器（篮球排球跟踪：Cascade-RCNN-S101；足球跟踪：ATSS-SwinL），以及两种不同的关联策略（DeepSORT和级联的OC-SORT），后处理就比较常规了：对于少于40帧的目标以及中间缺失帧少于10帧的轨迹段进行线性插值。直接看消融实验：</p><figure><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021172037755.png" alt="image-20221021172037755"><figcaption aria-hidden="true">image-20221021172037755</figcaption></figure><h2 id="rd-observation-centric-and-central-distance-recovery-on-sports-player-tracking">3rdObservation Centric and Central Distance Recovery on Sports PlayerTracking</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>作者：</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021164737403.png" alt="image-20221021164737403" style="zoom:50%;"></p><p><span class="github-emoji"><span>📘</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d8.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>论文链接：https://deeperaction.github.io/results/track3_3rd.pdf</p><h3 id="方法与总结-2">1. 方法与总结</h3><p>文章还是基于OC-SORT，在OC-SORT的<code>Observation-Centric Recovery</code>阶段将轨迹的最后一次观测与未匹配检测之间的度量方式从IoU变为了bbox欧氏距离<code>Central-distance Recovery</code>，防止最后一帧的观测与未匹配的检测之间IoU过小。</p><p>论文主要策略还是跟踪结果后处理方面，对于篮球运动员跟踪，限制跟踪的总轨迹数为10，当轨迹数达到10之后便仅通过检测目标与之前轨迹的id-embedding相似度进行关联合并；足球轨迹关联也是通过ReID特征的余弦距离进行缝合，且不同间隔时间对应不同的欧氏距离阈值，以及有不同的轮对应的关联阈值。</p><p>最后的消融结果：<code>The original OCSORT has a performance of 67.107 in HOTA, after the incorporation of central-distance recovery, the HOTA improves to 71.764. After the ReID post-processing stage, we achieve 73.968 in HOTA, 63.460 in AssA, 86.316 in DetA, 94.832 in MOTA, 78.271 in IDF1, 2754 in IDS, and 3592 in Frag, showing the effectiveness of our method.</code></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>论文总结</category>
+      
+      <category>多目标跟踪</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+      <tag>Workshop</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阅读笔记-ReMOTS__Self-Supervised Refining Multi-Object Tracking and Segmentation Keypoint Similarity Loss</title>
+    <link href="/jasonyang.github.io/2022/10/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-ReMOTS__Self-Supervised%20Refining%20Multi-Object%20Tracking%20and%20Segmentation/"/>
+    <url>/jasonyang.github.io/2022/10/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-ReMOTS__Self-Supervised%20Refining%20Multi-Object%20Tracking%20and%20Segmentation/</url>
+    
+    <content type="html"><![CDATA[<h2 id="remots-self-supervised-refining-multi-object-tracking-and-segmentation">ReMOTS:Self-Supervised Refining Multi-Object Tracking and Segmentation</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>作者：</strong></p><figure><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021142928234.png" alt="image-20221021142928234"><figcaption aria-hidden="true">image-20221021142928234</figcaption></figure><p><span class="github-emoji"><span>📘</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d8.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>arXiv: </strong>https://arxiv.org/abs/2007.03200</p><h3 id="摘要">1.1 摘要</h3><p>我们的目标是通过后续修正跟踪结果来提高多目标跟踪和分割 (MOTS)的性能。然而，修正 MOTS结果仍然具有挑战性，这可能是由于外观特征不适合目标视频，也很难找到合适的阈值来区分它们（不同的轨迹）。为了解决这个问题，我们提出了一个基于自监督的修正MOTS（即ReMOTS）框架。ReMOTS主要从数据关联的角度修正MOTS（跟踪）结果，主要包括四个步骤： (1)使用预测掩码（Mask）训练外观编码器； (2)将相邻帧之间的检测结果关联起来形成短期轨迹 ；(3)使用短期轨迹作为可靠的伪标签来训练（短轨迹的）外观编码器；(4)利用合适的外观特征（从外观编码器中获取）和从统计信息中获得的阈值将短期轨迹合并到长期轨迹。使用ReMOTS，我们在 CVPR 2020 MOTS Challenge 1 中获得第一名，sMOTSA 得分为69.9。</p><h3 id="方法与总结">1.2 方法与总结</h3><figure><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021144306785.png" alt="image-20221021144306785"><figcaption aria-hidden="true">image-20221021144306785</figcaption></figure><p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>方法：</strong></p><p>作者将跟踪结果的修正分为两个阶段:</p><ul><li>第一阶段逐两帧关联检测到的目标，具体方法是用训练后的ReID网络提取每帧目标的外观特征，然后根据相邻帧bbox的IoU和外观特征的Cosinesimilarity构建相邻帧的距离矩阵（IoU和余弦相似度过小则目标之间的距离为INF），这里比较有意思的是余弦相似度的阈值不是作者认为指定的，而是通过统计分析两帧之间相同身份ID的目标之间外观相似度的分布，通过正态分布的<span class="math inline">\(3\sigma\)</span>原则确定的。有了距离矩阵之后再通过匈牙利算法执行分配，确定相邻帧的连接关系，逐帧操作，以形成短轨迹（因为在跟踪过程中目标会出现被遮挡的情况，因此逐帧关联可能会把相同ID但是中间被遮挡的目标截成两个短轨迹）。</li><li>第二阶段从整个视频序列来考虑，合并短轨迹，具体而言又用短轨迹构建正负样本重新训练了第一阶段的ReID网络，训练完成之后重新提取每一帧目标的外观特征，然后同样的构建短轨迹段之间的距离矩阵，与上一阶段不同的是这里通过轨迹时序约束和余弦相似度击中比例作为距离阈值。两个短轨迹只有出现时间上不重叠，且前后出现时间间隔不超过15帧，才能被有机会被彼此关联上，满足上述条件的轨迹再计算两段轨迹外观相似度矩阵的平均相似度作为短轨迹之间的距离矩阵。最后文章用了一种层次聚类的方法结合短轨迹距离矩阵进行轨迹聚类，聚类阈值选定的时候也是通过统计的方式在GT轨迹中构建相同ID相似度的分布以及不同ID相似度分布，确定聚类阈值。</li></ul><blockquote><p>训练数据构建方面，第一阶段，构建预测轨迹的正负样本对和GT轨迹的正负样本对。预测的轨迹中选择同一帧中另一个不同ID的目标作为负样本，轨迹自身数据增强后的样本作为正样本；对于GT轨迹而言选择不同帧同一ID的目标组成正样本，不同帧不同ID的目标作为负样本。1:1混合预测轨迹和GT轨迹构建的正负样本对进行ReID网络的训练。第二阶段，也是分为预测和GT的正负样本对。第一阶段生成的短轨迹的不同帧目标之间互为正样本，短轨迹同一帧但是ID不同的目标互为负样本；GT轨迹则和第一阶段一致，不同帧同ID为正样本，不同帧不同ID为负样本，同样也是1:1混合之后训练ReID网络。</p></blockquote><p><span class="github-emoji"><span>⚡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/26a1.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结</strong></p><p>感觉这篇文章比较新颖的点就是尝试利用数据集的统计信息对关联阶段的禁止关联阈值和截断阈值进行了设置，省去了大量网格搜索的时间所得到的阈值也更具说服力（让数据来说话），其实不通过层次聚类而采用另一些无监督的聚类方法应该也能得到一个较好的结果。一点不足就是可能文章对目标的建模只停留在了外观表征方面，在目标时序和运动建模上考虑的还比较少。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>论文总结</category>
+      
+      <category>多目标跟踪</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+      <tag>Post-processing</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>多目标跟踪中的一些后处理方法汇总</title>
     <link href="/jasonyang.github.io/2022/10/16/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%9A%84%E4%B8%80%E4%BA%9B%E5%90%8E%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/"/>
     <url>/jasonyang.github.io/2022/10/16/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%9A%84%E4%B8%80%E4%BA%9B%E5%90%8E%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/</url>
