@@ -33,6 +33,35 @@
   
   
   <entry>
+    <title>论文总结-SoccerNet_multiple palyer tracking TOP3方案总结</title>
+    <link href="/jasonyang.github.io/2022/10/21/SoccerNet%20multiple%20palyer%20tracking%20TOP3%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/"/>
+    <url>/jasonyang.github.io/2022/10/21/SoccerNet%20multiple%20palyer%20tracking%20TOP3%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/</url>
+    
+    <content type="html"><![CDATA[<h1 id="soccernet-multiple-palyer-tracking-top3方案总结">SoccerNet:multiple palyer tracking TOP3方案总结</h1><blockquote><p>这一次的跟踪竞赛举办方提供了待跟踪运动员的GT框，所以本质上来说下列方案都是各自的关联策略。</p></blockquote><h2 id="st-trackmerger">1st TrackMerger：</h2><p><strong>关联策略：</strong></p><p>基于轨迹与检测目标之间的IoU以及其中心位置的距离构建costmatrix（文章没提用没用卡尔曼滤波预测，猜测使用了），然后利用匈牙利算法执行逐帧关联。需要注意的是对于足球框的关联利用了匹配面积的限制，只有较小的bbox才能被接受（相当于是一个先验）。之后训练了一个ReID网络用于关联找回从相机视角中暂时消失的目标（这里不知道是只针对暂时消失的轨迹执行ReID关联还是对所有轨迹都采用ReID与IoU距离融合，个人偏向于前者），最后用轨迹段之间的IDembedding向量的距离进行轨迹缝合。</p><h2 id="nd-cascaded-buffered-iou-c-biou">2nd Cascaded Buffered IoU(C-BIoU):</h2><p><strong>关联策略：</strong></p><p>提出一种带缓冲区域的IoU（BufferedIoU）计算方式，简单来说就是对bbox进行同中心等比例放大，然后基于放大后的轨迹前一帧检测框和检测框计算IoU距离（SORT策略），作者指出这样的一种放大方式能够缓解目标快速运动带来相邻帧IoU过小导致错误匹配的问题。文章用了两种不同放大比例进行级联匹配，先用小的放大比例保证关联准确性，然后用较大比例关联仍未匹配的轨迹和检测框保证召回率，此外文章还基于轨迹段的ReID特征，使用层次聚类的方式聚合小轨迹段。</p><h2 id="rd-camera-motion-aware-appearance-based-bytetrack">3rdCamera-motion-aware appearance-based ByteTrack：</h2><p><strong>关联策略：</strong></p><p>从检测-分割网络中提取目标的语义特征（不知道具体咋提取的，这个总结报告也太简短了吧-_-）同时融合手工提取的颜色直方图特征以提升当运动员被遮挡或者混入其他队伍中间（每个球队队服颜色不同）时的关联的鲁棒性，然后也用了轨迹段的ReID特征去合并真实身份一致的两段轨迹。最后也用了相机运动补偿去弥补由于相机视角变换带来卡尔曼滤波预测框更加不准的问题。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>论文总结</category>
+      
+      <category>多目标跟踪</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+      <tag>Workshop</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>阅读笔记-ReMOTS__Self-Supervised Refining Multi-Object Tracking and Segmentation Keypoint Similarity Loss</title>
     <link href="/jasonyang.github.io/2022/10/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-ReMOTS__Self-Supervised%20Refining%20Multi-Object%20Tracking%20and%20Segmentation/"/>
     <url>/jasonyang.github.io/2022/10/21/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0-ReMOTS__Self-Supervised%20Refining%20Multi-Object%20Tracking%20and%20Segmentation/</url>
