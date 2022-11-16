@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>ECCV 2022 Multiple People Tracking in Group Dance Challenge（DanceTrack）优秀方案总结</title>
+    <link href="/jasonyang.github.io/2022/11/01/ECCV%202022%20Multiple%20People%20Tracking%20in%20Group%20Dance%20Challenge%E4%BC%98%E7%A7%80%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/"/>
+    <url>/jasonyang.github.io/2022/11/01/ECCV%202022%20Multiple%20People%20Tracking%20in%20Group%20Dance%20Challenge%E4%BC%98%E7%A7%80%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/</url>
+    
+    <content type="html"><![CDATA[<h1 id="eccv-2022-multiple-people-tracking-in-group-dance-challengedancetrack优秀方案总结">ECCV2022 Multiple People Tracking in Group DanceChallenge（DanceTrack）优秀方案总结</h1><h2 id="stmotryolox">1st，MOTR+YOLOX</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_MOTRv2.pdf</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221027231200529.png" alt="image-20221027231200529" style="zoom:60%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">跟踪流程示例</div></center><p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p><p>整合了YOLOX强的检测能力与MOTR强的时序跟踪能力，存储YOLOX的检测结果（应该也是用了NMS之后的检测结果吧），并用于形成MOTR的detectionquery（MOTR中detection query被替换成了带有初始anchor位置编码的detectionquery，同时输出的bbox框是基于anchor的偏置（<span class="math inline">\(\Delta x, \Delta y, \Delta h , \Deltaw\)</span>）而不是直接预测坐标位置，因此模型更易收敛，作者称这样的MOTR为：anchor-basedMOTR），最后将detection query和trackquery（以上一帧的检测bbox作为输入）送入MOTR的Decoder分别预测新出现目标和之前目标的位置。除了更改原始MOTR的detectionquery为anchor-based query之外，作者还做了以下更改：</p><ul><li>数据增强后的GT框将根据图像边界进行裁剪；</li><li>在训练anchor-basedMOTR时，使用了YOLOX训练使用的HSV色彩空间增强；</li><li>取消了原始MOTR中手动增加假目标，删除真目标的数据增强操作（MOTR主要为提升模型对目标消失和新目标进入的鲁棒性，但是Dancetrack中目标数基本不发生变化）。</li><li>在训练anchor-basedMOTR时，用上一帧扰动后的GT框作为带噪声的query去指导MOTR正确回归该GT框目前所在的位置，消除由于匈牙利匹配带来的随机性，去除训练噪声加快收敛。</li></ul><p>然后就是其他一些比较常用的训练、跟踪后处理策略：</p><ul><li>混合多个数据集训练，融合了CrowdHuman与Dancetrack训练anchor-basedMOTR；</li><li>将YOLOX每次的检测结果作为anchor-basedMOTR的初始anchor输入（推理不需要规定query的个数）；</li><li>缝合较短的轨迹；</li></ul><p>最后附上作者所有这些策略的消融实验：</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221027235709586.png" alt="image-20221027235709586" style="zoom:40%;"><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221027235736502.png" alt="image-20221027235736502" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">消融实验</div></center><blockquote><p>official—原始MOTR；baseline—融合第一处更改的前3点；yolox—将YOLOX的检测结果作为MOTR的初始化detectionquery；crowdHuman—融合多个数据集训练MOTR；querydenoise—训练时使用增强后的前一帧GT框去指导MOTR正确预测该GT框，消除匈牙利分配GT框时的随机性；剩下的轨迹缝合，合并两段相距间隔不超过不超过100帧，且在此期间其余轨迹段都稳定的（没有新增轨迹也没有轨迹终止）轨迹（真的一点儿不用外观相似度吗？）</p></blockquote><h2 id="nd-cascaded-buffer-iou-c-biou-tracker">2nd, Cascaded Buffer-IoU(C-BIoU) Tracker</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_cbiou_report.pdf</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221028114132395.png" alt="image-20221028114132395" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">B-IoU示意</div></center><p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p><p>针对DanceTrack这类快速运动大姿态变化的待跟踪目标，提出了一种带缓冲区域的IoU计算方式，B-IoU的计算方式如上图所示，基本思想就是将目标框以恒定宽高比例进行放大，再计算边界框之间的IoU，这样的一种方式可以缓和由于相邻帧目标运动过快导致IoU过小的无法正确关联的问题（之前也有弥补IoU过小的问题，是通过对目标的运动建模——卡尔曼滤波来实现的，但是针对DanceTrack这个数据集来说KF之后的结果不是特别好），除此之外作者还用了ReMOTs里面的轨迹层次聚类方法，去合并真实身份ID相同的轨迹段，具体做法可以参考下方ReMOTs的阅读笔记和原文。</p><blockquote><p>ReMOTs：</p></blockquote><p>下面这个图是作者的关联流程，大致就是SORT的策略，作者用了两种不同的尺度执行两级关联，同时对于过长时间仍未更新的轨迹将会被终止。需要注意的是作者没有使用卡尔曼滤波进行目标位置的更新，而是通过轨迹之前几帧的位置计算平均速度然后以此估算目标在之后几帧的位置，下方是估算目标在<span class="math inline">\(t+\Delta\)</span>帧时刻位置的计算公式： <span class="math display">\[s^{t+\Delta}=o^{t}+\frac{\Delta}{n}\sum_{i=t-n+1}^{t}\left(o^{i}-o^{i-1}\right) ，\boldsymbol{o}=(x, y, w,h)\]</span></p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221028144636082.png" alt="image-20221028144636082" style="zoom:80%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">CB-IoU整体跟踪流程</div></center><p>最后附上作者的跟踪实验结果，可以看到作者在单使用CB-IoU在线策略时就可以达到了60.6的HOTA，相比之下ByteTrack只有47左右，OC-SORT只有55.1。然后使用了融合多个尺度检测结果和轨迹合并（ReMOTs里面的层级聚类）后处理后可以达到66.6。</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221028151552077.png" alt="image-20221028151552077" style="zoom:80%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">跟踪实验结果</div></center><h2 id="nd-height-based-iou-and-trajectory-based-patching">2nd,Height-based IoU and Trajectory-based Patching</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_mt_iot.pdf</p><p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221110105352795.png" alt="image-20221110105352795" style="zoom: 67%;"></p><p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p><p>在检测器和轨迹关联方面做了一些改进，检测器方面使用Crowdhuman和MOT20作为预训练集，再在DanceTrack上面训练，增强了检测被遮挡目标的能力，侧面提升了轨迹的连续性；轨迹关联方面有四个不同，一是与OC-SORT类似未匹配的轨迹的最后的一次观测结果与低分检测框进行匹配；二是对于低分框仍未匹配的轨迹，暂时用KF滤波的结果作为其当前帧的观察更新轨迹；三是对于存在的轨迹，如果其置信度分数低于某个阈值则认为轨迹被遮挡，该轨迹不与任何检测框配对（减少错分配IDs，存在疑惑如果某个轨迹是低分，然后一直无法匹配，其置信度也无法更新变高，轨迹不就断了吗？）；最后一点改动（也是最关键的改动）就是==将关联时基于面积的IoU度量更改为了基于bbox高度是否相同的度量==，作者提出使用的原因是在DanceTrack场景中目标的在垂直方向的变化很小，且变化了一般对应着目标前后的移动，因此使用高度度量能很好地区分目标之间的相对运动，避免错分配。此外作者还时测试了一下现阶段基于面积的不同IoU策略的影响。整体的消融结果如下图所示。</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221110113828791.png" alt="image-20221110113828791" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">预训练数据集消融</div></center><center><img src="C:\Users\morvan\AppData\Roaming\Typora\typora-user-images\image-20221110113836958.png" alt="image-20221110113836958" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">基于面积的IoU策略消融</div></center><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221110114033795.png" alt="image-20221110114033795" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">基于高度的IoU策略</div></center><p>最后作者还尝试了两种在MOT17-20上有效，但是在DanceTrack上无效的策略：相机运动补偿（BoT-SORT里面的）和模型集成。</p><h2 id="rdoc-sortreid">3rd，OC-SORT+ReID</h2><p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_DLUT_IIAU.pdf</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221114093628863.png" alt="image-20221114093628863" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">联合检测和特征建模的一体化方法</div></center><p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p><p>总体上来说方法就属于OC-SORT+ReID，匹配总共分为三个阶段，第一阶段使用高分检测与轨迹用<strong>KF滤波之后的结果、目标速度和方向以及单独ReID网络提取的目标外观特征</strong>三种线索进行匹配；第二阶段使用低分检测框与未匹配的轨迹用<strong>KF滤波之后轨迹框的IoU结果</strong>作为线索（匹配度量矩阵）进行匹配；第三阶段使用未匹配轨迹最近一次的关联框与未匹配的高分轨迹用IoU作为线索进行匹配以恢复轨迹，轨迹恢复后会对消失期间的轨迹进行插值，并用插值后的轨迹结果调整卡尔曼滤波器的参数，以减少在轨迹消失期间没有观测更新导致的卡尔曼滤波器的过大预测噪声。作者还将YOLOX中所用的bbox标签指定策略SimOTA换成了TAL（TaskAlignmentLearning），结合bbox预测的分类分数和IoU分数确定该bbox是否是正样本。具体计算公式如下：<span class="math display">\[t=c l s^{\alpha} \times i o u^{\beta}\]</span></p><blockquote><p>但是作者并未对这两个加权参数和TAL损失相较于SimOTA损失的性能作分析对比，无法确定TAL策略的单独性能。</p></blockquote><p>最后作者还提出了联合检测和目标特征建模的一体化网络，大致结构如上图所示，利用检测bbox和ROIAlign提取目标区域的特征，避免了重新使用一个单独的网络带来的模型参数量和运算量的增加。还有还有一个轻量化的网络具体做法是将检测器由YOLOX-X换为YOLOX-S，同时将YOLOXhead中标准卷积换为了<span class="math inline">\(5\times5\)</span>的深度可分离卷积。不同模型的实验结果如下：</p><center><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221114103454172.png" alt="image-20221114103454172" style="zoom:50%;"><br><div style="color:orange; border-bottom: 1px solid #d9d9d7;    display: inline-block;    color: #999;    padding: 2px;">不同模型的实验结果</div></center><blockquote><p>感觉作者的方法也不是很难想到，我也想到并且尝试了使用ReID特征进行关联，但是实验效果却相差甚远完全没有达到文章中所说的结果，也不知道是否有其他的调整，期待一波作者开源代码。</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>多目标跟踪</category>
+      
+      <category>优秀跟踪方案总结</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MOT</tag>
+      
+      <tag>workshop</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>论文总结-SportsMOT Track on Multi-actor Tracking, DeeperAction Challenge at ECCV 2022 获奖方案总结</title>
     <link href="/jasonyang.github.io/2022/10/21/SportsMOT%20Track%20on%20Multi-actor%20Tracking,%20DeeperAction%20Challenge%20at%20ECCV%202022%20%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/"/>
     <url>/jasonyang.github.io/2022/10/21/SportsMOT%20Track%20on%20Multi-actor%20Tracking,%20DeeperAction%20Challenge%20at%20ECCV%202022%20%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/</url>
@@ -13,9 +42,9 @@
     
     <categories>
       
-      <category>论文总结</category>
-      
       <category>多目标跟踪</category>
+      
+      <category>优秀跟踪方案总结</category>
       
     </categories>
     
@@ -42,9 +71,9 @@
     
     <categories>
       
-      <category>论文总结</category>
-      
       <category>多目标跟踪</category>
+      
+      <category>优秀跟踪方案总结</category>
       
     </categories>
     

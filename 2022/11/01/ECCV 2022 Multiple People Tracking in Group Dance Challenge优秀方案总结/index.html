@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jasonyang.github.io/img/panda.png">
+  <link rel="icon" href="/jasonyang.github.io/img/panda.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="jasonyang">
+  <meta name="keywords" content="">
+  
+  <title>ECCV 2022 Multiple People Tracking in Group Dance Challenge（DanceTrack）优秀方案总结 - jasonyang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/jasonyang.github.io/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/jasonyang.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/jasonyang.github.io/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","app_key":"wlepdaYUatxn4WD8tudl2BdX","server_url":"https://uqjw3jet.lc-cn-n1-shared.com"}},"search_path":"//jayheyang.github.io/jasonyang.github.io/search.xml"};
+  </script>
+  <script  src="/jasonyang.github.io/js/utils.js" ></script>
+  <script  src="/jasonyang.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/jasonyang.github.io/">&nbsp;<strong>Morvan</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jasonyang.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/jasonyang.github.io/img/zelda2.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="ECCV 2022 Multiple People Tracking in Group Dance Challenge（DanceTrack）优秀方案总结">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-11-01 12:16" pubdate>
+        2022年11月1日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      24
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ECCV 2022 Multiple People Tracking in Group Dance Challenge（DanceTrack）优秀方案总结</h1>
+            
+            <div class="markdown-body">
+              <h1 id="eccv-2022-multiple-people-tracking-in-group-dance-challengedancetrack优秀方案总结">ECCV
+2022 Multiple People Tracking in Group Dance
+Challenge（DanceTrack）优秀方案总结</h1>
+<h2 id="stmotryolox">1st，MOTR+YOLOX</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_MOTRv2.pdf</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221027231200529.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221027231200529" style="zoom:60%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+跟踪流程示例
+</div>
+</center>
+<p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
+<p>整合了YOLOX强的检测能力与MOTR强的时序跟踪能力，存储YOLOX的检测结果（应该也是用了NMS之后的检测结果吧），并用于形成MOTR的detection
+query（MOTR中detection query被替换成了带有初始anchor位置编码的detection
+query，同时输出的bbox框是基于anchor的偏置（<span class="math inline">\(\Delta x, \Delta y, \Delta h , \Delta
+w\)</span>）而不是直接预测坐标位置，因此模型更易收敛，作者称这样的MOTR为：anchor-based
+MOTR），最后将detection query和track
+query（以上一帧的检测bbox作为输入）送入MOTR的Decoder分别预测新出现目标和之前目标的位置。除了更改原始MOTR的detection
+query为anchor-based query之外，作者还做了以下更改：</p>
+<ul>
+<li>数据增强后的GT框将根据图像边界进行裁剪；</li>
+<li>在训练anchor-based
+MOTR时，使用了YOLOX训练使用的HSV色彩空间增强；</li>
+<li>取消了原始MOTR中手动增加假目标，删除真目标的数据增强操作（MOTR主要为提升模型对目标消失和新目标进入的鲁棒性，但是Dancetrack中目标数基本不发生变化）。</li>
+<li>在训练anchor-based
+MOTR时，用上一帧扰动后的GT框作为带噪声的query去指导MOTR正确回归该GT框目前所在的位置，消除由于匈牙利匹配带来的随机性，去除训练噪声加快收敛。</li>
+</ul>
+<p>然后就是其他一些比较常用的训练、跟踪后处理策略：</p>
+<ul>
+<li>混合多个数据集训练，融合了CrowdHuman与Dancetrack训练anchor-based
+MOTR；</li>
+<li>将YOLOX每次的检测结果作为anchor-based
+MOTR的初始anchor输入（推理不需要规定query的个数）；</li>
+<li>缝合较短的轨迹；</li>
+</ul>
+<p>最后附上作者所有这些策略的消融实验：</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221027235709586.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221027235709586" style="zoom:40%;"><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221027235736502.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221027235736502" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+消融实验
+</div>
+</center>
+<blockquote>
+<p>official—原始MOTR；baseline—融合第一处更改的前3点；yolox—将YOLOX的检测结果作为MOTR的初始化detection
+query；crowdHuman—融合多个数据集训练MOTR；query
+denoise—训练时使用增强后的前一帧GT框去指导MOTR正确预测该GT框，消除匈牙利分配GT框时的随机性；剩下的轨迹缝合，合并两段相距间隔不超过不超过100帧，且在此期间其余轨迹段都稳定的（没有新增轨迹也没有轨迹终止）轨迹（真的一点儿不用外观相似度吗？）</p>
+</blockquote>
+<h2 id="nd-cascaded-buffer-iou-c-biou-tracker">2nd, Cascaded Buffer-IoU
+(C-BIoU) Tracker</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_cbiou_report.pdf</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221028114132395.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221028114132395" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+B-IoU示意
+</div>
+</center>
+<p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
+<p>针对DanceTrack这类快速运动大姿态变化的待跟踪目标，提出了一种带缓冲区域的IoU计算方式，B-IoU的计算方式如上图所示，基本思想就是将目标框以恒定宽高比例进行放大，再计算边界框之间的IoU，这样的一种方式可以缓和由于相邻帧目标运动过快导致IoU过小的无法正确关联的问题（之前也有弥补IoU过小的问题，是通过对目标的运动建模——卡尔曼滤波来实现的，但是针对DanceTrack这个数据集来说KF之后的结果不是特别好），除此之外作者还用了ReMOTs里面的轨迹层次聚类方法，去合并真实身份ID相同的轨迹段，具体做法可以参考下方ReMOTs的阅读笔记和原文。</p>
+<blockquote>
+<p>ReMOTs：</p>
+</blockquote>
+<p>下面这个图是作者的关联流程，大致就是SORT的策略，作者用了两种不同的尺度执行两级关联，同时对于过长时间仍未更新的轨迹将会被终止。需要注意的是作者没有使用卡尔曼滤波进行目标位置的更新，而是通过轨迹之前几帧的位置计算平均速度然后以此估算目标在之后几帧的位置，下方是估算目标在<span class="math inline">\(t+\Delta\)</span>帧时刻位置的计算公式： <span class="math display">\[
+s^{t+\Delta}=o^{t}+\frac{\Delta}{n}
+\sum_{i=t-n+1}^{t}\left(o^{i}-o^{i-1}\right) ，\boldsymbol{o}=(x, y, w,
+h)
+\]</span></p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221028144636082.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221028144636082" style="zoom:80%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+CB-IoU整体跟踪流程
+</div>
+</center>
+<p>最后附上作者的跟踪实验结果，可以看到作者在单使用CB-IoU在线策略时就可以达到了60.6的HOTA，相比之下ByteTrack只有47左右，OC-SORT只有55.1。然后使用了融合多个尺度检测结果和轨迹合并（ReMOTs里面的层级聚类）后处理后可以达到66.6。</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221028151552077.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221028151552077" style="zoom:80%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+跟踪实验结果
+</div>
+</center>
+<h2 id="nd-height-based-iou-and-trajectory-based-patching">2nd,
+Height-based IoU and Trajectory-based Patching</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_mt_iot.pdf</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221110105352795.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221110105352795" style="zoom: 67%;"></p>
+<p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
+<p>在检测器和轨迹关联方面做了一些改进，检测器方面使用Crowdhuman和MOT20作为预训练集，再在DanceTrack上面训练，增强了检测被遮挡目标的能力，侧面提升了轨迹的连续性；轨迹关联方面有四个不同，一是与OC-SORT类似未匹配的轨迹的最后的一次观测结果与低分检测框进行匹配；二是对于低分框仍未匹配的轨迹，暂时用KF滤波的结果作为其当前帧的观察更新轨迹；三是对于存在的轨迹，如果其置信度分数低于某个阈值则认为轨迹被遮挡，该轨迹不与任何检测框配对（减少错分配IDs，
+存在疑惑如果某个轨迹是低分，然后一直无法匹配，其置信度也无法更新变高，轨迹不就断了吗？）；最后一点改动（也是最关键的改动）就是==将关联时基于面积的IoU度量更改为了基于bbox高度是否相同的度量==，作者提出使用的原因是在DanceTrack场景中目标的在垂直方向的变化很小，且变化了一般对应着目标前后的移动，因此使用高度度量能很好地区分目标之间的相对运动，避免错分配。此外作者还时测试了一下现阶段基于面积的不同IoU策略的影响。整体的消融结果如下图所示。</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221110113828791.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221110113828791" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+预训练数据集消融
+</div>
+</center>
+<center>
+<img src="C:\Users\morvan\AppData\Roaming\Typora\typora-user-images\image-20221110113836958.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221110113836958" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+基于面积的IoU策略消融
+</div>
+</center>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221110114033795.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221110114033795" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+基于高度的IoU策略
+</div>
+</center>
+<p>最后作者还尝试了两种在MOT17-20上有效，但是在DanceTrack上无效的策略：相机运动补偿（BoT-SORT里面的）和模型集成。</p>
+<h2 id="rdoc-sortreid">3rd，OC-SORT+ReID</h2>
+<p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>技术报告</strong>：https://motcomplex.github.io/report/dancetrack_DLUT_IIAU.pdf</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221114093628863.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221114093628863" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+联合检测和特征建模的一体化方法
+</div>
+</center>
+<p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>总结：</strong></p>
+<p>总体上来说方法就属于OC-SORT+ReID，匹配总共分为三个阶段，第一阶段使用高分检测与轨迹用<strong>KF滤波之后的结果、目标速度和方向以及单独ReID网络提取的目标外观特征</strong>三种线索进行匹配；第二阶段使用低分检测框与未匹配的轨迹用<strong>KF滤波之后轨迹框的IoU结果</strong>作为线索（匹配度量矩阵）进行匹配；第三阶段使用未匹配轨迹最近一次的关联框与未匹配的高分轨迹用IoU作为线索进行匹配以恢复轨迹，轨迹恢复后会对消失期间的轨迹进行插值，并用插值后的轨迹结果调整卡尔曼滤波器的参数，以减少在轨迹消失期间没有观测更新导致的卡尔曼滤波器的过大预测噪声。作者还将YOLOX中所用的bbox标签指定策略SimOTA换成了TAL（Task
+Alignment
+Learning），结合bbox预测的分类分数和IoU分数确定该bbox是否是正样本。具体计算公式如下：
+<span class="math display">\[
+t=c l s^{\alpha} \times i o u^{\beta}
+\]</span></p>
+<blockquote>
+<p>但是作者并未对这两个加权参数和TAL损失相较于SimOTA损失的性能作分析对比，无法确定TAL策略的单独性能。</p>
+</blockquote>
+<p>最后作者还提出了联合检测和目标特征建模的一体化网络，大致结构如上图所示，利用检测bbox和ROI
+Align提取目标区域的特征，避免了重新使用一个单独的网络带来的模型参数量和运算量的增加。还有还有一个轻量化的网络具体做法是将检测器由YOLOX-X换为YOLOX-S，同时将YOLOX
+head中标准卷积换为了<span class="math inline">\(5\times5\)</span>的深度可分离卷积。不同模型的实验结果如下：</p>
+<center>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221114103454172.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221114103454172" style="zoom:50%;">
+<br>
+<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+不同模型的实验结果
+</div>
+</center>
+<blockquote>
+<p>感觉作者的方法也不是很难想到，我也想到并且尝试了使用ReID特征进行关联，但是实验效果却相差甚远完全没有达到文章中所说的结果，也不知道是否有其他的调整，期待一波作者开源代码。</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E4%BC%98%E7%A7%80%E8%B7%9F%E8%B8%AA%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/">优秀跟踪方案总结</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/MOT/">MOT</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/tags/workshop/">workshop</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jasonyang.github.io/2022/10/21/SportsMOT%20Track%20on%20Multi-actor%20Tracking,%20DeeperAction%20Challenge%20at%20ECCV%202022%20%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/">
+                        <span class="hidden-mobile">论文总结-SportsMOT Track on Multi-actor Tracking, DeeperAction Challenge at ECCV 2022 获奖方案总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uqjw3JetMYb3p7Cmk5UQOUmt-gzGzoHsz","appKey":"wlepdaYUatxn4WD8tudl2BdX","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://uqjw3jet.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/jasonyang.github.io/js/events.js" ></script>
+<script  src="/jasonyang.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/jasonyang.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/jasonyang.github.io/js/local-search.js" ></script>
+
+
+
+
+  <script defer src="/jasonyang.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/jasonyang.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>
