@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      38
+      37
        分钟
     </span>
   
@@ -230,204 +230,175 @@
             <h1 style="display: none">阅读笔记-Improving Multiple Object Tracking with Single Object Tracking（SOTMOT）</h1>
             
             <div class="markdown-body">
-              <h1 id="improving-multiple-object-tracking-with-single-object-tracking">Improving
-Multiple Object Tracking with Single Object Tracking</h1>
-<p>论文链接：https://openaccess.thecvf.com/content/CVPR2021/papers/Zheng_Improving_Multiple_Object_Tracking_With_Single_Object_Tracking_CVPR_2021_paper.pdf</p>
+              <h1>Improving Multiple Object Tracking with Single Object Tracking</h1>
+<p>论文链接：<a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/CVPR2021/papers/Zheng_Improving_Multiple_Object_Tracking_With_Single_Object_Tracking_CVPR_2021_paper.pdf">https://openaccess.thecvf.com/content/CVPR2021/papers/Zheng_Improving_Multiple_Object_Tracking_With_Single_Object_Tracking_CVPR_2021_paper.pdf</a></p>
 <h2 id="摘要">摘要</h2>
 <h3 id="原文">原文</h3>
-<p>​ Despite considerable similarities between multiple object tracking
-(MOT) and single object tracking (SOT) tasks, modern MOT methods have
-not beneﬁted from the development of SOT ones to achieve satisfactory
-performance. The major reason for this situation is that it is
-inappropriate and inefﬁcient to apply multiple SOT models directly to
-the MOT task, although advanced SOT methods are of the strong
-discriminative power and can run at fast speeds.</p>
-<p>​ In this paper, we propose a novel and end-to-end trainable MOT
-architecture that extends CenterNet by adding an SOT branch for tracking
-objects in parallel with the existing branch for object detection,
-allowing the MOT task to beneﬁt from the strong discriminative power of
-SOT methods in an effective and efﬁcient way. Unlike most existing SOT
-methods which learn to distinguish the target object from its local
-backgrounds, the added SOT branch trains a separate SOT model per target
-online to distinguish the target from its surrounding targets, assigning
-SOT models the novel discrimination. Moreover, similar to the detection
-branch, the SOT branch treats objects as points, making its online
-learning efﬁcient even if multiple targets are processed simultaneously.
-Without tricks, the proposed tracker achieves MOTAs of 0.710 and 0.686,
-IDF1s of 0.719 and 0.714, on MOT17 and MOT20 benchmarks, respectively,
-while running at 16 FPS on MOT17.</p>
+<p>​	Despite considerable similarities between multiple object tracking (MOT) and single object tracking (SOT) tasks, modern MOT methods have not beneﬁted from the development of SOT ones to achieve satisfactory performance. The major reason for this situation is that it is inappropriate and inefﬁcient to apply multiple SOT models directly to the MOT task, although advanced SOT methods are of the strong discriminative power and can run at fast speeds.</p>
+<p>​	In this paper, we propose a novel and end-to-end trainable MOT architecture that extends CenterNet by adding an SOT branch for tracking objects in parallel with the existing branch for object detection, allowing the MOT task to beneﬁt from the strong discriminative power of SOT methods in an effective and efﬁcient way. Unlike most existing SOT methods which learn to distinguish the target object from its local backgrounds, the added SOT branch trains a separate SOT model per target online to distinguish the target from its surrounding targets, assigning SOT models the novel discrimination. Moreover, similar to the detection branch, the SOT branch treats objects as points, making its online learning efﬁcient even if multiple targets are processed simultaneously. Without tricks, the proposed tracker achieves MOTAs of 0.710 and 0.686, IDF1s of 0.719 and 0.714, on MOT17 and MOT20 benchmarks, respectively, while running at 16 FPS on MOT17.</p>
 <h3 id="翻译">翻译</h3>
 <p>  尽管多目标跟踪（MOT）和单目标跟踪（SOT）任务之间有相当大的相似性，但现代MOT方法并没有从SOT任务的发展中获益，从而获得令人满意的性能。出现这种情况的主要原因是，尽管先进的SOT方法具有很强的识别能力，并且可以以很快的速度运行，但直接将多个SOT模型应用于MOT任务是不合适的，也是不充分的。</p>
-<p>  在本文中，我们提出了一种新颖的端到端可培训MOT体系结构，通过添加用于跟踪对象的SOT分支与用于对象检测的现有分支并行，扩展了CenterNet，使MOT任务能够以有效的方式受益于SOT方法的强鉴别能力。与大多数现有的SOT方法不同，SOT方法学习将目标对象与其局部背景区分开来，添加的SOT分支在线为每个目标训练一个单独的SOT模型，以将目标与其周围目标区分开来，从而为SOT模型分配新的区分。此外，与检测分支类似，SOT分支将对象视为点，即使同时处理多个目标，其在线学习也非常有效。在没有技巧的情况下，建议的跟踪器在MOT17和MOT20基准上分别实现了0.710和0.686的MOTA，0.719和0.714的IDF1，同时在MOT17上以16
-FPS的速度运行。</p>
+<p>  在本文中，我们提出了一种新颖的端到端可培训MOT体系结构，通过添加用于跟踪对象的SOT分支与用于对象检测的现有分支并行，扩展了CenterNet，使MOT任务能够以有效的方式受益于SOT方法的强鉴别能力。与大多数现有的SOT方法不同，SOT方法学习将目标对象与其局部背景区分开来，添加的SOT分支在线为每个目标训练一个单独的SOT模型，以将目标与其周围目标区分开来，从而为SOT模型分配新的区分。此外，与检测分支类似，SOT分支将对象视为点，即使同时处理多个目标，其在线学习也非常有效。在没有技巧的情况下，建议的跟踪器在MOT17和MOT20基准上分别实现了0.710和0.686的MOTA，0.719和0.714的IDF1，同时在MOT17上以16 FPS的速度运行。</p>
 <h2 id="总体思路和结构">总体思路和结构</h2>
 <h3 id="总体思路">总体思路</h3>
-<p>  在CenterNet的基础上增加了一个SOT
-branch，轨迹（先用卡尔曼滤波预测轨迹在当前帧的虚拟位置）和当前帧的检测利用SOT分支的岭回归权重进行相似度计算，然后利用匈牙利算法进行匹配，同时对于这一轮未匹配上的轨迹<span class="math inline">\(\mathcal{T}_{unmatched}\)</span>，再次利用IoU度量矩阵和匈牙利算法进行二次匹配，仍未匹配的轨迹丢入轨迹暂存池<span class="math inline">\(\mathcal{T}_{pool}\)</span>，仍未匹配的高分检测初始化为新的轨迹。</p>
+<p>  在CenterNet的基础上增加了一个SOT branch，轨迹（先用卡尔曼滤波预测轨迹在当前帧的虚拟位置）和当前帧的检测利用SOT分支的岭回归权重进行相似度计算，然后利用匈牙利算法进行匹配，同时对于这一轮未匹配上的轨迹$\mathcal{T}<em>{unmatched}$，再次利用IoU度量矩阵和匈牙利算法进行二次匹配，仍未匹配的轨迹丢入轨迹暂存池$\mathcal{T}</em>{pool}$，仍未匹配的高分检测初始化为新的轨迹。</p>
 <h3 id="网络结构">网络结构</h3>
 <center>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513210421725.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513210421725" style="zoom:33%;">
-<br>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+   <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513210421725.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513210421725" style="zoom:33%;">
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d7;
     display: inline-block;
     color: #999;
-    padding: 2px;">
-SOTMOT总体结构图
-</div>
+    padding: 2px;">SOTMOT总体结构图</div>
 </center>
 <center>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513210835865.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513210835865" style="zoom:33%;">
-<br>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+  <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513210835865.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513210835865" style="zoom:33%;">
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d7;
     display: inline-block;
     color: #999;
-    padding: 2px;">
-单独的SOT Branch示意图
-</div>
+    padding: 2px;">单独的SOT Branch示意图</div>
 </center>
 <blockquote>
-<p>注：
-两帧图像同时输入一个共享权重的网络（其实就是一个网络，进行两次前向传播后再计算损失）仅在Offline
-training阶段使用，在推理阶段仅需要输入当前帧图像。<span class="math inline">\(EFAC\)</span>就是提取特征图目标中点所有通道的特征；<span class="math inline">\(F\)</span>表示经过3个卷积层再一次提取特征之后的特征图<span class="math inline">\(F \in R^{C_{sot} \times \frac{H}{4} \times
-\frac{W}{4}}\)</span>。</p>
+<p>注： 两帧图像同时输入一个共享权重的网络（其实就是一个网络，进行两次前向传播后再计算损失）仅在Offline training阶段使用，在推理阶段仅需要输入当前帧图像。$EFAC$就是提取特征图目标中点所有通道的特征；$F$表示经过3个卷积层再一次提取特征之后的特征图$F \in R^{C_{sot} \times \frac{H}{4} \times \frac{W}{4}}$。</p>
 </blockquote>
-<h2 id="sot-branch离线训练和在线推理">SOT Branch离线训练和在线推理</h2>
+<h2 id="SOT-Branch离线训练和在线推理">SOT Branch离线训练和在线推理</h2>
 <h3 id="预备工作">预备工作</h3>
-<ol type="1">
-<li>根据检测目标彼此之间中心点的位置得到邻接矩阵<span class="math inline">\(A \in R^{N \times N}\)</span>（假设当前检测到<span class="math inline">\(N\)</span>个目标）</li>
+<ol>
+<li>根据检测目标彼此之间中心点的位置得到邻接矩阵$A \in R^{N \times N}$（假设当前检测到$N$个目标）</li>
 </ol>
-<p><span class="math display">\[
-\mathbf{A}_{i, j}=\left\{\begin{array}{cc}
-1 &amp; \text { if } \min
-\left(\left|x_{i}^{c}-x_{j}^{c}\right|,\left|y_{i}^{c}-y_{j}^{c}\right|\right)
-\leqslant r \\
-0 &amp; \text { otherwise }
-\end{array}\right.
-\]</span></p>
+<p>$$<br>
+\mathbf{A}<em>{i, j}=\left{\begin{array}{cc}<br>
+1 &amp; \text { if } \min \left(\left|x</em>{i}^{c}-x_{j}^{c}\right|,\left|y_{i}^{c}-y_{j}^{c}\right|\right) \leqslant r \<br>
+0 &amp; \text { otherwise }<br>
+\end{array}\right.<br>
+$$</p>
 <blockquote>
-<p>其中，<span class="math inline">\(x_i^c和y_i^c\)</span>表示第<span class="math inline">\(i\)</span>个目标中心点的坐标，<span class="math inline">\(r\)</span>为距离阈值，文章中取值为75。</p>
+<p>其中，$x_i^c和y_i^c$表示第$i$个目标中心点的坐标，$r$为距离阈值，文章中取值为75。</p>
 </blockquote>
-<ol start="2" type="1">
-<li><p>依据邻接矩阵<span class="math inline">\(A\)</span>和第2节中的特征图<span class="math inline">\(F \in R^{C_{sot} \times \frac{H}{4} \times
-\frac{W}{4}}\)</span>建立每个目标<span class="math inline">\(i\)</span>的邻居特征集合<span class="math inline">\(X_i， i \in [1, ..,
-N]\)</span>和对应的邻居标签向量<span class="math inline">\(\mathbf{y_i}\)</span> <span class="math display">\[
-X_i = \text{concat}[\mathbf{x}_j], \ \ \mathbf{x}_{j} =
-\left\{\mathbf{x}_{j} \mid \forall j: \mathbf{A}_{i, j}=1\right\} \ \
-X_i \in R^{n_i \times C_{sot}}
-\\
-\mathbf{y_i} =[1, 0,0, ..., 0]^{\top}， \mathbf{y_i} \in  R^{n_i \times
-1}
-\]</span></p>
+<ol start="2">
+<li>
+<p>依据邻接矩阵$A$和第2节中的特征图$F \in R^{C_{sot} \times \frac{H}{4} \times \frac{W}{4}}$建立每个目标$i$的邻居特征集合$X_i， i \in [1, …, N]$和对应的邻居标签向量$\mathbf{y_i}$<br>
+$$<br>
+X_i = \text{concat}[\mathbf{x}<em>j], \ \ \mathbf{x}</em>{j} = \left{\mathbf{x}<em>{j} \mid \forall j: \mathbf{A}</em>{i, j}=1\right} \ \ X_i \in R^{n_i \times C_{sot}}<br>
+\<br>
+\mathbf{y_i} =[1, 0,0, …, 0]^{\top}， \mathbf{y_i} \in  R^{n_i \times 1}<br>
+$$</p>
 <blockquote>
-<p>其中<span class="math inline">\(\mathbf{x}_j\)</span>表示第<span class="math inline">\(j\)</span>个目标中心点在<span class="math inline">\(F\)</span>中所对应的嵌入特征，<span class="math inline">\(\mathbf{x}_j \in R^{1 \times
-C_{sot}}\)</span>;<span class="math inline">\(n_i\)</span>表示第<span class="math inline">\(i\)</span>个目标周围的邻居目标数量，这个邻居包括自己，因此在对应的标签向量<span class="math inline">\(\mathbf{y_i}\)</span>中有且仅有一个位置的值为1.</p>
-</blockquote></li>
-<li><p>建立并求解岭回归（系统辨识）模型</p>
+<p>其中$\mathbf{x}_j$表示第$j$个目标中心点在$F$中所对应的嵌入特征，$\mathbf{x}<em>j \in R^{1 \times C</em>{sot}}$;$n_i$表示第$i$个目标周围的邻居目标数量，这个邻居包括自己，因此在对应的标签向量$\mathbf{y_i}$中有且仅有一个位置的值为1.</p>
+</blockquote>
+</li>
+<li>
+<p>建立并求解岭回归（系统辨识）模型</p>
 <p>这里的岭回归感觉就是一个系统辨识，输入是不同目标的特征向量，输出是判定为特定目标的概率。具体建立和求解公式如下：</p>
-<ol type="1">
-<li><p>建立带正则化的最小化预测误差模型 <span class="math display">\[
-\min _{\mathbf{w}_{i}}\left\|\mathbf{X}_{i}
-\mathbf{w}_{i}-\mathbf{y}_{i}\right\|_{2}^{2}+\lambda\left\|\mathbf{w}_{i}\right\|_{2}^{2}
-\]</span></p>
+<ol>
+<li>
+<p>建立带正则化的最小化预测误差模型<br>
+$$<br>
+\min <em>{\mathbf{w}</em>{i}}\left|\mathbf{X}<em>{i} \mathbf{w}</em>{i}-\mathbf{y}<em>{i}\right|</em>{2}^{2}+\lambda\left|\mathbf{w}<em>{i}\right|</em>{2}^{2}<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(\mathbf{w}_i\)</span>表示待求解的系统参数，<span class="math inline">\(\lambda\)</span>为正则化参数，文中取值为0.1.</p>
-</blockquote></li>
-<li><p>利用岭回归求解公式解出最优系统参数<span class="math inline">\(\mathbf{w}_i^*\)</span> <span class="math display">\[
-\mathbf{w}_{i}^{*}=\left(\mathbf{X}_{i}^{\top} \mathbf{X}_{i}+\lambda
-\mathbf{I}\right)^{-1} \mathbf{X}_{i}^{\top} \mathbf{y}_{i}, \
-\mathbf{w}_{i}^{*} \in R^{C_{sot} \times 1}
-\]</span></p></li>
-</ol></li>
+<p>$\mathbf{w}_i$表示待求解的系统参数，$\lambda$为正则化参数，文中取值为0.1.</p>
+</blockquote>
+</li>
+<li>
+<p>利用岭回归求解公式解出最优系统参数$\mathbf{w}<em>i^*$<br>
+$$<br>
+\mathbf{w}</em>{i}^{<em>}=\left(\mathbf{X}<em>{i}^{\top} \mathbf{X}</em>{i}+\lambda \mathbf{I}\right)^{-1} \mathbf{X}<em>{i}^{\top} \mathbf{y}</em>{i}, \ \mathbf{w}_{i}^{</em>} \in R^{C_{sot} \times 1}<br>
+$$</p>
+</li>
 </ol>
-<p>​ 以上便完成了对目标<span class="math inline">\(i\)</span>一致性的度量函数的求解，即有了<span class="math inline">\(\mathbf{w}_i^*\)</span>之后，可以通过<span class="math inline">\(\mathbf{w}_i^*
-\mathbf{x}_j\)</span>值的大小，判定目标<span class="math inline">\(i,j\)</span>是否为同一目标。</p>
-<h3 id="离线训练sot-branch">离线训练SOT Branch</h3>
-<p>经过上面的推导可以知道，在同一帧中构建目标的邻居节点集合，之后可以给定邻居的标签通过岭回归求解得到映射矩阵<span class="math inline">\(\mathbf{w}_i^*\)</span>，但如何将同一帧计算的结果扩展到不同帧，同时利用网络反向传播，根据预测与真实值的误差增强SOT分支目标中心点特征的提取能力，这就需要利用成对的（前后帧）图像输入，对网络进行离线训练。具体训练流程如下：</p>
-<ol type="1">
-<li><p>针对<span class="math inline">\(t1\)</span>帧的图像（假设<span class="math inline">\(t1 &lt;
-t2\)</span>），图像经过带SOT分支的CenterNet网络，得到<span class="math inline">\(N\)</span>个高置信度检测目标（以目标中心点<span class="math inline">\((x_i^c,
-y_i^c)\)</span>及中心点对应的目标嵌入特征表示<span class="math inline">\(\mathbf{x}_i\)</span>）。</p></li>
-<li><p>依据第3.1节的岭回归模型构建流程，得到<span class="math inline">\(N\)</span>个目标各自的一致性映射矩阵<span class="math inline">\(\left \{ \mathbf{w}_i^* \right
-\}_{i=1}^{N}\)</span>。</p></li>
-<li><p>针对<span class="math inline">\(t2\)</span>帧的图像，图像同样经过带SOT分支的CenterNet网络，得到<span class="math inline">\(M\)</span>个高置信度检测目标（以目标中心点<span class="math inline">\((x_j^c,
-y_j^c)\)</span>及中心点对应的目标嵌入特征表示<span class="math inline">\(\mathbf{x}_j\)</span>）。</p></li>
-<li><p>依据公式（1）（2），生成<span class="math inline">\(t2\)</span>帧中每个目标<span class="math inline">\(j\)</span>的邻居中心特征向量集合<span class="math inline">\(X_j^{t2}\)</span>。</p></li>
-<li><p>假设在<span class="math inline">\(t1\)</span>帧中出现的目标有<span class="math inline">\(K\)</span>个同时出现在<span class="math inline">\(t2\)</span>帧中，此时针对这<span class="math inline">\(K\)</span>个相同的目标，在<span class="math inline">\(t1\)</span>帧生成的映射矩阵按理来说同样对<span class="math inline">\(t2\)</span>帧中相同的目标的邻居集作出准确的判断。所以有如下预测公式：
-<span class="math display">\[
-\hat{\mathbf{v}}_k=X_k^{t2}\mathbf{w}_k^*, \ k \in K
-\]</span></p></li>
-<li><p>根据预测和标签值计算SOT预测损失（只针对两帧中同时出现的<span class="math inline">\(K\)</span>个目标）。 <span class="math display">\[
-\mathcal{L}_{\mathrm{sot}}=\sum_{k=1}^{K}
-\mathcal{L}_{\mathrm{reg}}\left(\mathbf{v}_{k},
-\hat{\mathbf{v}}_{k}\right)
-\\
-\mathcal{L}_{\mathrm{reg}}(\mathbf{v},
-\hat{\mathbf{v}})=\left\|\frac{\exp (\mathbf{v})
-\odot(\mathbf{v}-\hat{\mathbf{v}})}{1+\exp (a
-\cdot(c-|\mathbf{v}-\hat{\mathbf{v}}|))}\right\|_{2}^{2}
-\]</span></p>
+</li>
+</ol>
+<p>​	以上便完成了对目标$i$一致性的度量函数的求解，即有了$\mathbf{w}_i^<em>$之后，可以通过$\mathbf{w}_i^</em> \mathbf{x}_j$值的大小，判定目标$i,j$是否为同一目标。</p>
+<h3 id="离线训练SOT-Branch">离线训练SOT Branch</h3>
+<p>经过上面的推导可以知道，在同一帧中构建目标的邻居节点集合，之后可以给定邻居的标签通过岭回归求解得到映射矩阵$\mathbf{w}_i^*$，但如何将同一帧计算的结果扩展到不同帧，同时利用网络反向传播，根据预测与真实值的误差增强SOT分支目标中心点特征的提取能力，这就需要利用成对的（前后帧）图像输入，对网络进行离线训练。具体训练流程如下：</p>
+<ol>
+<li>
+<p>针对$t1$帧的图像（假设$t1 &lt; t2$），图像经过带SOT分支的CenterNet网络，得到$N$个高置信度检测目标（以目标中心点$(x_i^c, y_i^c)$及中心点对应的目标嵌入特征表示$\mathbf{x}_i$）。</p>
+</li>
+<li>
+<p>依据第3.1节的岭回归模型构建流程，得到$N$个目标各自的一致性映射矩阵$\left { \mathbf{w}<em>i^* \right }</em>{i=1}^{N}$。</p>
+</li>
+<li>
+<p>针对$t2$帧的图像，图像同样经过带SOT分支的CenterNet网络，得到$M$个高置信度检测目标（以目标中心点$(x_j^c, y_j^c)$及中心点对应的目标嵌入特征表示$\mathbf{x}_j$）。</p>
+</li>
+<li>
+<p>依据公式（1）（2），生成$t2$帧中每个目标$j$的邻居中心特征向量集合$X_j^{t2}$。</p>
+</li>
+<li>
+<p>假设在$t1$帧中出现的目标有$K$个同时出现在$t2$帧中，此时针对这$K$个相同的目标，在$t1$帧生成的映射矩阵按理来说同样对$t2$帧中相同的目标的邻居集作出准确的判断。所以有如下预测公式：<br>
+$$<br>
+\hat{\mathbf{v}}_k=X_k^{t2}\mathbf{w}_k^*, \ k \in K<br>
+$$</p>
+</li>
+<li>
+<p>根据预测和标签值计算SOT预测损失（只针对两帧中同时出现的$K$个目标）。<br>
+$$<br>
+\mathcal{L}<em>{\mathrm{sot}}=\sum</em>{k=1}^{K} \mathcal{L}<em>{\mathrm{reg}}\left(\mathbf{v}</em>{k}, \hat{\mathbf{v}}<em>{k}\right)<br>
+\<br>
+\mathcal{L}</em>{\mathrm{reg}}(\mathbf{v}, \hat{\mathbf{v}})=\left|\frac{\exp (\mathbf{v}) \odot(\mathbf{v}-\hat{\mathbf{v}})}{1+\exp (a \cdot(c-|\mathbf{v}-\hat{\mathbf{v}}|))}\right|_{2}^{2}<br>
+$$</p>
 <blockquote>
-<p>其中<span class="math inline">\(\odot\)</span>表示同或运算，<span class="math inline">\(a,c\)</span>文章取值为10和0.2.</p>
-</blockquote></li>
-<li><p>根据SOT损失，以及其他检测分支的损失端到端训练SOTMOT网络。</p></li>
+<p>其中$\odot$表示同或运算，$a,c$文章取值为10和0.2.</p>
+</blockquote>
+</li>
+<li>
+<p>根据SOT损失，以及其他检测分支的损失端到端训练SOTMOT网络。</p>
+</li>
 </ol>
 <blockquote>
 <p>这里为什么没有类似于推理的跨帧配对计算损失，是因为跨帧预测标签的指定非常麻烦，不能直接通过距离阈值构建，前一帧每个目标的预测标签都需要两帧之间的身份id来构建，但是理论上可行的。同时还有一个可能的原因是，推理是前后紧密相连的两帧，同时前帧的位置还利用卡尔曼滤波进行了跨帧传播，前后帧目标差距不大，而离线训练的两帧时间间隔比较大，目标的空间位置比较远，无法进行有效衡量。</p>
 </blockquote>
 <h3 id="在线推理">在线推理</h3>
-<p>网络训练完成之后，在线推理阶段只需要输入当前帧的视频图像，然后依据之前的轨迹<span class="math inline">\(i\)</span>为中心，确定半径阈值为<span class="math inline">\(r\)</span>的邻居检测目标集合<span class="math inline">\(Z_i^{det}\)</span>，然后利用轨迹<span class="math inline">\(i\)</span>的映射矩阵$_i^*
-$，判断当前帧的邻居检测目标与之前轨迹的相似性，以完成跨帧的轨迹传播。</p>
+<p>网络训练完成之后，在线推理阶段只需要输入当前帧的视频图像，然后依据之前的轨迹$i$为中心，确定半径阈值为$r$的邻居检测目标集合$Z_i^{det}$，然后利用轨迹$i$的映射矩阵$\mathbf{w}_i^* $，判断当前帧的邻居检测目标与之前轨迹的相似性，以完成跨帧的轨迹传播。</p>
 <h4 id="预测轨迹和检测的相似性">预测轨迹和检测的相似性</h4>
-<ol type="1">
-<li><p>计算轨迹<span class="math inline">\(k\)</span>的映射矩阵$_k^*
-$</p>
-<p>这里的计算方法与之前单独每一帧的计算方法有些许不同，因为每个轨迹会保存其从轨迹开始到当前帧的所有结果（<span class="math inline">\(\mathcal{X}_{k}=\left\{\left(\mathbf{X}_{k}^{p},
-\mathbf{y}_{k}^{p}\right)\right\}_{p=s}^{t-1}\)</span>），所以求解映射矩阵时是最小化轨迹所有观测检测的预测误差得到。假设轨迹<span class="math inline">\(k\)</span>在第<span class="math inline">\(s\)</span>帧初始化，在第<span class="math inline">\(t-1\)</span>帧仍能被观察到，则此时轨迹的映射矩阵应该通过最小化下面这个公式得到：
-<span class="math display">\[
-\min _{\mathbf{w}_{k}} \sum_{p=s}^{t-1}
-\beta^{p}\left\|\mathbf{X}_{k}^{p}
-\mathbf{w}_{k}-\mathbf{y}_{k}^{p}\right\|_{2}^{2}+\lambda\left\|\mathbf{w}_{k}\right\|_{2}^{2}
-\]</span></p>
+<ol>
+<li>
+<p>计算轨迹$k$的映射矩阵$\mathbf{w}_k^* $</p>
+<p>这里的计算方法与之前单独每一帧的计算方法有些许不同，因为每个轨迹会保存其从轨迹开始到当前帧的所有结果（$\mathcal{X}<em>{k}=\left{\left(\mathbf{X}</em>{k}^{p}, \mathbf{y}<em>{k}^{p}\right)\right}</em>{p=s}^{t-1}$），所以求解映射矩阵时是最小化轨迹所有观测检测的预测误差得到。假设轨迹$k$在第$s$帧初始化，在第$t-1$帧仍能被观察到，则此时轨迹的映射矩阵应该通过最小化下面这个公式得到：<br>
+$$<br>
+\min <em>{\mathbf{w}</em>{k}} \sum_{p=s}^{t-1} \beta^{p}\left|\mathbf{X}<em>{k}^{p} \mathbf{w}</em>{k}-\mathbf{y}<em>{k}^{p}\right|</em>{2}^{2}+\lambda\left|\mathbf{w}<em>{k}\right|</em>{2}^{2}<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(\beta^p\)</span>是轨迹平滑系数，$<sup>{s}=(1-)</sup>{t-s},
-_{p=s}^{t-1} ^{p}=1， &nbsp;^{p-1} / ^{p}=1-<span class="math inline">\(，其中\)</span>$，该式表示对最新的轨迹观测的预测损失我们应该更加看重。</p>
+<p>$\beta^p$是轨迹平滑系数，$\beta^{s}=(1-\delta)^{t-s}, \sum_{p=s}^{t-1} \beta^{p}=1， \text{and} \ \beta^{p-1} / \beta^{p}=1-\delta $，其中$\delta=0.1$，该式表示对最新的轨迹观测的预测损失我们应该更加看重。</p>
 </blockquote>
-<p>轨迹<span class="math inline">\(k\)</span>的映射矩阵$_k^* $: <span class="math display">\[
-\mathbf{w}_{k}^{*}=\left[\sum_{p=s}^{t}
-\beta^{p}\left(\mathbf{X}_{k}^{p}\right)^{\top}
-\mathbf{X}_{k}^{p}+\lambda \mathbf{I}\right]^{-1}\left[\sum_{p=s}^{t}
-\beta^{p}\left(\mathbf{X}_{k}^{p}\right)^{\top}
-\mathbf{y}_{k}^{p}\right]
-\]</span></p></li>
-<li><p>利用卡尔曼滤波更新轨迹<span class="math inline">\(k\)</span>在当前帧的位置（<span class="math inline">\(\hat{x}_k^c, \hat{y}_k^c\)</span>）</p></li>
-<li><p>根据轨迹在当前的预测位置（<span class="math inline">\(\hat{x}_k^c,
-\hat{y}_k^c\)</span>）确定轨迹哪些检测目标是轨迹的邻居（周围目标）</p></li>
-<li><p>提取轨迹周围目标的中心点嵌入特征<span class="math inline">\(\mathbf{x}_j^{det}\)</span>，并根据轨迹的映射矩阵进行相似度预测。</p></li>
+<p>轨迹$k$的映射矩阵$\mathbf{w}<em>k^* $:<br>
+$$<br>
+\mathbf{w}</em>{k}^{*}=\left[\sum_{p=s}^{t} \beta^{p}\left(\mathbf{X}<em>{k}^{p}\right)^{\top} \mathbf{X}</em>{k}^{p}+\lambda \mathbf{I}\right]^{-1}\left[\sum_{p=s}^{t} \beta^{p}\left(\mathbf{X}<em>{k}^{p}\right)^{\top} \mathbf{y}</em>{k}^{p}\right]<br>
+$$</p>
+</li>
+<li>
+<p>利用卡尔曼滤波更新轨迹$k$在当前帧的位置（$\hat{x}_k^c, \hat{y}_k^c$）</p>
+</li>
+<li>
+<p>根据轨迹在当前的预测位置（$\hat{x}_k^c, \hat{y}_k^c$）确定轨迹哪些检测目标是轨迹的邻居（周围目标）</p>
+</li>
+<li>
+<p>提取轨迹周围目标的中心点嵌入特征$\mathbf{x}_j^{det}$，并根据轨迹的映射矩阵进行相似度预测。</p>
+</li>
 </ol>
 <h4 id="匹配流程">匹配流程</h4>
-<ol type="1">
+<ol>
 <li>利用预测的轨迹和目标的相似性进行第一轮匹配</li>
 <li>根据轨迹的虚拟位置和检测框的IoU进行第二轮匹配</li>
 <li>将仍未匹配上的轨迹加入缓存池；将仍未匹配上的检测初始化为新轨迹</li>
 </ol>
 <p>通过以上步骤便完成了多个目标的跨帧跟踪。</p>
 <h2 id="总结">总结</h2>
-<p>SOTMOT与FairMOT都有一个专门提取提升的嵌入特征的embedding
-Head，但他们的的不同点在于：</p>
-<ol type="1">
+<p>SOTMOT与FairMOT都有一个专门提取提升的嵌入特征的embedding Head，但他们的的不同点在于：</p>
+<ol>
 <li>SOTMOT学习的是如何将目标与周围其他目标区分，FairMOT需要学习将目标与整幅图像中的所有其他目标区分，SOTMOT的学习更具针对性，也更容易收敛。</li>
 <li>SOTMOT每次的映射度量是有一个最优参数估计（岭回归）在里面的，而FairMOT只是单纯运用余弦相似度进行映射。</li>
 </ol>
 <p>最后附上性能对比图：</p>
 <center>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220514111832808.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220514111832808" style="zoom:50%;">
-<br>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+  <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220514111832808.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220514111832808" style="zoom:50%;">
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d7;
     display: inline-block;
     color: #999;
-    padding: 2px;">
-private detection
-</div>
+    padding: 2px;">private detection</div>
 </center>
 
             </div>
@@ -438,9 +409,9 @@ private detection
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 

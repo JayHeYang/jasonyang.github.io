@@ -230,33 +230,20 @@
             <h1 style="display: none">（转载）详解IoU、GIoU、DIoU、CIoU、EIoU和DIoU-NMS</h1>
             
             <div class="markdown-body">
-              <h1 id="详解iougioudioucioueiou和diou-nms">详解IoU、GIoU、DIoU、CIoU、EIoU和DIoU-NMS</h1>
-<p>原文链接：https://aitechtogether.com/article/18153.html</p>
+              <h1>详解IoU、GIoU、DIoU、CIoU、EIoU和DIoU-NMS</h1>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://aitechtogether.com/article/18153.html">https://aitechtogether.com/article/18153.html</a></p>
 <p><strong>考虑的回归框的特性</strong></p>
 <ul>
 <li>IOU Loss：考虑了重叠面积，归一化坐标尺度；</li>
-<li>GIOU
-Loss：考虑了重叠面积，基于IOU解决边界框不相交时loss等于0的问题；</li>
-<li>DIOU
-Loss：考虑了重叠面积和中心点距离，基于IOU解决GIOU收敛慢的问题；</li>
-<li>CIOU
-Loss：考虑了重叠面积、中心点距离、纵横比，基于DIOU提升回归精确度；</li>
-<li>EIOU
-Loss：考虑了重叠面积，中心点距离、长宽边长真实差，基于CIOU解决了纵横比的模糊定义，并添加Focal
-Loss解决BBox回归中的样本不平衡问题。</li>
+<li>GIOU Loss：考虑了重叠面积，基于IOU解决边界框不相交时loss等于0的问题；</li>
+<li>DIOU Loss：考虑了重叠面积和中心点距离，基于IOU解决GIOU收敛慢的问题；</li>
+<li>CIOU Loss：考虑了重叠面积、中心点距离、纵横比，基于DIOU提升回归精确度；</li>
+<li>EIOU Loss：考虑了重叠面积，中心点距离、长宽边长真实差，基于CIOU解决了纵横比的模糊定义，并添加Focal Loss解决BBox回归中的样本不平衡问题。</li>
 </ul>
 <p><strong>对比简表</strong></p>
 <table>
-<colgroup>
-<col style="width: 2%">
-<col style="width: 19%">
-<col style="width: 19%">
-<col style="width: 19%">
-<col style="width: 19%">
-<col style="width: 19%">
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>IOU Loss</th>
 <th>GIOU Loss</th>
 <th>DIOU Loss</th>
@@ -266,25 +253,20 @@ Loss解决BBox回归中的样本不平衡问题。</li>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>优点</td>
 <td>IOU算法是目标检测中最常用的指标，具有尺度不变性，满足非负性；同一性；对称性；三角不等性等特点。</td>
 <td>GIOU在基于IOU特性的基础上引入最小外接框解决检测框和真实框没有重叠时loss等于0问题。</td>
 <td>DIOU在基于IOU特性的基础上考虑到GIOU的缺点，直接回归两个框中心点的欧式距离，加速收敛。</td>
 <td>CIOU就是在DIOU的基础上增加了检测框尺度的loss，增加了长和宽的loss，这样预测框就会更加的符合真实框。</td>
-<td>EIOU在CIOU的基础上分别计算宽高的差异值取代了纵横比，同时引入Focal
-Loss解决难易样本不平衡的问题。</td>
+<td>EIOU在CIOU的基础上分别计算宽高的差异值取代了纵横比，同时引入Focal Loss解决难易样本不平衡的问题。</td>
 </tr>
-<tr class="even">
+<tr>
 <td>缺点</td>
-<td>1.如果两个框不相交，不能反映两个框距离远近
-2.无法精确的反映两个框的重合度大小</td>
-<td>1.当检测框和真实框出现包含现象的时候GIOU退化成IOU
-2.两个框相交时，在水平和垂直方向上收敛慢</td>
-<td>回归过程中未考虑Bounding
-box的纵横比，精确度上尚有进一步提升的空间</td>
-<td>1. 纵横比描述的是相对值，存在一定的模糊 2.
-未考虑难易样本的平衡问题</td>
+<td>1.如果两个框不相交，不能反映两个框距离远近 2.无法精确的反映两个框的重合度大小</td>
+<td>1.当检测框和真实框出现包含现象的时候GIOU退化成IOU 2.两个框相交时，在水平和垂直方向上收敛慢</td>
+<td>回归过程中未考虑Bounding box的纵横比，精确度上尚有进一步提升的空间</td>
+<td>1. 纵横比描述的是相对值，存在一定的模糊 2. 未考虑难易样本的平衡问题</td>
 <td>待定</td>
 </tr>
 </tbody>

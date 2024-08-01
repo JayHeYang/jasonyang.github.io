@@ -230,14 +230,13 @@
             <h1 style="display: none">（转载）Pytorch运行时指定对应序号的显卡</h1>
             
             <div class="markdown-body">
-              <h1 id="pytorch运行时指定对应序号的显卡">Pytorch运行时指定对应序号的显卡</h1>
-<p>原文链接：https://zhuanlan.zhihu.com/p/166161217</p>
-<h2 id="在代码中指定">1. 在代码中指定</h2>
+              <h1>Pytorch运行时指定对应序号的显卡</h1>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166161217">https://zhuanlan.zhihu.com/p/166161217</a></p>
+<h2 id="1-在代码中指定">1. 在代码中指定</h2>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os <br>os.environ[<span class="hljs-string">'CUDA_VISIBLE_DEVICES'</span>] = <span class="hljs-string">'2'</span> <br></code></pre></td></tr></tbody></table></figure>
-<h2 id="在命令行中执行代码时指定">2. 在命令行中执行代码时指定</h2>
+<h2 id="2-在命令行中执行代码时指定">2. 在命令行中执行代码时指定</h2>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">CUDA_VISIBLE_DEVICES='2' python3 train.py<br></code></pre></td></tr></tbody></table></figure>
-<h2 id="在命令行中执行脚本文件时指定">3.
-在命令行中执行脚本文件时指定</h2>
+<h2 id="3-在命令行中执行脚本文件时指定">3. 在命令行中执行脚本文件时指定</h2>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">CUDA_VISIBLE_DEVICES='2' sh run.sh<br></code></pre></td></tr></tbody></table></figure>
 
             </div>

@@ -230,113 +230,104 @@
             <h1 style="display: none">Gaussian Processes for Regression</h1>
             
             <div class="markdown-body">
-              <h1 id="高斯过程回归gaussian-processes-for-regression">高斯过程回归（Gaussian
-Processes for Regression）</h1>
+              <h1>高斯过程回归（Gaussian Processes for Regression）</h1>
 <hr>
 <h2 id="实际问题">实际问题</h2>
-<p>如下图所示，我们已知<span class="math inline">\(x\)</span>在<span class="math inline">\(\left[\begin{array}{llllll} -1.50 &amp; -1.00
-&amp; -0.75 &amp; -0.40 &amp; -0.25 &amp; 0.00
-\end{array}\right]\)</span>处的观测值以及他们在这些点处的观测标准差<span class="math inline">\(\sigma_n=0.3\)</span>，如何根据这些已知信息去求得<span class="math inline">\(x_*=0.2\)</span>时，<span class="math inline">\(y_*=?\)</span>。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513113623452.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513113623452" style="zoom:35%;"></p>
+<p>如下图所示，我们已知$x$在$\left[\begin{array}{llllll}<br>
+-1.50 &amp; -1.00 &amp; -0.75 &amp; -0.40 &amp; -0.25 &amp; 0.00<br>
+\end{array}\right]$处的观测值以及他们在这些点处的观测标准差$\sigma_n=0.3$，如何根据这些已知信息去求得$x_<em>=0.2$时，$y_</em>=?$。</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513113623452.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513113623452" style="zoom:35%;">
 <h2 id="问题建模">问题建模</h2>
 <h3 id="确定衡量观测点影响重要程度的协方差函数">确定衡量观测点影响重要程度的协方差函数</h3>
-<p>​ 一般选用径向基函数（RBF）来衡量两个观测点之间的协方差（影响程度）：
-<span class="math display">\[
-k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp
-\left[\frac{-\left(x-x^{\prime}\right)^{2}}{2 l^{2}}\right]
-\]</span></p>
+<p>​	一般选用径向基函数（RBF）来衡量两个观测点之间的协方差（影响程度）：<br>
+$$<br>
+k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp \left[\frac{-\left(x-x^{\prime}\right)^{2}}{2 l^{2}}\right]<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(k(x,x')\)</span>表示<span class="math inline">\(x\)</span>与<span class="math inline">\(x'\)</span>之间的协方差，<span class="math inline">\(\sigma_f\)</span>控制影响强度，<span class="math inline">\(l\)</span>控制影响周期。</p>
+<p>$k(x,x’)$表示$x$与$x’$之间的协方差，$\sigma_f$控制影响强度，$l$控制影响周期。</p>
 </blockquote>
 <h3 id="不同时刻或者位置的观测值">不同时刻或者位置的观测值</h3>
-<p>一个系统或者运动物体在时刻<span class="math inline">\(t\)</span>或者位置<span class="math inline">\(x\)</span>的观测值<span class="math inline">\(y\)</span>有如下计算公式： <span class="math display">\[
-y=f(x)+\mathcal{N}(0, \sigma_{n}^{2})
-\]</span></p>
+<p>一个系统或者运动物体在时刻$t$或者位置$x$的观测值$y$有如下计算公式：<br>
+$$<br>
+y=f(x)+\mathcal{N}(0, \sigma_{n}^{2})<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(f(.)\)</span>表示依赖或者映射函数，<span class="math inline">\(\mathcal{N}(0,
-\sigma_{n}^{2})\)</span>表示测量值噪声服从均值为0，方差为<span class="math inline">\(\sigma_{n}^2\)</span>的高斯分布。</p>
+<p>$f(.)$表示依赖或者映射函数，$\mathcal{N}(0, \sigma_{n}^{2})$表示测量值噪声服从均值为0，方差为$\sigma_{n}^2$的高斯分布。</p>
 </blockquote>
 <h3 id="融合观测噪声的协方差函数">融合观测噪声的协方差函数</h3>
-<p><span class="math display">\[
-k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp
-\left[\frac{-\left(x-x^{\prime}\right)^{2}}{2
-l^{2}}\right]+\sigma_{n}^{2} \delta\left(x, x^{\prime}\right)
-\]</span></p>
+<p>$$<br>
+k\left(x, x^{\prime}\right)=\sigma_{f}^{2} \exp \left[\frac{-\left(x-x^{\prime}\right)^{2}}{2 l^{2}}\right]+\sigma_{n}^{2} \delta\left(x, x^{\prime}\right)<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(\delta(.)\)</span>表示Kronecker三角函数，当<span class="math inline">\(x=x'\)</span>时，<span class="math inline">\(\delta(x, x')=1\)</span>,其余时候等于0.</p>
+<p>$\delta(.)$表示Kronecker三角函数，当$x=x’$时，$\delta(x, x’)=1$,其余时候等于0.</p>
 </blockquote>
 <h3 id="根据任意两个观测点计算得到协方差矩阵">根据任意两个观测点计算得到协方差矩阵</h3>
-<p>根据2.3中的协方差函数以及已知观测点的位置<span class="math inline">\(x\)</span>和未知待预测点的位置<span class="math inline">\(x_*\)</span>计算得到以下协方差阵： <span class="math display">\[
-K=\left[\begin{array}{cccc}
-k\left(x_{1}, x_{1}\right) &amp; k\left(x_{1}, x_{2}\right) &amp; \cdots
-&amp; k\left(x_{1}, x_{n}\right) \\
-k\left(x_{2}, x_{1}\right) &amp; k\left(x_{2}, x_{2}\right) &amp; \cdots
-&amp; k\left(x_{2}, x_{n}\right) \\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
-k\left(x_{n}, x_{1}\right) &amp; k\left(x_{n}, x_{2}\right) &amp; \cdots
-&amp; k\left(x_{n}, x_{n}\right)
-\end{array}\right]
-\]</span></p>
-<p><span class="math display">\[
-K_{*}=\left[\begin{array}{llll}
-k\left(x_{*}, x_{1}\right) &amp; k\left(x_{*}, x_{2}\right) &amp; \cdots
-&amp; k\left(x_{*}, x_{n}\right)
-\end{array}\right] \quad K_{* *}=k\left(x_{*}, x_{*}\right)
-\]</span></p>
+<p>根据2.3中的协方差函数以及已知观测点的位置$x$和未知待预测点的位置$x_*$计算得到以下协方差阵：<br>
+$$<br>
+K=\left[\begin{array}{cccc}<br>
+k\left(x_{1}, x_{1}\right) &amp; k\left(x_{1}, x_{2}\right) &amp; \cdots &amp; k\left(x_{1}, x_{n}\right) \<br>
+k\left(x_{2}, x_{1}\right) &amp; k\left(x_{2}, x_{2}\right) &amp; \cdots &amp; k\left(x_{2}, x_{n}\right) \<br>
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \<br>
+k\left(x_{n}, x_{1}\right) &amp; k\left(x_{n}, x_{2}\right) &amp; \cdots &amp; k\left(x_{n}, x_{n}\right)<br>
+\end{array}\right]<br>
+$$</p>
+<p>$$<br>
+K_{<em>}=\left[\begin{array}{llll}<br>
+k\left(x_{</em>}, x_{1}\right) &amp; k\left(x_{<em>}, x_{2}\right) &amp; \cdots &amp; k\left(x_{</em>}, x_{n}\right)<br>
+\end{array}\right] \quad K_{* <em>}=k\left(x_{</em>}, x_{*}\right)<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(x_1, ...,
-x_n\)</span>表示已知观测点，<span class="math inline">\(x_*\)</span>表示待预测的点。可以确定的是依据2.3中的公式，矩阵<span class="math inline">\(K\)</span>的对角线元素为<span class="math inline">\(\sigma_f^2 + \sigma_n^2\)</span>。</p>
+<p>$x_1, …, x_n$表示已知观测点，$x_*$表示待预测的点。可以确定的是依据2.3中的公式，矩阵$K$的对角线元素为$\sigma_f^2 + \sigma_n^2$。</p>
 </blockquote>
 <h3 id="基于高斯过程和最大后验概率求解待预测值">基于高斯过程和最大后验概率求解待预测值</h3>
-<p>基于之前的关键假设：观测系统是一个高斯过程。所以目前的观测值和待预测值服从一个多元高斯分布：
-<span class="math display">\[
-\left[\begin{array}{c}
-\mathbf{y} \\
-y_{*}
-\end{array}\right] \sim
-\mathcal{N}\left(\mathbf{0},\left[\begin{array}{ll}
-K &amp; K_{*}^{\mathrm{T}} \\
-K_{*} &amp; K_{* *}
-\end{array}\right]\right)
-\]</span> 现在需要做的是，求得一个待预测的观测值<span class="math inline">\(y_*\)</span>，使得<span class="math inline">\(p(y_*|\mathbf{y})\)</span>的概率最大，换句话说使得<span class="math inline">\(p(y_*|\mathbf{y})\)</span>概率最大的<span class="math inline">\(y_*\)</span>即为所求的最佳高斯过程回归值。</p>
-<p><span class="math inline">\(y_*|\mathbf{y}\)</span>的条件概率服从：
-<span class="math display">\[
-y_{*} \mid \mathbf{y} \sim \mathcal{N}\left(K_{*} K^{-1} \mathbf{y},
-K_{* *}-K_{*} K^{-1} K_{*}^{\mathrm{T}}\right)
-\]</span> 综上，<span class="math inline">\(y_*\)</span>的最佳估计和估计的方差为： <span class="math display">\[
-\bar{y}_{*}=K_{*} K^{-1} \mathbf{y}
-\]</span></p>
-<p><span class="math display">\[
-\operatorname{var}\left(y_{*}\right)=K_{* *}-K_{*} K^{-1}
-K_{*}^{\mathrm{T}}
-\]</span></p>
+<p>基于之前的关键假设：观测系统是一个高斯过程。所以目前的观测值和待预测值服从一个多元高斯分布：<br>
+$$<br>
+\left[\begin{array}{c}<br>
+\mathbf{y} \<br>
+y_{<em>}<br>
+\end{array}\right] \sim \mathcal{N}\left(\mathbf{0},\left[\begin{array}{ll}<br>
+K &amp; K_{</em>}^{\mathrm{T}} \<br>
+K_{<em>} &amp; K_{</em> <em>}<br>
+\end{array}\right]\right)<br>
+$$<br>
+现在需要做的是，求得一个待预测的观测值$y_</em>$，使得$p(y_<em>|\mathbf{y})$的概率最大，换句话说使得$p(y_</em>|\mathbf{y})$概率最大的$y_*$即为所求的最佳高斯过程回归值。</p>
+<p>$y_<em>|\mathbf{y}$的条件概率服从：<br>
+$$<br>
+y_{</em>} \mid \mathbf{y} \sim \mathcal{N}\left(K_{<em>} K^{-1} \mathbf{y}, K_{</em> <em>}-K_{</em>} K^{-1} K_{<em>}^{\mathrm{T}}\right)<br>
+$$<br>
+综上，$y_</em>$的最佳估计和估计的方差为：<br>
+$$<br>
+\bar{y}<em>{*}=K</em>{*} K^{-1} \mathbf{y}<br>
+$$</p>
+<p>$$<br>
+\operatorname{var}\left(y_{<em>}\right)=K_{</em> <em>}-K_{</em>} K^{-1} K_{*}^{\mathrm{T}}<br>
+$$</p>
 <blockquote>
-<p>这里的估计均值和方差在协方差矩阵中没有显式的声明<span class="math inline">\(\sigma_{n}^{2}I\)</span>的原因在于公式（3）中已经融合了协方差值</p>
+<p>这里的估计均值和方差在协方差矩阵中没有显式的声明$\sigma_{n}^{2}I$的原因在于公式（3）中已经融合了协方差值</p>
 </blockquote>
 <h2 id="例题">例题</h2>
-<p>依据上述第一节的例题，有6个观测点值<span class="math inline">\(x=
-\left[\begin{array}{llllll}-1.50 &amp; -1.00 &amp; -0.75 &amp; -0.40
-&amp; -0.25 &amp; 0.00\end{array}\right]\)</span>，同时可以假定<span class="math inline">\(\sigma_n=0.3\)</span>，设定<span class="math inline">\(\sigma_f=1.27,
-l=1\)</span>，则依据公式（3）（4）（5）得： <span class="math display">\[
-K=\left[\begin{array}{llllll}
-1.70 &amp; 1.42 &amp; 1.21 &amp; 0.87 &amp; 0.72 &amp; 0.51 \\
-1.42 &amp; 1.70 &amp; 1.56 &amp; 1.34 &amp; 1.21 &amp; 0.97 \\
-1.21 &amp; 1.56 &amp; 1.70 &amp; 1.51 &amp; 1.42 &amp; 1.21 \\
-0.87 &amp; 1.34 &amp; 1.51 &amp; 1.70 &amp; 1.59 &amp; 1.48 \\
-0.72 &amp; 1.21 &amp; 1.42 &amp; 1.59 &amp; 1.70 &amp; 1.56 \\
-0.51 &amp; 0.97 &amp; 1.21 &amp; 1.48 &amp; 1.56 &amp; 1.70
-\end{array}\right]
-\\
-K_{*}=\left[\begin{array}{llllll}
-0.38 &amp; 0.79 &amp; 1.03 &amp; 1.35 &amp; 1.46 &amp; 1.58
-\end{array}\right] ,\ \  \    K_{**}=1.70
-\]</span> 之后依据公式（8）（9）得到： <span class="math display">\[
-\bar{y}_{*}=0.95 ，\ \  \operatorname{var}\left(y_{*}\right)=0.21
-\]</span>
+<p>依据上述第一节的例题，有6个观测点值$x= \left[\begin{array}{llllll}-1.50 &amp; -1.00 &amp; -0.75 &amp; -0.40 &amp; -0.25 &amp; 0.00\end{array}\right]$，同时可以假定$\sigma_n=0.3$，设定$\sigma_f=1.27, l=1$，则依据公式（3）（4）（5）得：<br>
+$$<br>
+K=\left[\begin{array}{llllll}<br>
+1.70 &amp; 1.42 &amp; 1.21 &amp; 0.87 &amp; 0.72 &amp; 0.51 \<br>
+1.42 &amp; 1.70 &amp; 1.56 &amp; 1.34 &amp; 1.21 &amp; 0.97 \<br>
+1.21 &amp; 1.56 &amp; 1.70 &amp; 1.51 &amp; 1.42 &amp; 1.21 \<br>
+0.87 &amp; 1.34 &amp; 1.51 &amp; 1.70 &amp; 1.59 &amp; 1.48 \<br>
+0.72 &amp; 1.21 &amp; 1.42 &amp; 1.59 &amp; 1.70 &amp; 1.56 \<br>
+0.51 &amp; 0.97 &amp; 1.21 &amp; 1.48 &amp; 1.56 &amp; 1.70<br>
+\end{array}\right]<br>
+\<br>
+K_{<em>}=\left[\begin{array}{llllll}<br>
+0.38 &amp; 0.79 &amp; 1.03 &amp; 1.35 &amp; 1.46 &amp; 1.58<br>
+\end{array}\right] ,\ \  \    K_{**}=1.70<br>
+$$<br>
+之后依据公式（8）（9）得到：<br>
+$$<br>
+\bar{y}_{</em>}=0.95 ，\ \  \operatorname{var}\left(y_{*}\right)=0.21<br>
+$$<br>
 <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220513150426202.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220513150426202" style="zoom:35%;"></p>
 <blockquote>
-<p>图中黑色实线表示GPR预测值，黑色原点表示实际观测值，蓝色点表示在<span class="math inline">\(x=0.2\)</span>处的观测值，红色区域表示95%的置信度区间（<span class="math inline">\(\bar{y}_{*} \pm 1.96
-\sqrt{\operatorname{var}\left(y_{*}\right)}\)</span>）。</p>
+<p>图中黑色实线表示GPR预测值，黑色原点表示实际观测值，蓝色点表示在$x=0.2$处的观测值，红色区域表示95%的置信度区间（$\bar{y}<em>{*} \pm 1.96 \sqrt{\operatorname{var}\left(y</em>{*}\right)}$）。</p>
 </blockquote>
 
             </div>
@@ -347,9 +338,9 @@ K_{*}=\left[\begin{array}{llllll}
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
                     
                   </div>
                 

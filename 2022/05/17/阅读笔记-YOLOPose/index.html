@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      658 字
+      654 字
     </span>
   
 
@@ -230,78 +230,59 @@
             <h1 style="display: none">阅读笔记-YOLO_Pose:Enhancing YOLO for Multi Person Pose Estimation Using Object Keypoint Similarity Loss</h1>
             
             <div class="markdown-body">
-              <h1 id="yolo-pose-enhancing-yolo-for-multi-person-pose-estimation-using-object-keypoint-similarity-loss">YOLO-Pose:
-Enhancing YOLO for Multi Person Pose Estimation Using Object Keypoint
-Similarity Loss</h1>
-<p>原文链接：https://arxiv.org/pdf/2204.06806.pdf</p>
+              <h1>YOLO-Pose: Enhancing YOLO for Multi Person Pose Estimation Using Object Keypoint Similarity Loss</h1>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2204.06806.pdf">https://arxiv.org/pdf/2204.06806.pdf</a></p>
 <h2 id="行文结构">行文结构</h2>
 <h3 id="摘要">摘要</h3>
 <p><strong>目前算法的问题：</strong></p>
-<ol type="1">
-<li>不是端到端训练，同时无法直接依据姿态检测的指标OKS进行训练，而是使用L1
-Loss进行替代。</li>
+<ol>
+<li>不是端到端训练，同时无法直接依据姿态检测的指标OKS进行训练，而是使用L1 Loss进行替代。</li>
 </ol>
-<p>所提算法允许进行端到端地训练模型并优化 OKS
-指标本身。所提出的模型学习在单次前向传递中联合检测多人的边界框及其相应的
-2D 姿势。</p>
+<p>所提算法允许进行端到端地训练模型并优化 OKS 指标本身。所提出的模型学习在单次前向传递中联合检测多人的边界框及其相应的 2D 姿势。</p>
 <center>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525201239786.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525201239786" style="zoom:23%;"><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525201313195.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525201313195" style="zoom:25%;">
-<br>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+  <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525201239786.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525201239786" style="zoom:23%;"><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525201313195.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525201313195" style="zoom:25%;">
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d7;
     display: inline-block;
     color: #999;
-    padding: 2px;">
-算法可视化对比 ：YOLO-pose(左)， HigherHRNetW32（右）
-</div>
+    padding: 2px;">算法可视化对比 ：YOLO-pose(左)， HigherHRNetW32（右）</div>
 </center>
 <blockquote>
 <p>上图中HRNet需要先运行一次目标检测网络然后才能对框定的bbox进行姿态估计。</p>
 </blockquote>
 <h3 id="介绍">介绍</h3>
-<p><strong>2D人体姿态估计：</strong>多人 2D
-姿势估计是理解图像中的人类的任务。
-给定输入图像，目标是检测每个人并定位他们的身体关节。
-由于图像中的人数可变、比例变化、身体部位的遮挡、人体的非刚性以及各种其他原因，推断图像中多人的姿势可能具有挑战性。</p>
+<p>**2D人体姿态估计：**多人 2D 姿势估计是理解图像中的人类的任务。 给定输入图像，目标是检测每个人并定位他们的身体关节。 由于图像中的人数可变、比例变化、身体部位的遮挡、人体的非刚性以及各种其他原因，推断图像中多人的姿势可能具有挑战性。</p>
 <p>提出的姿态估计技术可以很容易地集成到任何运行目标检测的计算机视觉系统中，计算量几乎为零。</p>
-<h3 id="yolo-pose整体结构">YOLO-Pose整体结构</h3>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525204036320.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525204036320" style="zoom:50%;"></p>
-<p>就是相当于YOLOv5在之前的bbox分支基础上重新增加了一个Head去回归目标的姿态。整体的预测向量如下：
-<span class="math display">\[
-\begin{array}{l}
-P_{v}=\left\{C_{x}, C_{y}, W, H, \text { box }_{\text {conf }}, \text {
-class }_{\text {conf }}, K_{x}^{1}, K_{y}^{1}, K_{\text {conf }}^{1},
-\ldots\right., K_{x}^{n}, K_{y}^{n}, K_{\text {conf }\}}^{n}
-\end{array}
-\]</span></p>
+<h3 id="YOLO-Pose整体结构">YOLO-Pose整体结构</h3>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525204036320.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525204036320" style="zoom:50%;">
+<p>就是相当于YOLOv5在之前的bbox分支基础上重新增加了一个Head去回归目标的姿态。整体的预测向量如下：<br>
+$$<br>
+\begin{array}{l}<br>
+P_{v}=\left{C_{x}, C_{y}, W, H, \text { box }<em>{\text {conf }}, \text { class }</em>{\text {conf }}, K_{x}^{1}, K_{y}^{1}, K_{\text {conf }}^{1}, \ldots\right., K_{x}^{n}, K_{y}^{n}, K_{\text {conf }}}^{n}<br>
+\end{array}<br>
+$$</p>
 <blockquote>
-<p>其中<span class="math inline">\(n=17\)</span>代表需要预测17个人体关键点，每个关键点由位置<span class="math inline">\(x,y\)</span>和关键点置信度<span class="math inline">\(K_{conf}\)</span>衡量。在推理时保留置信度高于0.5的关键点。</p>
+<p>其中$n=17$代表需要预测17个人体关键点，每个关键点由位置$x,y$和关键点置信度$K_{conf}$衡量。在推理时保留置信度高于0.5的关键点。</p>
 </blockquote>
-<h4 id="oks损失计算">OKS损失计算</h4>
-<p><span class="math display">\[
-\begin{aligned}
-\mathcal{L}_{k p t s}(s, i, j, k) &amp;=1-\sum_{n=1}^{N_{k p t s}} O K S
-\\
-&amp;=1-\frac{\sum_{n=1}^{N_{k p t s}} \exp \left(\frac{d_{n}^{2}}{2
-s^{2} k_{n}^{2}}\right) \delta\left(v_{n}&gt;0\right)}{\sum_{n=1}^{N_{k
-p t s}} \delta\left(v_{n}&gt;0\right)}
-\end{aligned}
-\]</span></p>
+<h4 id="OKS损失计算">OKS损失计算</h4>
+<p>$$<br>
+\begin{aligned}<br>
+\mathcal{L}<em>{k p t s}(s, i, j, k) &amp;=1-\sum</em>{n=1}^{N_{k p t s}} O K S \<br>
+&amp;=1-\frac{\sum_{n=1}^{N_{k p t s}} \exp \left(\frac{d_{n}^{2}}{2 s^{2} k_{n}^{2}}\right) \delta\left(v_{n}&gt;0\right)}{\sum_{n=1}^{N_{k p t s}} \delta\left(v_{n}&gt;0\right)}<br>
+\end{aligned}<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(d_n\)</span>表示第<span class="math inline">\(n\)</span>个关键点GT与Pred之间的欧氏距离；</p>
-<p><span class="math inline">\(s\)</span>表示目标的尺度（也即anchor
-bbox的尺度），其他描述又说是目标关键点轮廓的面积；</p>
-<p><span class="math inline">\(k_n\)</span>表示第<span class="math inline">\(n\)</span>个关键点的权重；</p>
-<p><span class="math inline">\(\delta(v_n)\)</span>表示关键点可见度符号函数，当真实可见度<span class="math inline">\(v_n &gt; 0\)</span>时，<span class="math inline">\(\delta(v_n)\)</span>等于1。</p>
+<p>$d_n$表示第$n$个关键点GT与Pred之间的欧氏距离；</p>
+<p>$s$表示目标的尺度（也即anchor bbox的尺度），其他描述又说是目标关键点轮廓的面积；</p>
+<p>$k_n$表示第$n$个关键点的权重；</p>
+<p>$\delta(v_n)$表示关键点可见度符号函数，当真实可见度$v_n &gt; 0$时，$\delta(v_n)$等于1。</p>
 </blockquote>
-<h3 id="sota结果对比">SOTA结果对比</h3>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220526093441077.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220526093441077" style="zoom:67%;"></p>
-<h3 id="l1-loss和oks-loss的对比分析">L1 Loss和OKS Loss的对比分析</h3>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220526093646961.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220526093646961" style="zoom: 33%;"></p>
-<h3 id="macs与flops的比较">MACs与FLOPs的比较</h3>
-<figure>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/v2-ec81621db83d2e9216d320410d5a8771_b.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
+<h3 id="SOTA结果对比">SOTA结果对比</h3>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220526093441077.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220526093441077" style="zoom:67%;">
+<h3 id="L1-Loss和OKS-Loss的对比分析">L1 Loss和OKS Loss的对比分析</h3>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220526093646961.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220526093646961" style="zoom: 33%;">
+<h3 id="MACs与FLOPs的比较">MACs与FLOPs的比较</h3>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/v2-ec81621db83d2e9216d320410d5a8771_b.jpg" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="img"></p>
 
             </div>
             <hr>

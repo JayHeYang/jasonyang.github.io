@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      469 字
+      467 字
     </span>
   
 
@@ -230,7 +230,7 @@
             <h1 style="display: none">Linux SSH配置方案</h1>
             
             <div class="markdown-body">
-              <h1 id="linux-ssh配置方案">Linux SSH配置方案</h1>
+              <h1>Linux SSH配置方案</h1>
 <p>[TOC]</p>
 <h2 id="安装sshd服务">安装sshd服务</h2>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get install sshd<br></code></pre></td></tr></tbody></table></figure>
@@ -238,21 +238,18 @@
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service sshd start<br></code></pre></td></tr></tbody></table></figure>
 <p>这里也可以终止服务</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service sshd stop<br></code></pre></td></tr></tbody></table></figure>
-<h2 id="配置ssh开放端口并允许远程访问">配置ssh，开放端口，并允许远程访问</h2>
+<h2 id="配置ssh，开放端口，并允许远程访问">配置ssh，开放端口，并允许远程访问</h2>
 <p>键入以下指令打开ssh配置文件</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo gedit /etc/ssh/sshd_config<br></code></pre></td></tr></tbody></table></figure>
 <p>打开后修改文件如下：</p>
-<figure>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220612100551512.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220612100551512">
-<figcaption aria-hidden="true">image-20220612100551512</figcaption>
-</figure>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220612100551512.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220612100551512"></p>
 <h2 id="查看ssh服务启动状态">查看ssh服务启动状态</h2>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service ssh status<br></code></pre></td></tr></tbody></table></figure>
 <p>如果其<code>Active:</code>显示为<code>active(running)</code>则为开启状态；反之如果显示为<code>inactive (dead)</code>则此时处于未运行状态。</p>
 <h2 id="查看linux服务器端的ip地址">查看linux服务器端的ip地址</h2>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ip address<br></code></pre></td></tr></tbody></table></figure>
 <h2 id="ssh远程连接与免密登录">ssh远程连接与免密登录</h2>
-<h3 id="用户名密码登录">用户名+密码登录</h3>
+<h3 id="用户名-密码登录">用户名+密码登录</h3>
 <p>在客户端（mac或者Windows），（刚才配置的linux暂且称为服务器端）的终端输入：</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ssh username@198.98.198.222 -p 22<br></code></pre></td></tr></tbody></table></figure>
 <p>然后根据提示输入用户的密码即可登录。</p>
@@ -266,10 +263,9 @@
 <figure class="highlight crmsh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host my_server<br>    HostName <span class="hljs-number">198.98</span>.<span class="hljs-number">198.222</span> <span class="hljs-comment"># 刚才的linux的ip地址</span><br>    <span class="hljs-keyword">User</span> <span class="hljs-title">username</span> <span class="hljs-comment"># 需要登录的用户名</span><br>    Port <span class="hljs-number">22</span> <br>    IdentityFile <span class="hljs-string">"~/.ssh/my_rsa"</span><br><br></code></pre></td></tr></tbody></table></figure>
 <p>之后就可以直接在终端输入<code>ssh my_server</code>连接自己的linux服务器了。</p>
 <h2 id="参考博文">参考博文</h2>
-<p>【CSDN】Linux配置SSH服务实现远程远程访问：https://blog.csdn.net/liguangxianbin/article/details/79759498</p>
+<p>【CSDN】Linux配置SSH服务实现远程远程访问：<a target="_blank" rel="noopener" href="https://blog.csdn.net/liguangxianbin/article/details/79759498">https://blog.csdn.net/liguangxianbin/article/details/79759498</a></p>
 <p>【CSDN】linux开启ssh服务，实现ssh远程登录：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Shiny0815/article/details/95336929?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=Linux%E9%85%8D%E7%BD%AESSH%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-3-95336929.142%5Ev13%5Epc_search_result_control_group,157%5Ev14%5Enew_3&amp;spm=1018.2226.3001.4187">链接</a></p>
-<p>【网页】如何解决SSH连接 “Connection
-Refused”报错：https://www.wbolt.com/how-to-fix-ssh-connection-refused.html</p>
+<p>【网页】如何解决SSH连接 “Connection Refused”报错：<a target="_blank" rel="noopener" href="https://www.wbolt.com/how-to-fix-ssh-connection-refused.html">https://www.wbolt.com/how-to-fix-ssh-connection-refused.html</a></p>
 
             </div>
             <hr>

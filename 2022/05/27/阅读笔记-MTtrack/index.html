@@ -230,91 +230,90 @@
             <h1 style="display: none">阅读笔记-Towards Discriminative Representation:Multi-view Trajectory Contrastive Learning for Online Multi-object Tracking (MTtrack)</h1>
             
             <div class="markdown-body">
-              <h1 id="towards-discriminative-representation-multi-view-trajectory-contrastive-learning-for-online-multi-object-tracking">Towards
-Discriminative Representation: Multi-view Trajectory Contrastive
-Learning for Online Multi-object Tracking</h1>
-<p>原文链接：https://arxiv.org/pdf/2203.14208.pdf</p>
+              <h1>Towards Discriminative Representation: Multi-view Trajectory Contrastive Learning for Online Multi-object Tracking</h1>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.14208.pdf">https://arxiv.org/pdf/2203.14208.pdf</a></p>
 <h2 id="阅读疑惑">阅读疑惑</h2>
-<ol type="1">
-<li>“在推理阶段，开发了一种相似性引导的特征融合策略，以进一步提高轨迹表示的质量。”
-<ol type="1">
+<ol>
+<li>
+<p>“在推理阶段，开发了一种相似性引导的特征融合策略，以进一步提高轨迹表示的质量。”</p>
+<ol>
 <li>计算当前捕获的特征与之前轨迹buffer中的特征的余弦相似度，然后基于此相似度进行加权特征融合。</li>
-</ol></li>
-<li>在回归采样点坐标的时候，中心点特征的维度是<span class="math inline">\(256\times
-1\)</span>，无论如进行线性变化，最后得到维度都是<span class="math inline">\(N_k \times 1\)</span>，如何确定<span class="math inline">\(x,y\)</span>方向的偏移？
-<ol type="1">
-<li>应该是用中心点特征（256）去变换得到<span class="math inline">\(N_k\)</span>个坐标偏移点坐标，即<span class="math inline">\(1 \times 256-&gt;1 \times (N_k \times
-2)\)</span></li>
-</ol></li>
+</ol>
+</li>
+<li>
+<p>在回归采样点坐标的时候，中心点特征的维度是$256\times 1$，无论如进行线性变化，最后得到维度都是$N_k \times 1$，如何确定$x,y$方向的偏移？</p>
+<ol>
+<li>应该是用中心点特征（256）去变换得到$N_k$个坐标偏移点坐标，即$1 \times 256-&gt;1 \times (N_k \times 2)$</li>
+</ol>
+</li>
 </ol>
 <h2 id="行文结构">行文结构</h2>
 <h3 id="提出问题">提出问题</h3>
-<p>最近的工作主要利用单个或相邻帧中的特征来构建度量损失并授权网络来提取目标的表示。尽管这种策略是有效的，但它未能充分利用整个轨迹中包含的信息。许多具有不同身份的对象由于被遮挡或模糊而与相同的轨迹相关联，从而导致学习的表示无法区分。
-因此，需要提取更有意义和有区别的表示来提高关联的准确性。</p>
+<p>最近的工作主要利用单个或相邻帧中的特征来构建度量损失并授权网络来提取目标的表示。尽管这种策略是有效的，但它未能充分利用整个轨迹中包含的信息。许多具有不同身份的对象由于被遮挡或模糊而与相同的轨迹相关联，从而导致学习的表示无法区分。 因此，需要提取更有意义和有区别的表示来提高关联的准确性。</p>
 <h3 id="介绍">介绍</h3>
-<ol type="1">
+<ol>
 <li>将目标外观向量视为查询，并设计对比损失以使它们更靠近相应的轨迹中心，同时远离其他轨迹中心</li>
-<li>LVS （可学习视图采样）用多个自适应选择的关键点而不是锚点或其 2D
-中心来表示每个目标。</li>
+<li>LVS （可学习视图采样）用多个自适应选择的关键点而不是锚点或其 2D 中心来表示每个目标。</li>
 </ol>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520090626497.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220520090626497" style="zoom:60%;"></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520090626497.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220520090626497" style="zoom:60%;">
 <p>使用LVS方法能够让算法自动地去提取目标未遮挡部分的外观信息。</p>
-<p><em>目标的锚点或 2D 中心被其他对象遮挡，而 LVS
-仍然可以自适应地关注可见区域。</em></p>
-<ol start="3" type="1">
-<li>在推理阶段，我们注意到某些帧的目标特征不清楚，不适合表示轨迹。
-相应地，我们设计了一种相似度引导的特征融合（SGFF）策略，该策略基于历史特征相似度自适应地聚合特征，以减轻这些不良特征对轨迹表示的影响</li>
+<p><em>目标的锚点或 2D 中心被其他对象遮挡，而 LVS 仍然可以自适应地关注可见区域。</em></p>
+<ol start="3">
+<li>在推理阶段，我们注意到某些帧的目标特征不清楚，不适合表示轨迹。 相应地，我们设计了一种相似度引导的特征融合（SGFF）策略，该策略基于历史特征相似度自适应地聚合特征，以减轻这些不良特征对轨迹表示的影响</li>
 </ol>
 <h3 id="可学习视图采样">可学习视图采样</h3>
 <p><strong>基于中心点特征向量表示的缺点：</strong></p>
-<ol type="1">
+<ol>
 <li>目标中心点可能被其他物体遮挡，此时生成的外观向量无法反应目标的特征</li>
 <li>仅用一个向量表示每个目标无法为对比学习算法提供足够的样本。</li>
 </ol>
-<p>提取方法：首先提取目标中心点的特征向量<span class="math inline">\(v_{c}\)</span>表示目标的外观特征，然后使用一个线性变换层去回归<span class="math inline">\(N_k=9\)</span>个采样点相对于中心点的偏置offset，最后限制所有的采样点均在以<span class="math inline">\(c\)</span>为中心点的目标bbox框内。</p>
-<p>对于采样点坐标提取其对应的特征向量<span class="math inline">\(v_i^{k}\)</span>,经过4层FC之后得到增强后的特征表示<span class="math inline">\(\widetilde{v}_i^k\)</span>。</p>
+<p>提取方法：首先提取目标中心点的特征向量$v_{c}$表示目标的外观特征，然后使用一个线性变换层去回归$N_k=9$个采样点相对于中心点的偏置offset，最后限制所有的采样点均在以$c$为中心点的目标bbox框内。</p>
+<p>对于采样点坐标提取其对应的特征向量$v_i^{k}$,经过4层FC之后得到增强后的特征表示$\widetilde{v}_i^k$。</p>
 <blockquote>
-<p>注：在推理阶段，$N_k
-$个外观向量被合并为一个单独的向量来表示它们对应的目标。</p>
+<p>注：在推理阶段，$N_k $个外观向量被合并为一个单独的向量来表示它们对应的目标。</p>
 </blockquote>
-<h3 id="轨迹中心向量记忆库">轨迹中心(向量)记忆库</h3>
-<p>bank存储的是从开始到目前帧所有轨迹的中心特征向量,如果有<span class="math inline">\(N\)</span>个轨迹,则bank的向量维度为<span class="math inline">\(N\times
-256\)</span>,(假设一个id-embedding的特征向量是256维)</p>
-<ol type="1">
-<li><p>开发了一种基于动量的更新策略，在每次迭代中动态更新轨迹中心，而不需要历史梯度信息。</p></li>
-<li><p>收集从具有相同轨迹 ID
-的实例中提取的所有外观向量，以更新它们对应的轨迹中心</p></li>
-<li><p>利用所有外观特征向量中与中心特征向量余弦相似度最小的(最难学习)来更新中心特征.
-<span class="math display">\[
-c_{l} \leftarrow \alpha c_{l}+(1-\alpha) p_{m}^{l}
-\]</span> <span class="math inline">\(c_l\)</span>表示中心向量,<span class="math inline">\(\alpha=0.2\)</span>表示更新阈值,$ p_{m}^{l}<span class="math inline">\(表示轨迹\)</span>l$中最难学习的一条外观特征.</p></li>
-<li><p>在训练阶段，使用难样本更新轨迹中心有助于提高网络训练的效率。
-我们的实验结果已经证实了这个问题。</p></li>
+<h3 id="轨迹中心-向量-记忆库">轨迹中心(向量)记忆库</h3>
+<p>bank存储的是从开始到目前帧所有轨迹的中心特征向量,如果有$N$个轨迹,则bank的向量维度为$N\times 256$,(假设一个id-embedding的特征向量是256维)</p>
+<ol>
+<li>
+<p>开发了一种基于动量的更新策略，在每次迭代中动态更新轨迹中心，而不需要历史梯度信息。</p>
+</li>
+<li>
+<p>收集从具有相同轨迹 ID 的实例中提取的所有外观向量，以更新它们对应的轨迹中心</p>
+</li>
+<li>
+<p>利用所有外观特征向量中与中心特征向量余弦相似度最小的(最难学习)来更新中心特征.<br>
+$$<br>
+c_{l} \leftarrow \alpha c_{l}+(1-\alpha) p_{m}^{l}<br>
+$$<br>
+$c_l$表示中心向量,$\alpha=0.2$表示更新阈值,$ p_{m}^{l}$表示轨迹$l$中最难学习的一条外观特征.</p>
+</li>
+<li>
+<p>在训练阶段，使用难样本更新轨迹中心有助于提高网络训练的效率。 我们的实验结果已经证实了这个问题。</p>
+</li>
 </ol>
-<p>使用InfoNCE loss来监督,使得帧内第<span class="math inline">\(k\)</span>个外观特征<span class="math inline">\(\widetilde{v}_l^k\)</span>,与中心特征<span class="math inline">\(c_l\)</span>更加接近,而与其他轨迹的中心特征<span class="math inline">\(c_{other}\)</span>距离更远. <span class="math display">\[
-L_{N C E}^{k}=-\log \frac{\exp \left(\tilde{v}_{l}^{k} \cdot
-c_{l}\right) / \tau}{\sum_{i=0}^{N_{t}} \exp \left(\tilde{v}_{l}^{k}
-\cdot c_{i}\right) / \tau}
-\]</span></p>
-<p><span class="math display">\[
-L_{t c l}=\frac{1}{N_{a}} \sum_{k=1}^{N_{a}} L_{N C E}^{k}
-\]</span></p>
+<p>使用InfoNCE loss来监督,使得帧内第$k$个外观特征$\widetilde{v}<em>l^k$,与中心特征$c_l$更加接近,而与其他轨迹的中心特征$c</em>{other}$距离更远.<br>
+$$<br>
+L_{N C E}^{k}=-\log \frac{\exp \left(\tilde{v}<em>{l}^{k} \cdot c</em>{l}\right) / \tau}{\sum_{i=0}^{N_{t}} \exp \left(\tilde{v}<em>{l}^{k} \cdot c</em>{i}\right) / \tau}<br>
+$$</p>
+<p>$$<br>
+L_{t c l}=\frac{1}{N_{a}} \sum_{k=1}^{N_{a}} L_{N C E}^{k}<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(\tau=0.05\)</span>是一个[0-1]的超参数;<span class="math inline">\(N_t\)</span>表示中心数;<span class="math inline">\(N_a\)</span>表示有LVS确定的外观特征采样点数.</p>
+<p>$\tau=0.05$是一个[0-1]的超参数;$N_t$表示中心数;$N_a$表示有LVS确定的外观特征采样点数.</p>
 </blockquote>
 <h3 id="外观特征相似度指导的轨迹融合">外观特征相似度指导的轨迹融合</h3>
-<p>保留轨迹前<span class="math inline">\(Q\)</span>帧的外观特征,然后分别计算当前外观特征与之前外观特征的余弦相似度,得到一个加权值,最后将当前帧的特征融合进去.
-<span class="math display">\[
-\beta^{t}=\max \left\{0, \frac{1}{Q} \sum_{i=1}^{Q}
-\Psi_{d}\left(z_{l}^{t}, z_{l}^{t-i}\right)\right\}
-\]</span></p>
+<p>保留轨迹前$Q$帧的外观特征,然后分别计算当前外观特征与之前外观特征的余弦相似度,得到一个加权值,最后将当前帧的特征融合进去.<br>
+$$<br>
+\beta^{t}=\max \left{0, \frac{1}{Q} \sum_{i=1}^{Q} \Psi_{d}\left(z_{l}^{t}, z_{l}^{t-i}\right)\right}<br>
+$$</p>
 <blockquote>
-<p><span class="math inline">\(\Psi_{d}\)</span>表示余弦相似度的计算.,<span class="math inline">\(Q=30\)</span></p>
+<p>$\Psi_{d}$表示余弦相似度的计算.,$Q=30$</p>
 </blockquote>
 <p>这种以相似度来更新的有BUG，就是如果之前外观特征学得不好，后面学好了但是却一直无法更新,最后的结果就是越学越差。</p>
 <h2 id="总结">总结</h2>
 <p>  LVS从多个目标位置提取外观特征的做法值得借鉴,但是这样提取的特征不足以鲁棒性的表示目标,文章还使用了额外的4个FC来提取更具判别性的特征,这无疑增加了计算成本,同时提出的相似度指导的特征融合能够使用自适应权重,但是其权重却是通过与之前特征的相似度高低的得来的,这样会造成如果之前特征就学习不好的话,后面学好的特征仍无法更新目标外观模型的情况,个人感觉还不如使用可见度或者采样节点的可见度(或者目标的遮挡度)对外观模型进行加权融合.</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520110352302.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220520110352302" style="zoom:50%;"></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220520110352302.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220520110352302" style="zoom:50%;">
 
             </div>
             <hr>
@@ -324,9 +323,9 @@ L_{t c l}=\frac{1}{N_{a}} \sum_{k=1}^{N_{a}} L_{N C E}^{k}
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 

@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      98 字
+      96 字
     </span>
   
 
@@ -230,22 +230,18 @@
             <h1 style="display: none">02. 深度学习网络结构可视化</h1>
             
             <div class="markdown-body">
-              <h2 id="深度学习网络结构可视化">02. 深度学习网络结构可视化</h2>
-<h3 id="torchsummary">1. torchsummary</h3>
+              <h2 id="02-深度学习网络结构可视化">02. 深度学习网络结构可视化</h2>
+<h3 id="1-torchsummary">1. torchsummary</h3>
 <p>安装:</p>
 <figure class="highlight cmake"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> torchsummary<br></code></pre></td></tr></tbody></table></figure>
 <p>使用方法：</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">from</span> torchvision <span class="hljs-keyword">import</span> models<br><span class="hljs-keyword">from</span> torchsummary <span class="hljs-keyword">import</span> summary<br><br>device = torch.device(<span class="hljs-string">'cuda'</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">'cpu'</span>)<br>vgg = models.vgg16().to(device)<br><br><span class="hljs-string">'''</span><br><span class="hljs-string"># summary 函数完整形式</span><br><span class="hljs-string">summary(model, input_size, batch_size=-1, device=torch.device('cuda:0'),dtypes=None)</span><br><span class="hljs-string">'''</span><br>summary(vgg, (<span class="hljs-number">3</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>))<br></code></pre></td></tr></tbody></table></figure>
 <p>输出大概长这个样子：</p>
-<figure>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220226155818058.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220226155818058">
-<figcaption aria-hidden="true">image-20220226155818058</figcaption>
-</figure>
-<p>官方链接及使用指南：https://github.com/sksq96/pytorch-summary</p>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220226155818058.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220226155818058"></p>
+<p>官方链接及使用指南：<a target="_blank" rel="noopener" href="https://github.com/sksq96/pytorch-summary">https://github.com/sksq96/pytorch-summary</a></p>
 <div class="note note-success">
             <p><strong>Post Author:</strong> jasonyang</p>
           </div>
-
             </div>
             <hr>
             <div>

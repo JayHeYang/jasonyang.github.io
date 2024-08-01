@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.6k 字
+      1.7k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      19
+      20
        分钟
     </span>
   
@@ -230,78 +230,43 @@
             <h1 style="display: none">阅读笔记-Quasi-Dense Similarity Learning for Multiple Object Tracking</h1>
             
             <div class="markdown-body">
-              <h1 id="阅读笔记-quasi-dense-similarity-learning-for-multiple-object-tracking">阅读笔记-Quasi-Dense
-Similarity Learning for Multiple Object Tracking</h1>
-<p>论文连接：https://arxiv.org/pdf/2006.06664.pdf</p>
+              <h1>阅读笔记-Quasi-Dense Similarity Learning for Multiple Object Tracking</h1>
+<p>论文连接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2006.06664.pdf">https://arxiv.org/pdf/2006.06664.pdf</a></p>
 <h2 id="摘要">摘要</h2>
 <h3 id="原文">原文</h3>
-<p>​ Similarity learning has been recognized as a crucial step for object
-tracking. However, existing multiple object tracking methods only use
-sparse ground truth matching as the training objective, while ignoring
-the majority of the informative regions on the images. In this paper, we
-present Quasi-Dense Similarity Learning, which densely samples hundreds
-of region proposals on a pair of images for contrastive learning. We can
-directly combine this similarity learning with existing detection
-methods to build QuasiDense Tracking (QDTrack) without turning to
-displacement regression or motion priors. We also find that the
-resulting distinctive feature space admits a simple nearest neighbor
-search at the inference time. Despite its simplicity, QDTrack
-outperforms all existing methods on MOT, BDD100K, Waymo, and TAO
-tracking benchmarks. It achieves 68.7 MOTA at 20.3 FPS on MOT17 without
-using external training data. Compared to methods with similar
-detectors, it boosts almost 10 points of MOTA and significantly
-decreases the number of ID switches on BDD100K and Waymo datasets. Our
-code and trained models are available at http://vis.xyz/pub/qdtrack.</p>
+<p>​		Similarity learning has been recognized as a crucial step for object tracking. However, existing multiple object tracking methods only use sparse ground truth matching as the training objective, while ignoring the majority of the informative regions on the images. In this paper, we present Quasi-Dense Similarity Learning, which densely samples hundreds of region proposals on a pair of images for contrastive learning. We can directly combine this similarity learning with existing detection methods to build QuasiDense Tracking (QDTrack) without turning to displacement regression or motion priors. We also find that the resulting distinctive feature space admits a simple nearest neighbor search at the inference time. Despite its simplicity, QDTrack outperforms all existing methods on MOT, BDD100K, Waymo, and TAO tracking benchmarks. It achieves 68.7 MOTA at 20.3 FPS on MOT17 without using external training data. Compared to methods with similar detectors, it boosts almost 10 points of MOTA and significantly decreases the number of ID switches on BDD100K and Waymo datasets. Our code and trained models are available at <a target="_blank" rel="noopener" href="http://vis.xyz/pub/qdtrack">http://vis.xyz/pub/qdtrack</a>.</p>
 <h3 id="译文">译文</h3>
-<p>​
-相似性学习已被认为是对象跟踪的关键步骤。然而，现有的多目标跟踪方法仅使用稀疏的地面实况匹配作为训练目标，而忽略了图像上的大部分信息区域。在本文中，我们提出了准密集相似性学习，它在一对图像上密集采样数百个区域提议以进行对比学习。我们可以直接将这种相似性学习与现有的检测方法结合起来构建准密集跟踪（QDTrack），而无需转向位移回归或运动先验。我们还发现，由此产生的独特特征空间允许在推理时进行简单的最近邻搜索。尽管简单，但
-QDTrack 在 MOT、BDD100K、Waymo 和 TAO
-跟踪基准上优于所有现有方法。在不使用外部训练数据的情况下，它在 MOT17
-上以 20.3 FPS 的速度实现了 68.7
-MOTA。与具有类似检测器的方法相比，它提高了近 10 个点的
-MOTA，并显着减少了 BDD100K 和 Waymo 数据集上的 ID
-开关数量。我们的代码和经过训练的模型可在 http://vis.xyz/pub/qdtrack
-获得。</p>
+<p>​		相似性学习已被认为是对象跟踪的关键步骤。然而，现有的多目标跟踪方法仅使用稀疏的地面实况匹配作为训练目标，而忽略了图像上的大部分信息区域。在本文中，我们提出了准密集相似性学习，它在一对图像上密集采样数百个区域提议以进行对比学习。我们可以直接将这种相似性学习与现有的检测方法结合起来构建准密集跟踪（QDTrack），而无需转向位移回归或运动先验。我们还发现，由此产生的独特特征空间允许在推理时进行简单的最近邻搜索。尽管简单，但 QDTrack 在 MOT、BDD100K、Waymo 和 TAO 跟踪基准上优于所有现有方法。在不使用外部训练数据的情况下，它在 MOT17 上以 20.3 FPS 的速度实现了 68.7 MOTA。与具有类似检测器的方法相比，它提高了近 10 个点的 MOTA，并显着减少了 BDD100K 和 Waymo 数据集上的 ID 开关数量。我们的代码和经过训练的模型可在 <a target="_blank" rel="noopener" href="http://vis.xyz/pub/qdtrack">http://vis.xyz/pub/qdtrack</a> 获得。</p>
 <h2 id="总体思路">总体思路</h2>
 <h3 id="以前的外观嵌入学习方法">以前的外观嵌入学习方法</h3>
-<p>​
-以前MOT中的外观嵌入学习，要么是检测后单独使用ReID方法获得（a），要么就是联合检测和嵌入特征分类一同训练(b)，还有一类方法就是构建GT框的正负样本(c)，然后利用triplet
-loss训练。以上这些方法使用的都是只有GT框，都忽略了图像上的大部分信息区域，这些区域同样可当做负样本来扯远真实目标区域特征与其的距离，增强特征嵌入的判别性。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220619165204406.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220619165204406" style="zoom:50%;"></p>
+<p>​		以前MOT中的外观嵌入学习，要么是检测后单独使用ReID方法获得（a），要么就是联合检测和嵌入特征分类一同训练(b)，还有一类方法就是构建GT框的正负样本©，然后利用triplet loss训练。以上这些方法使用的都是只有GT框，都忽略了图像上的大部分信息区域，这些区域同样可当做负样本来扯远真实目标区域特征与其的距离，增强特征嵌入的判别性。</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220619165204406.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220619165204406" style="zoom:50%;">
 <h3 id="训练框架">训练框架</h3>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220619195444443.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220619195444443" style="zoom:80%;"></p>
-<p>​
-上面是整体的训练框图，首先是关键帧和参考帧用作输入，整体结构采用Faster
-R-CNN框架，基于RPN结构生成许多感兴趣的区域，然后这些区域特征用于类别判断和边框回归以及增加一个4conv+1fc的embeddings
-head
-用于提取这些RoIs对应的特征，即一个RoI的bbox有一个与之对应的embedding特征。最后对提取的特征利用非参数的softmax
-和 cross entropy对特征进行学习，已获取更好的目标嵌入表示。</p>
-<p>​
-嵌入特征学习方面，根据bbox框和GT框的IoU判断，高于0.7则人为是正样本，低于0.3则认为是负样本（背景），同时对于关键帧中的每个bbox（对于背景bbox，其在参考帧对应的正样本同样为背景bbox），其在参考帧对应的正样本定义为和关键帧的bbox代表相同物体的那些bbox，剩下的其它样本都是负样本。然后利用下述的公式进行嵌入特征提取的损失计算：
-<span class="math display">\[
-\mathcal{L}_{\text {embed }}=\log \left[1+\sum_{\mathbf{k}^{+}}
-\sum_{\mathbf{k}^{-}} \exp \left(\mathbf{v} \cdot
-\mathbf{k}^{-}-\mathbf{v} \cdot \mathbf{k}^{+}\right)\right]
-\]</span> ​ 其中<span class="math inline">\(\bf{v}\)</span>代表关键帧中的bbox对应的嵌入向量，$\bf{k,v}<span class="math inline">\(是一对正样本（在两帧中对应不同时刻的同一物体）的情况，对应的\)</span>c=1<span class="math inline">\(，否则\)</span>c=0$。</p>
-<p>最后的训练损失函数如下: <span class="math display">\[
-\mathcal{L}=\mathcal{L}_{\text {det }}+\gamma_{1} \mathcal{L}_{\text
-{embed }}+\gamma_{2} \mathcal{L}_{\text {aux }}
-\]</span> 其中<span class="math inline">\(\gamma_1=0.25,
-\gamma_2=1\)</span>。</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220619195444443.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220619195444443" style="zoom:80%;">
+<p>​		上面是整体的训练框图，首先是关键帧和参考帧用作输入，整体结构采用Faster R-CNN框架，基于RPN结构生成许多感兴趣的区域，然后这些区域特征用于类别判断和边框回归以及增加一个4conv+1fc的embeddings head 用于提取这些RoIs对应的特征，即一个RoI的bbox有一个与之对应的embedding特征。最后对提取的特征利用非参数的softmax 和 cross entropy对特征进行学习，已获取更好的目标嵌入表示。</p>
+<p>​		嵌入特征学习方面，根据bbox框和GT框的IoU判断，高于0.7则人为是正样本，低于0.3则认为是负样本（背景），同时对于关键帧中的每个bbox（对于背景bbox，其在参考帧对应的正样本同样为背景bbox），其在参考帧对应的正样本定义为和关键帧的bbox代表相同物体的那些bbox，剩下的其它样本都是负样本。然后利用下述的公式进行嵌入特征提取的损失计算：<br>
+$$<br>
+\mathcal{L}<em>{\text {embed }}=\log \left[1+\sum</em>{\mathbf{k}^{+}} \sum_{\mathbf{k}^{-}} \exp \left(\mathbf{v} \cdot \mathbf{k}^{-}-\mathbf{v} \cdot \mathbf{k}^{+}\right)\right]<br>
+$$<br>
+​		其中$\bf{v}$代表关键帧中的bbox对应的嵌入向量，$\bf{k^-} $和$\bf{k^+} $分别代表$\bf{v}$在参考帧中的负样本和正样本。同样为了保证收敛限制嵌入特征的余弦相似度，作者另外给这些特征加入了一定的约束：<br>
+$$<br>
+\mathcal{L}_{\mathrm{aux}}=\left(\frac{\mathbf{v} \cdot \mathbf{k}}{|\mathbf{v}| \cdot|\mathbf{k}|}-c\right)^{2}<br>
+$$<br>
+对于$\bf{k,v}$是一对正样本（在两帧中对应不同时刻的同一物体）的情况，对应的$c=1$，否则$c=0$。</p>
+<p>最后的训练损失函数如下:<br>
+$$<br>
+\mathcal{L}=\mathcal{L}<em>{\text {det }}+\gamma</em>{1} \mathcal{L}<em>{\text {embed }}+\gamma</em>{2} \mathcal{L}_{\text {aux }}<br>
+$$<br>
+其中$\gamma_1=0.25, \gamma_2=1$。</p>
 <h3 id="推理流程">推理流程</h3>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220619201006198.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220619201006198" style="zoom:80%;"></p>
-<p>​ 上图是QDTrack的在线推理过程，此时关键帧为当前时刻<span class="math inline">\(t\)</span>，参考帧为之前多个时刻，参考帧中包含需要跟踪的目标，包括：激活的轨迹、暂时消失的轨迹以及背景目标，背景目标是用来关联当前检测到的一些背景bbox。然后对于这些bbox对应的嵌入特征使用双端softmax进行相似度匹配计算，计算公式如下：
-<span class="math display">\[
-\mathbf{f}(i, j)=\left[\frac{\exp \left(\mathbf{n}_{i} \cdot
-\mathbf{m}_{j}\right)}{\sum_{k=0}^{M-1} \exp \left(\mathbf{n}_{i} \cdot
-\mathbf{m}_{k}\right)}+\frac{\exp \left(\mathbf{n}_{i} \cdot
-\mathbf{m}_{j}\right)}{\sum_{k=0}^{N-1} \exp \left(\mathbf{n}_{k} \cdot
-\mathbf{m}_{j}\right)}\right] / 2
-\]</span> ​
-然后文章直接依据双端匹配分数确定跟踪结果，即分数高的匹配边说明关键帧和参考帧是一致的，跟踪成功；分数低的匹配边说明两帧之间目标不一致，如果此时关键帧中的检测bbox置信度又比较高的话说明这是一个新出现的物体，此时初始化目标轨迹，其余的低分匹配被删除。但是这里有一个问题就是<strong>根据匹配公式会存在两个高分匹配边，他们来自参考帧的不同目标，但是他们可能都连接了同一个物体，此时如何分配他们之间的连接关系？是通过贪婪匹配原则，先把最高匹配的边分配了在看剩余的还是说用其他二分图匹配的算法？</strong></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20220619201006198.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220619201006198" style="zoom:80%;">
+<p>​		上图是QDTrack的在线推理过程，此时关键帧为当前时刻$t$，参考帧为之前多个时刻，参考帧中包含需要跟踪的目标，包括：激活的轨迹、暂时消失的轨迹以及背景目标，背景目标是用来关联当前检测到的一些背景bbox。然后对于这些bbox对应的嵌入特征使用双端softmax进行相似度匹配计算，计算公式如下：<br>
+$$<br>
+\mathbf{f}(i, j)=\left[\frac{\exp \left(\mathbf{n}<em>{i} \cdot \mathbf{m}</em>{j}\right)}{\sum_{k=0}^{M-1} \exp \left(\mathbf{n}<em>{i} \cdot \mathbf{m}</em>{k}\right)}+\frac{\exp \left(\mathbf{n}<em>{i} \cdot \mathbf{m}</em>{j}\right)}{\sum_{k=0}^{N-1} \exp \left(\mathbf{n}<em>{k} \cdot \mathbf{m}</em>{j}\right)}\right] / 2<br>
+$$<br>
+​		然后文章直接依据双端匹配分数确定跟踪结果，即分数高的匹配边说明关键帧和参考帧是一致的，跟踪成功；分数低的匹配边说明两帧之间目标不一致，如果此时关键帧中的检测bbox置信度又比较高的话说明这是一个新出现的物体，此时初始化目标轨迹，其余的低分匹配被删除。但是这里有一个问题就是<strong>根据匹配公式会存在两个高分匹配边，他们来自参考帧的不同目标，但是他们可能都连接了同一个物体，此时如何分配他们之间的连接关系？是通过贪婪匹配原则，先把最高匹配的边分配了在看剩余的还是说用其他二分图匹配的算法？</strong></p>
 <h2 id="总结">总结</h2>
-<p>这篇文章最大的亮点就是充分利用了检测器的检测框，并且通过一种简单的正负样本指定策略和非参数化的softmax
-交叉熵损失函数以一种对抗学习的方式完成对嵌入特征的优化，同时基于双端softmax的目标相似度计算保证了相互匹配的一致性，可见简单使用相似度阈值完成轨迹-检测之间的关联。</p>
+<p>这篇文章最大的亮点就是充分利用了检测器的检测框，并且通过一种简单的正负样本指定策略和非参数化的softmax 交叉熵损失函数以一种对抗学习的方式完成对嵌入特征的优化，同时基于双端softmax的目标相似度计算保证了相互匹配的一致性，可见简单使用相似度阈值完成轨迹-检测之间的关联。</p>
 
             </div>
             <hr>
@@ -311,9 +276,9 @@ head
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 

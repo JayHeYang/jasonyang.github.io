@@ -230,124 +230,117 @@
             <h1 style="display: none">阅读笔记-DanceTrack:Multi-Object Tracking in Uniform Appearance and Diverse Motion</h1>
             
             <div class="markdown-body">
-              <h1 id="dancetrack-multi-object-tracking-in-uniform-appearance-and-diverse-motion">DanceTrack:
-Multi-Object Tracking in Uniform Appearance and Diverse Motion</h1>
-<p>原文链接：https://arxiv.org/pdf/2111.14690.pdf</p>
+              <h1>DanceTrack: Multi-Object Tracking in Uniform Appearance and Diverse Motion</h1>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2111.14690.pdf">https://arxiv.org/pdf/2111.14690.pdf</a></p>
 <h2 id="行文结构">行文结构</h2>
 <p><strong>DanceTrack数据集的特点：</strong></p>
-<ol type="1">
-<li><p>统一外观：人类具有高度相似且几乎没有区别的外观。</p></li>
-<li><p>多样的运动：它们具有复杂的运动模式和相互作用。</p>
+<ol>
+<li>
+<p>统一外观：人类具有高度相似且几乎没有区别的外观。</p>
+</li>
+<li>
+<p>多样的运动：它们具有复杂的运动模式和相互作用。</p>
 <blockquote>
 <p>具有频繁的相对位置切换和遮挡。</p>
-</blockquote></li>
+</blockquote>
+</li>
 </ol>
 <h3 id="摘要">摘要</h3>
-<p>现有跟踪数据集中的偏差，其中大多数对象往往具有可区分的外观，因此使用re-ID
-模型足以建立关联，但是当对象外观没有足够的辨别力时，多目标跟踪方法也应该起作用。期待后来的一些算法能够<strong>更少依赖于视觉辨别，更多地依赖于运动分析。</strong></p>
+<p>现有跟踪数据集中的偏差，其中大多数对象往往具有可区分的外观，因此使用re-ID 模型足以建立关联，但是当对象外观没有足够的辨别力时，多目标跟踪方法也应该起作用。期待后来的一些算法能够<strong>更少依赖于视觉辨别，更多地依赖于运动分析。</strong></p>
 <h3 id="介绍">介绍</h3>
 <p>现有多目标跟踪数据集的局限性，并观察到许多目标具有不同的外观，并且目标的运动模式非常规则甚至是线性的。最近开发的多目标跟踪算法高度依赖外观匹配来关联检测到的对象，同时几乎不考虑其他线索。</p>
 <p>DanceTrack数据集：</p>
-<ol type="1">
+<ol>
 <li>该数据集包含超过 100K 的图像帧（几乎是 MOT17 数据集的 10 倍）；</li>
-<li>外观一致：视频中的人穿着非常相似甚至相同的衣服，使得他们的视觉特征很难被
-re-ID 模型区分；</li>
+<li>外观一致：视频中的人穿着非常相似甚至相同的衣服，使得他们的视觉特征很难被 re-ID 模型区分；</li>
 <li>多样化运动：人们通常有非常大范围的运动和复杂的身体姿态变化，对运动建模提出了更高的要求。第二个属性也带来了遮挡和交叉作为副作用，即人体彼此重叠的比例很大，并且它们的相对位置经常交换。</li>
 </ol>
 <p>一些对更好的实现DanceTrack上的关联结果有益的结论：</p>
-<ol type="1">
+<ol>
 <li>目标的细粒度表示，例如分割和姿势，表现出比粗边界框更好的能力；
-<ol type="1">
+<ol>
 <li>是否可以融合姿势度量相似度，文末尝试了融合OKS相似度确实带来了很大的提升。</li>
-</ol></li>
+</ol>
+</li>
 <li>尽管我们正在解决二维跟踪任务，但深度信息显示出对关联对象的积极影响；</li>
 <li>时间动力学的运动建模很重要。</li>
 </ol>
-<h3 id="dancetrack数据集">DanceTrack数据集</h3>
+<h3 id="DanceTrack数据集">DanceTrack数据集</h3>
 <p>DanceTrack数据集与MOT17、MOT20的比较：</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525145804749.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525145804749" style="zoom:50%;"></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525145804749.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525145804749" style="zoom:50%;">
 <h4 id="数据集构建">数据集构建</h4>
-<p>通过简单地增加感兴趣对象的密度来关注“人群”并不是我们所期望的，MOT20包含行人非常拥挤的视频。
-但由于行人的运动非常规律，相对位置和遮挡区域保持一致，这样的“人群”并没有为外观匹配设置障碍。</p>
-<p>对于部分被遮挡的对象，标注了一个全身框。<strong>对于完全被遮挡的物体，我们不标注</strong>；
-当它在未来的帧中重新出现时，它的标识符id在可见时与前一帧保持相同。</p>
+<p>通过简单地增加感兴趣对象的密度来关注“人群”并不是我们所期望的，MOT20包含行人非常拥挤的视频。 但由于行人的运动非常规律，相对位置和遮挡区域保持一致，这样的“人群”并没有为外观匹配设置障碍。</p>
+<p>对于部分被遮挡的对象，标注了一个全身框。<strong>对于完全被遮挡的物体，我们不标注</strong>； 当它在未来的帧中重新出现时，它的标识符id在可见时与前一帧保持相同。</p>
 <p>厉害呀，啥工具。标注工具可以自动将注释框从前一帧传播到当前帧，而注释器只需要对当前帧中的框进行细化。</p>
 <h4 id="数据集统计">数据集统计</h4>
 <p>训练集40个，验证集25个，测试集35个。并且在数据集拆分过程中，我们在平均长度、平均边界框数、包含场景和运动多样性方面保持子集的分布接近。</p>
 <p>一些具有挑战性的场景：</p>
-<ol type="1">
+<ol>
 <li>低光照和远距离相机</li>
 <li>Group Dance，最多40人</li>
 <li>体操比赛视频：极其多样化的身体姿势、频繁的姿势变化和复杂的运动模式。</li>
 </ol>
 <p>目标之间的外观相似度、相邻帧的重叠IoU、目标中心的相对位置切换在不用数据集上的比较：</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525151644078.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525151644078" style="zoom:67%;"></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525151644078.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525151644078" style="zoom:67%;">
 <h4 id="数据集的性能评价指标">数据集的性能评价指标</h4>
 <p>HOTA：综合指标</p>
 <p>AssA、IDF1：衡量关联性能</p>
 <p>DetA、MOTA：衡量检测性能</p>
 <h4 id="当前工作的局限">当前工作的局限</h4>
-<ol type="1">
+<ol>
 <li>考虑到上述动机和建议的数据集，我们没有提供一种高度优于以前的多目标跟踪算法的算法，但将其作为未来研究的一个悬而未决的问题。</li>
-<li>我们在这项工作中强调的情况，人体姿势或分割掩码的注释对于更细粒度的研究应该很重要。
-但受限于时间和资源，我们在这个版本中只提供了边界框的标注。</li>
+<li>我们在这项工作中强调的情况，人体姿势或分割掩码的注释对于更细粒度的研究应该很重要。 但受限于时间和资源，我们在这个版本中只提供了边界框的标注。</li>
 </ol>
 <h3 id="对比实验分析">对比实验分析</h3>
 <p>CenterTrack论文中提供了一种MOT17训练集拆分为训练集和验证集的方法。</p>
-<h4 id="oracle-analysisgt关联分析">Oracle Analysis（GT关联分析）</h4>
+<h4 id="Oracle-Analysis（GT关联分析）">Oracle Analysis（GT关联分析）</h4>
 <p>用具有不同关联算法的GT边界框来实现预期的算法上限性能。</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525152911459.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525152911459" style="zoom:67%;"></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525152911459.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525152911459" style="zoom:67%;">
 <blockquote>
-<p>从结果来看，就 MOT17 上的所有指标而言，跟踪输出接近完美。
-而且，有趣的是，仅使用 IoU 匹配可以获得最佳性能，这证明 MOT17
-包含具有简单和规则运动模式的对象，并且在大多数情况下瓶颈不在于关联。在DanceTrack上同样最佳性能仅在于
-IoU
-匹配，即使结合线性运动模型或附加外观信息也无济于事。当使用外观相似性时，所有指标都比不使用任何外观提示要差。</p>
+<p>从结果来看，就 MOT17 上的所有指标而言，跟踪输出接近完美。 而且，有趣的是，仅使用 IoU 匹配可以获得最佳性能，这证明 MOT17 包含具有简单和规则运动模式的对象，并且在大多数情况下瓶颈不在于关联。在DanceTrack上同样最佳性能仅在于 IoU 匹配，即使结合线性运动模型或附加外观信息也无济于事。当使用外观相似性时，所有指标都比不使用任何外观提示要差。</p>
 </blockquote>
 <p>MOT17和DanceTrack数据集目标外观特征Tt-SNE聚类可视化</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525153305733.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525153305733" style="zoom:33%;"></p>
-<p><strong>GT分析结论：现有数据集存在严重偏差，更多地关注检测质量，并且所涉及的简单轨迹模式限制了该领域的研究。
-相反，DanceTrack
-对开发具有提高关联能力的多对象跟踪器提出了更高的要求。</strong></p>
-<h4 id="目前先进算法在dancetrack上的表现">目前先进算法在DanceTrack上的表现</h4>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525153730867.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525153730867" style="zoom:67%;"></p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525153305733.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525153305733" style="zoom:33%;">
+<p><strong>GT分析结论：现有数据集存在严重偏差，更多地关注检测质量，并且所涉及的简单轨迹模式限制了该领域的研究。 相反，DanceTrack 对开发具有提高关联能力的多对象跟踪器提出了更高的要求。</strong></p>
+<h4 id="目前先进算法在DanceTrack上的表现">目前先进算法在DanceTrack上的表现</h4>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525153730867.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525153730867" style="zoom:67%;">
 <blockquote>
-<p>检测不是在 DanceTrack
-上具有良好跟踪性能的瓶颈，如何针对目标的统一外观和多样化运动建立稳健的关联才是。</p>
+<p>检测不是在 DanceTrack 上具有良好跟踪性能的瓶颈，如何针对目标的统一外观和多样化运动建立稳健的关联才是。</p>
 </blockquote>
-<h4 id="不同关联算法在dancetrack数据集上的性能比较">不同关联算法在DanceTrack数据集上的性能比较</h4>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525154132253.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525154132253" style="zoom: 40%;"></p>
+<h4 id="不同关联算法在DanceTrack数据集上的性能比较">不同关联算法在DanceTrack数据集上的性能比较</h4>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525154132253.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525154132253" style="zoom: 40%;">
 <blockquote>
 <p>以上关联方法均是基于YOLOX的检测结果。</p>
 </blockquote>
 <h4 id="多任务融合学习分析">多任务融合学习分析</h4>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525154922769.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525154922769" style="zoom:67%;"></p>
-<ol type="1">
-<li><p>融合COCO目标mask监督</p>
-<p>训练数据是 DanceTrack 训练集和 COCO Mask的组合。 如果输入图像来自
-DanceTrack，我们将其 mask loss 设置为 0。在推理过程中，匹配度量是
-bounding box IoU 和 mask IoU
-的加权和。<em>但是从图中看联合训练之后只用bbox匹配就可以达到很好的效果了呀</em></p></li>
-<li><p>融合COCO目标pose监督</p>
-<p>训练数据是 DanceTrack 训练集和 COCO 人体姿势 [24] 的组合。
-如果输入图像来自 DanceTrack，我们将其位姿损失设置为
-0。在推理过程中，匹配度量是边界框 IoU 和对象关键点相似度 (OKS)
-的加权和。</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525154922769.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525154922769" style="zoom:67%;">
+<ol>
+<li>
+<p>融合COCO目标mask监督</p>
+<p>训练数据是 DanceTrack 训练集和 COCO Mask的组合。 如果输入图像来自 DanceTrack，我们将其 mask loss 设置为 0。在推理过程中，匹配度量是 bounding box IoU 和 mask IoU 的加权和。<em>但是从图中看联合训练之后只用bbox匹配就可以达到很好的效果了呀</em></p>
+</li>
+<li>
+<p>融合COCO目标pose监督</p>
+<p>训练数据是 DanceTrack 训练集和 COCO 人体姿势 [24] 的组合。 如果输入图像来自 DanceTrack，我们将其位姿损失设置为 0。在推理过程中，匹配度量是边界框 IoU 和对象关键点相似度 (OKS) 的加权和。</p>
 <blockquote>
 <p>当人体的大部分区域已经被遮挡时，分割模型通常不能提供可靠的输出，而专注于某些人体关键点的姿态估计模型通常表现出更高的鲁棒性。</p>
-</blockquote></li>
-<li><p>融合深度信息</p>
-<p>和KITII数据集中的车辆数据一起训练，有较大的域Gap，因此造成了性能下降；感觉深度信息和姿态信息都是能用的。</p></li>
-<li><p>融合运动模型的作用</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525160839057.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525160839057" style="zoom:40%;"></p>
+</blockquote>
+</li>
+<li>
+<p>融合深度信息</p>
+<p>和KITII数据集中的车辆数据一起训练，有较大的域Gap，因此造成了性能下降；感觉深度信息和姿态信息都是能用的。</p>
+</li>
+<li>
+<p>融合运动模型的作用</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220525160839057.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220525160839057" style="zoom:40%;">
 <blockquote>
 <p>使用弱监督学习来估计其他模式（深度、遮罩掩膜、姿态估计）</p>
-</blockquote></li>
+</blockquote>
+</li>
 </ol>
 <h2 id="储备知识">储备知识</h2>
-<ol type="1">
-<li>有度量关键点相似度的算法：Object Keypoint Similarity(OKS)
-（COCO数据集里面提供的）</li>
+<ol>
+<li>有度量关键点相似度的算法：Object Keypoint Similarity(OKS) （COCO数据集里面提供的）</li>
 </ol>
 
             </div>
@@ -358,9 +351,9 @@ bounding box IoU 和 mask IoU
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 

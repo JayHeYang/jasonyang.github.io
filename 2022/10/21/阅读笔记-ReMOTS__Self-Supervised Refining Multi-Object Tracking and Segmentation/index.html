@@ -230,38 +230,18 @@
             <h1 style="display: none">阅读笔记-ReMOTS__Self-Supervised Refining Multi-Object Tracking and Segmentation Keypoint Similarity Loss</h1>
             
             <div class="markdown-body">
-              <h2 id="remots-self-supervised-refining-multi-object-tracking-and-segmentation">ReMOTS:
-Self-Supervised Refining Multi-Object Tracking and Segmentation</h2>
+              <h2 id="ReMOTS-Self-Supervised-Refining-Multi-Object-Tracking-and-Segmentation">ReMOTS: Self-Supervised Refining Multi-Object Tracking and Segmentation</h2>
 <p><span class="github-emoji"><span>🐋</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>作者：</strong></p>
-<figure>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021142928234.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221021142928234">
-<figcaption aria-hidden="true">image-20221021142928234</figcaption>
-</figure>
-<p><span class="github-emoji"><span>📘</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d8.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>arXiv: </strong>
-https://arxiv.org/abs/2007.03200</p>
-<h3 id="摘要">1.1 摘要</h3>
-<p>我们的目标是通过后续修正跟踪结果来提高多目标跟踪和分割 (MOTS)
-的性能。然而，修正 MOTS
-结果仍然具有挑战性，这可能是由于外观特征不适合目标视频，也很难找到合适的阈值来区分它们（不同的轨迹）。为了解决这个问题，我们提出了一个基于自监督的修正MOTS（即
-ReMOTS）框架。
-ReMOTS主要从数据关联的角度修正MOTS（跟踪）结果，主要包括四个步骤： (1)
-使用预测掩码（Mask）训练外观编码器； (2)
-将相邻帧之间的检测结果关联起来形成短期轨迹 ；(3)
-使用短期轨迹作为可靠的伪标签来训练（短轨迹的）外观编码器；
-(4)利用合适的外观特征（从外观编码器中获取）和从统计信息中获得的阈值将短期轨迹合并到长期轨迹。使用
-ReMOTS，我们在 CVPR 2020 MOTS Challenge 1 中获得第一名，sMOTSA 得分为
-69.9。</p>
-<h3 id="方法与总结">1.2 方法与总结</h3>
-<figure>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021144306785.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221021144306785">
-<figcaption aria-hidden="true">image-20221021144306785</figcaption>
-</figure>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021142928234.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221021142928234"></p>
+<p><span class="github-emoji"><span>📘</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d8.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>**arXiv: ** <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2007.03200">https://arxiv.org/abs/2007.03200</a></p>
+<h3 id="1-1-摘要">1.1 摘要</h3>
+<p>我们的目标是通过后续修正跟踪结果来提高多目标跟踪和分割 (MOTS) 的性能。然而，修正 MOTS 结果仍然具有挑战性，这可能是由于外观特征不适合目标视频，也很难找到合适的阈值来区分它们（不同的轨迹）。为了解决这个问题，我们提出了一个基于自监督的修正MOTS（即 ReMOTS）框架。 ReMOTS主要从数据关联的角度修正MOTS（跟踪）结果，主要包括四个步骤： (1) 使用预测掩码（Mask）训练外观编码器； (2) 将相邻帧之间的检测结果关联起来形成短期轨迹 ；(3) 使用短期轨迹作为可靠的伪标签来训练（短轨迹的）外观编码器； (4)利用合适的外观特征（从外观编码器中获取）和从统计信息中获得的阈值将短期轨迹合并到长期轨迹。使用 ReMOTS，我们在 CVPR 2020 MOTS Challenge 1 中获得第一名，sMOTSA 得分为 69.9。</p>
+<h3 id="1-2-方法与总结">1.2 方法与总结</h3>
+<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/hjy/image-20221021144306785.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20221021144306785"></p>
 <p><span class="github-emoji"><span>🍂</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f342.png?v8" srcset="/jasonyang.github.io/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><strong>方法：</strong></p>
 <p>作者将跟踪结果的修正分为两个阶段:</p>
 <ul>
-<li>第一阶段逐两帧关联检测到的目标，具体方法是用训练后的ReID网络提取每帧目标的外观特征，然后根据相邻帧bbox的IoU和外观特征的Cosine
-similarity构建相邻帧的距离矩阵（IoU
-和余弦相似度过小则目标之间的距离为INF），这里比较有意思的是余弦相似度的阈值不是作者认为指定的，而是通过统计分析两帧之间相同身份ID的目标之间外观相似度的分布，通过正态分布的<span class="math inline">\(3\sigma\)</span>原则确定的。有了距离矩阵之后再通过匈牙利算法执行分配，确定相邻帧的连接关系，逐帧操作，以形成短轨迹（因为在跟踪过程中目标会出现被遮挡的情况，因此逐帧关联可能会把相同ID但是中间被遮挡的目标截成两个短轨迹）。</li>
+<li>第一阶段逐两帧关联检测到的目标，具体方法是用训练后的ReID网络提取每帧目标的外观特征，然后根据相邻帧bbox的IoU和外观特征的Cosine similarity构建相邻帧的距离矩阵（IoU 和余弦相似度过小则目标之间的距离为INF），这里比较有意思的是余弦相似度的阈值不是作者认为指定的，而是通过统计分析两帧之间相同身份ID的目标之间外观相似度的分布，通过正态分布的$3\sigma$原则确定的。有了距离矩阵之后再通过匈牙利算法执行分配，确定相邻帧的连接关系，逐帧操作，以形成短轨迹（因为在跟踪过程中目标会出现被遮挡的情况，因此逐帧关联可能会把相同ID但是中间被遮挡的目标截成两个短轨迹）。</li>
 <li>第二阶段从整个视频序列来考虑，合并短轨迹，具体而言又用短轨迹构建正负样本重新训练了第一阶段的ReID网络，训练完成之后重新提取每一帧目标的外观特征，然后同样的构建短轨迹段之间的距离矩阵，与上一阶段不同的是这里通过轨迹时序约束和余弦相似度击中比例作为距离阈值。两个短轨迹只有出现时间上不重叠，且前后出现时间间隔不超过15帧，才能被有机会被彼此关联上，满足上述条件的轨迹再计算两段轨迹外观相似度矩阵的平均相似度作为短轨迹之间的距离矩阵。最后文章用了一种层次聚类的方法结合短轨迹距离矩阵进行轨迹聚类，聚类阈值选定的时候也是通过统计的方式在GT轨迹中构建相同ID相似度的分布以及不同ID相似度分布，确定聚类阈值。</li>
 </ul>
 <blockquote>
@@ -278,9 +258,9 @@ similarity构建相邻帧的距离矩阵（IoU
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 

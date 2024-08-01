@@ -230,148 +230,131 @@
             <h1 style="display: none">阅读笔记-Multiple People Tracking by Lifted Multicut and Person Re-identiﬁcation</h1>
             
             <div class="markdown-body">
-              <h1 id="multiple-people-tracking-by-lifted-multicut-and-person-re-identiﬁcation">Multiple
-People Tracking by Lifted Multicut and Person Re-identiﬁcation</h1>
-<p>原文链接：https://openaccess.thecvf.com/content_cvpr_2017/papers/Tang_Multiple_People_Tracking_CVPR_2017_paper.pdf</p>
+              <h1>Multiple People Tracking by Lifted Multicut and Person Re-identiﬁcation</h1>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Tang_Multiple_People_Tracking_CVPR_2017_paper.pdf">https://openaccess.thecvf.com/content_cvpr_2017/papers/Tang_Multiple_People_Tracking_CVPR_2017_paper.pdf</a></p>
 <h2 id="主要工作">主要工作</h2>
-<ol type="1">
-<li><p>将MCLMP融入到多目标跟踪领域</p>
-<p>  MCLMP（Minimum Cost Lifted Multicut
-Problem）——最小花费改进多边切割问题，之前这类方法主要用在经典的图像分割领域，以像素点或者像素块作为图节点，为节点之间的每条边分配去切断惩罚（边权重，有正有负），在一定的约束条件下对节点间多余的边进行切割（切断图像块与图像块之间的联系，剩余聚合的图像块便可以看作一个具有相同语义的区域）以最小化惩罚，然后得到聚类结果。这类方法最重要的是通过一些合理的节点连接权重的度量函数，衡量节点之间的关系，然后便是利用一些启发式的算法对图进行切割优化。</p>
-<p>  应用到多目标跟踪领域，作者将图的每个节点等效成视频帧中的每个检测到的目标，同一帧中的目标之间可以彼此相连（这里相连的原因是作者对检测得到的bbox没有进行NMS会有一些重复的框），然后对前后相差<span class="math inline">\(\delta_t\)</span>帧的目标也进行连接（通过中心点距离或者bbox或者外观相似的阈值条件确定），此时的连接都是regular
-edges，另外还有一点就是通过additional
-edges去连接部分外观度量特别相似，然后帧间隔大于<span class="math inline">\(\delta_t\)</span>的目标。边的连接权重或者切断惩罚通过下面的向量计算式得到:
-<span class="math display">\[
-\begin{array}{c}
-c_e=\log \frac{1-p_e}{pe}=-&lt;\theta_{\gamma}, f^{(e)}&gt; \\
-f^{(e)} \leftarrow \left( f_{st}, f_{dm}, f_{reID}, f_{st}^2,f_{st} \dot
-\ f_{dm} \dots, \xi_{min}^2\right), \ f^{(e)} \in \cal{R}^{14}
-\end{array}
-\]</span> 其中：</p>
+<ol>
+<li>
+<p>将MCLMP融入到多目标跟踪领域</p>
+<p>  MCLMP（Minimum Cost Lifted Multicut Problem）——最小花费改进多边切割问题，之前这类方法主要用在经典的图像分割领域，以像素点或者像素块作为图节点，为节点之间的每条边分配去切断惩罚（边权重，有正有负），在一定的约束条件下对节点间多余的边进行切割（切断图像块与图像块之间的联系，剩余聚合的图像块便可以看作一个具有相同语义的区域）以最小化惩罚，然后得到聚类结果。这类方法最重要的是通过一些合理的节点连接权重的度量函数，衡量节点之间的关系，然后便是利用一些启发式的算法对图进行切割优化。</p>
+<p>  应用到多目标跟踪领域，作者将图的每个节点等效成视频帧中的每个检测到的目标，同一帧中的目标之间可以彼此相连（这里相连的原因是作者对检测得到的bbox没有进行NMS会有一些重复的框），然后对前后相差$\delta_t$帧的目标也进行连接（通过中心点距离或者bbox或者外观相似的阈值条件确定），此时的连接都是regular edges，另外还有一点就是通过additional edges去连接部分外观度量特别相似，然后帧间隔大于$\delta_t$的目标。边的连接权重或者切断惩罚通过下面的向量计算式得到:<br>
+$$<br>
+\begin{array}{c}<br>
+c_e=\log \frac{1-p_e}{pe}=-&lt;\theta_{\gamma}, f^{(e)}&gt; \<br>
+f^{(e)} \leftarrow \left( f_{st}, f_{dm}, f_{reID}, f_{st}^2,f_{st} \dot \ f_{dm} \dots, \xi_{min}^2\right), \ f^{(e)} \in \cal{R}^{14}<br>
+\end{array}<br>
+$$<br>
+其中：</p>
 <ul>
-<li><span class="math inline">\(\theta_{\gamma}\)</span>为可学习的映射参数（文中在训练跟踪视频的时候使用了一个Logistic
-Regression来预测这个参数）</li>
-<li><span class="math inline">\(f_{st}\)</span>代表检测框中心点和高相似度：<span class="math inline">\(f_{s
-t}=\frac{\sqrt{\left(x_{v}-x_{w}\right)^{2}+\left(y_{v}-y_{w}\right)^{2}}}{\bar{h}}\)</span></li>
-<li><span class="math inline">\(f_{dm}\)</span>代表两个目标的关键点集合匹配度（感觉有点儿像交并比），但又不完全是（图1是第一篇用这种DeepMatching的论文：Multiperson
-tracking by multicuts and deep matching）</li>
-<li><span class="math inline">\(f_{reID}\)</span>代表融合目标关键点特征的目标相似度（by
-StackNetPose），具体怎么融合看主要工作2</li>
-<li><span class="math inline">\(\xi_{min}\)</span>表示两个目标检测置信度中，较小的那个置信度。</li>
+<li>$\theta_{\gamma}$为可学习的映射参数（文中在训练跟踪视频的时候使用了一个Logistic Regression来预测这个参数）</li>
+<li>$f_{st}$代表检测框中心点和高相似度：$f_{s t}=\frac{\sqrt{\left(x_{v}-x_{w}\right)^{2}+\left(y_{v}-y_{w}\right)^{2}}}{\bar{h}}$</li>
+<li>$f_{dm}$代表两个目标的关键点集合匹配度（感觉有点儿像交并比），但又不完全是（图1是第一篇用这种DeepMatching的论文：Multiperson tracking by multicuts and deep matching）</li>
+<li>$f_{reID}$代表融合目标关键点特征的目标相似度（by StackNetPose），具体怎么融合看主要工作2</li>
+<li>$\xi_{min}$表示两个目标检测置信度中，较小的那个置信度。</li>
 </ul>
 <center>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220516211227565.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220516211227565" style="zoom:50%;">
-<br></p>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220516211227565.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220516211227565" style="zoom:50%;">
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d7;
     display: inline-block;
     color: #999;
-    padding: 2px;">
-图1 Deep Matching 示意图
-</div>
-</center></li>
+    padding: 2px;">图1 Deep Matching 示意图</div>
+</center>
+</li>
 </ol>
 <p>​</p>
-<ol start="2" type="1">
-<li><p>提出融合人体外观和人体姿态的深度评估网络</p>
-<p>  作者提出了融合深度外观和人体关键点的评估网络名为：StackNetPose。具体做法为，先通过单独的人体关键点检测网络，得到各个关键点（每个行人图像14个points）的响应图（宽高与原图一致），然后融合成7张单通道的heatmap，两张行人图像得到14个heatmap（如下图中绿色部分），之后将这些heatmap与两张行人图像的RGB通道堆叠得到一个拥有20个通道输入的特征图，最后通过一个分类网络评估行人图像之间的相似度。</p></li>
+<ol start="2">
+<li>
+<p>提出融合人体外观和人体姿态的深度评估网络</p>
+<p>  作者提出了融合深度外观和人体关键点的评估网络名为：StackNetPose。具体做法为，先通过单独的人体关键点检测网络，得到各个关键点（每个行人图像14个points）的响应图（宽高与原图一致），然后融合成7张单通道的heatmap，两张行人图像得到14个heatmap（如下图中绿色部分），之后将这些heatmap与两张行人图像的RGB通道堆叠得到一个拥有20个通道输入的特征图，最后通过一个分类网络评估行人图像之间的相似度。</p>
+</li>
 </ol>
-<center>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517091655746.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517091655746" style="zoom:50%;">
-<br>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+  <center>
+    <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517091655746.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517091655746" style="zoom:50%;">
+         <br>
+         <div style="color:orange; border-bottom: 1px solid #d9d9d7;
          display: inline-block;
          color: #999;
-         padding: 2px;">
-图2 深度提取网络示意图
-</div>
-</center>
-<h2 id="mclmp问题建模及约束解释">MCLMP问题建模及约束解释</h2>
+         padding: 2px;">图2 深度提取网络示意图</div>
+     </center>
+<h2 id="MCLMP问题建模及约束解释">MCLMP问题建模及约束解释</h2>
 <p>最小花费改进多边切割问题的定义或者用法如第一节所述，下面以一个简单得了例子来表述如何构建一个MCLMP模型。这是一个简单的双向图模型，每条边旁边的数字代表切掉这条表对应的花费或者收益，实线连接的边表示连接（joint），虚线连接的边表示剪掉（cut）。</p>
 <center>
-<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517092532052.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517092532052" style="zoom:30%;">
-<br>
-<div style="color:orange; border-bottom: 1px solid #d9d9d7;
+   <img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517092532052.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517092532052" style="zoom:30%;">
+         <br>
+         <div style="color:orange; border-bottom: 1px solid #d9d9d7;
          display: inline-block;
          color: #999;
-         padding: 2px;">
-图3 连接关系图
-</div>
-</center>
+         padding: 2px;">图3 连接关系图</div>
+     </center>
 <h3 id="问题建模">问题建模</h3>
 <p>MCLMP的规划模型如下：</p>
-<ol type="1">
-<li><p>目标函数 <span class="math display">\[
-\min _{x \in\{0,1\} E^{\prime}} \sum_{e \in E^{\prime}} c_{e} x_{e}
-\]</span></p>
+<ol>
+<li>
+<p>目标函数<br>
+$$<br>
+\min <em>{x \in{0,1} E^{\prime}} \sum</em>{e \in E^{\prime}} c_{e} x_{e}<br>
+$$</p>
 <blockquote>
-<p>其中<span class="math inline">\(E'\)</span>表示图中所有的边（包括剪掉和连接的，包括regular
-edges 和 additional edges，additional edges是自己设置的），<span class="math inline">\(c_e\)</span>表示<span class="math inline">\(e\)</span>这条边剪掉所带来的花费，比如上图中<span class="math inline">\(V_1，V_6\)</span>两个节点的弧形连接边，如果将这个边cut，那么将会花费5。<span class="math inline">\(x_e\)</span>表示边的连接状态，<span class="math inline">\(x_e=1\)</span>表示这条边被cut，<span class="math inline">\(x_e=0\)</span>表示这条边是joint。因此对于一个都是joint关系的图，总体的花费都为0，需要cut掉一些产生收益的负权边（如上图的-1，-0.5的这些边）来进一步减少花费。</p>
-</blockquote></li>
-<li><p>约束条件</p>
-<p>约束1： <span class="math display">\[
-\forall Y \in \operatorname{cycles}(G), \ \  \forall e \in Y: x_{e} \leq
-\sum_{e^{\prime} \in Y \backslash\{e\}} x_{e^{\prime}}
-\]</span></p>
-<blockquote>
-<p>直观表述：对任意一个循环连接（cut的虚线边也算作连接，也存在循环连接），循环圈中的每条边的连接状态值，小于等于剩余边连接状态值的之和。通俗解释，一个循环连接，要么就全都是joint的，此时所有的<span class="math inline">\(x_e=0\)</span>，有<span class="math inline">\(0
-\le
-0\)</span>，约束成立；要么就要有两条及以上的边是cut的，此时对被cut的边有<span class="math inline">\(1 \le 1+k\)</span>，<span class="math inline">\(k\)</span>为循环连接中cut边数量-2， <span class="math inline">\(k \ge 0\)</span>。</p>
+<p>其中$E’$表示图中所有的边（包括剪掉和连接的，包括regular edges 和 additional edges，additional edges是自己设置的），$c_e$表示$e$这条边剪掉所带来的花费，比如上图中$V_1，V_6$两个节点的弧形连接边，如果将这个边cut，那么将会花费5。$x_e$表示边的连接状态，$x_e=1$表示这条边被cut，$x_e=0$表示这条边是joint。因此对于一个都是joint关系的图，总体的花费都为0，需要cut掉一些产生收益的负权边（如上图的-1，-0.5的这些边）来进一步减少花费。</p>
 </blockquote>
-<p>约束2： <span class="math display">\[
-\forall v w \in E^{\prime} \backslash E , \ \ \forall P \in v w \text
-{-paths(G) }: x_{v w} \leq \sum_{e \in P} x_{e}
-\]</span></p>
+</li>
+<li>
+<p>约束条件</p>
+<p>约束1：<br>
+$$<br>
+\forall Y \in \operatorname{cycles}(G), \ \  \forall e \in Y: x_{e} \leq \sum_{e^{\prime} \in Y \backslash{e}} x_{e^{\prime}}<br>
+$$</p>
 <blockquote>
-<p>直观表述：对任意一条additional edges,其任意一条可行的regular
-edges组成的path（状态为0才能称之为path），path中所有连接边的状态值之和应该大于additional
-edges直接连接的状态值。通俗解释：任意一条additional
-edges（比如图3中的V1——V6边）状态为joint的前提是存在一个同样为joint的连接通路，这个通路可以是：V1——V2——V3——V6，也可以是：V1——V2——V5——V6，也可以两个都存在。</p>
+<p>直观表述：对任意一个循环连接（cut的虚线边也算作连接，也存在循环连接），循环圈中的每条边的连接状态值，小于等于剩余边连接状态值的之和。通俗解释，一个循环连接，要么就全都是joint的，此时所有的$x_e=0$，有$0 \le 0$，约束成立；要么就要有两条及以上的边是cut的，此时对被cut的边有$1 \le 1+k$，$k$为循环连接中cut边数量-2， $k \ge 0$。</p>
 </blockquote>
-<p>约束3： <span class="math display">\[
-\forall v w \in E^{\prime} \backslash E , \ \ \forall C \in v
-w-\operatorname{cuts}(G): 1-x_{v w} \leq \sum_{e \in
-C}\left(1-x_{e}\right)
-\]</span></p>
+<p>约束2：<br>
+$$<br>
+\forall v w \in E^{\prime} \backslash E , \ \ \forall P \in v w \text {-paths(G) }: x_{v w} \leq \sum_{e \in P} x_{e}<br>
+$$</p>
 <blockquote>
-<p>通俗表述：对任意一条additional
-edges（比如图3中的V1——V6边）状态为cut的前提是所有V1——V6的连接通路均不存在一些状态为cut的边，这些通路包括：V1——V2——V3——V6，也可以是：V1——V2——V5——V6，V1——V4——V5——V6，都要有cut边。</p>
-</blockquote></li>
+<p>直观表述：对任意一条additional edges,其任意一条可行的regular edges组成的path（状态为0才能称之为path），path中所有连接边的状态值之和应该大于additional edges直接连接的状态值。通俗解释：任意一条additional edges（比如图3中的V1——V6边）状态为joint的前提是存在一个同样为joint的连接通路，这个通路可以是：V1——V2——V3——V6，也可以是：V1——V2——V5——V6，也可以两个都存在。</p>
+</blockquote>
+<p>约束3：<br>
+$$<br>
+\forall v w \in E^{\prime} \backslash E , \ \ \forall C \in v w-\operatorname{cuts}(G): 1-x_{v w} \leq \sum_{e \in C}\left(1-x_{e}\right)<br>
+$$</p>
+<blockquote>
+<p>通俗表述：对任意一条additional edges（比如图3中的V1——V6边）状态为cut的前提是所有V1——V6的连接通路均不存在一些状态为cut的边，这些通路包括：V1——V2——V3——V6，也可以是：V1——V2——V5——V6，V1——V4——V5——V6，都要有cut边。</p>
+</blockquote>
+</li>
 </ol>
 <p>图例解释：</p>
-<ol type="1">
+<ol>
 <li>不满足约束（1）</li>
 </ol>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517102134624.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517102134624" style="zoom:45%;"></p>
-<p>假设优化剪边后的图连接关系如上，此时对于V1——V2——V5——V4——V1循环，边<span class="math inline">\(x_{12}=1\)</span>，而其余的边<span class="math inline">\(x_{e^{'}}=0\)</span>，因此对于约束（1）<span class="math inline">\(x_{12}=1 \nleq
-0\)</span>不满足，不是问题的可行解。</p>
-<ol start="2" type="1">
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517102134624.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517102134624" style="zoom:45%;">
+<p>假设优化剪边后的图连接关系如上，此时对于V1——V2——V5——V4——V1循环，边$x_{12}=1$，而其余的边$x_{e^{'}}=0$，因此对于约束（1）$x_{12}=1 \nleq 0$不满足，不是问题的可行解。</p>
+<ol start="2">
 <li>不满足约束（2）</li>
 </ol>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517102844176.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517102844176" style="zoom:45%;"></p>
-<p>假设优化剪边后的图连接关系如上，此时因为存在V1——V4——V5——V6的path,
-所以additional edges <span class="math inline">\(x_{16}\)</span>应该为joint状态。</p>
-<ol start="3" type="1">
-<li><p>不满足约束（3）</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517103152519.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517103152519" style="zoom:45%;"></p></li>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517102844176.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517102844176" style="zoom:45%;">
+<p>假设优化剪边后的图连接关系如上，此时因为存在V1——V4——V5——V6的path, 所以additional edges $x_{16}$应该为joint状态。</p>
+<ol start="3">
+<li>
+<p>不满足约束（3）</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517103152519.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517103152519" style="zoom:45%;">
+</li>
 </ol>
-<p>假设优化剪边后的图连接关系如上，此时因为任何一条从V1——V6的通路都带有cut状态的边，因此additional
-edges <span class="math inline">\(x_{16}\)</span>应该为cut状态。</p>
+<p>假设优化剪边后的图连接关系如上，此时因为任何一条从V1——V6的通路都带有cut状态的边，因此additional edges $x_{16}$应该为cut状态。</p>
 <p>最后放上正确优化后的图结构：</p>
-<p><img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517103817848.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517103817848" style="zoom:40%;"></p>
-<p>此时的多边切割划分为为（-1 + -1 + -1 + -1 =
--4），相比原来的花费0，确实更小了。</p>
+<img src="https://imgbed2333.oss-cn-beijing.aliyuncs.com/img/image-20220517103817848.png" srcset="/jasonyang.github.io/img/loading.gif" lazyload alt="image-20220517103817848" style="zoom:40%;">
+<p>此时的多边切割划分为为（-1 + -1 + -1 + -1 = -4），相比原来的花费0，确实更小了。</p>
 <p><strong>相关文献：</strong></p>
 <p>Multi-Person Tracking by Multicut and Deep Matching</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1608.05404.pdf">Paper</a>;</li>
 </ul>
-<p>Multiple People Tracking by Lifted Multicut and Person
-Re-identiﬁcation</p>
+<p>Multiple People Tracking by Lifted Multicut and Person Re-identiﬁcation</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Tang_Multiple_People_Tracking_CVPR_2017_paper.pdf">Paper</a></li>
 </ul>
-<p>An Efficient Fusion Move Algorithm for the Minimum Cost Lifted
-Multicut Problem</p>
+<p>An Efficient Fusion Move Algorithm for the Minimum Cost Lifted Multicut Problem</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://hci.iwr.uni-heidelberg.de/sites/default/files/publications/files/1939997197/beier_16_efficient.pdf">Paper</a></li>
 <li><a target="_blank" rel="noopener" href="http://www.eccv2016.org/files/posters/O-2A-01.pdf">Poster</a></li>
@@ -386,9 +369,9 @@ Multicut Problem</p>
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
-                    
                       <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">多目标跟踪</a>
+                    
+                      <a class="hover-with-bg" href="/jasonyang.github.io/categories/%E8%AE%BA%E6%96%87%E6%80%BB%E7%BB%93/">论文总结</a>
                     
                   </div>
                 
